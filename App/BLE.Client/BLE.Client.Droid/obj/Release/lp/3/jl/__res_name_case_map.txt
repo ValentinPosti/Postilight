@@ -1,2 +1,0 @@
-values/Ids.xml;values/ids.xml
-values/MvxBindingAttributes.xml;values/mvxbindingattributes.xml

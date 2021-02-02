@@ -70,3 +70,11 @@ App/Plugin.BLE.iOS/obj/
 App/Plugin.BLE.Android/obj/
 
 App/Plugin.BLE.Abstractions/obj/
+
+App/BLE.Client/BLE.Client.Droid/obj/
+
+App/BLE.Client/BLE.Client.macOS/obj/
+
+App/BLE.Client/BLE.Client.iOS/obj/
+
+App/.vs/
