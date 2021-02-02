@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.ibtool.document.errors</key>
+	<dict/>
+	<key>com.apple.ibtool.document.notices</key>
+	<dict/>
+	<key>com.apple.ibtool.document.warnings</key>
+	<dict>
+		<key>global</key>
+		<array>
+			<dict>
+				<key>affected-objects</key>
+				<array/>
+				<key>message</key>
+				<string>This file is set to build for a version older than the deployment target. Functionality may be limited.</string>
+				<key>type</key>
+				<string>IBIssueTypeUnsupportedConfiguration</string>
+				<key>type-value</key>
+				<integer>9</integer>
+			</dict>
+		</array>
+	</dict>
+</dict>
+</plist>

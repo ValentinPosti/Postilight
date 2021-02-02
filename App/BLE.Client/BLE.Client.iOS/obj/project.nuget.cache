@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "0lrPr6lv0OyBeoDLZYMU/y0WhxfObOQ2rA02VlcR0hw/wX74QGpCKINbCu3ESM+66KzNLSnhwKi8Gp2hnppYEA==",
+  "success": true,
+  "projectFilePath": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/BLE.Client/BLE.Client.iOS/BLE.Client.iOS.csproj",
+  "expectedPackageFiles": [
+    "/Users/nico/.nuget/packages/acr.userdialogs/7.0.4/acr.userdialogs.7.0.4.nupkg.sha512",
+    "/Users/nico/.nuget/packages/btprogresshud/1.2.0.6/btprogresshud.1.2.0.6.nupkg.sha512",
+    "/Users/nico/.nuget/packages/mvvmcross/6.3.1/mvvmcross.6.3.1.nupkg.sha512",
+    "/Users/nico/.nuget/packages/mvvmcross.forms/6.3.1/mvvmcross.forms.6.3.1.nupkg.sha512",
+    "/Users/nico/.nuget/packages/plugin.permissions/3.0.0.12/plugin.permissions.3.0.0.12.nupkg.sha512",
+    "/Users/nico/.nuget/packages/xam.plugins.settings/3.1.1/xam.plugins.settings.3.1.1.nupkg.sha512",
+    "/Users/nico/.nuget/packages/xamarin.forms/4.2.0.709249/xamarin.forms.4.2.0.709249.nupkg.sha512"
+  ],
+  "logs": []
+}

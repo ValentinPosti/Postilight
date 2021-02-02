@@ -1,0 +1,1153 @@
+{
+  "version": 3,
+  "targets": {
+    "Xamarin.Mac,Version=v2.0": {
+      "Acr.UserDialogs/7.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        }
+      },
+      "MvvmCross/6.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        }
+      },
+      "MvvmCross.Forms/6.3.1": {
+        "type": "package",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Xamarin.Forms": "3.6.0.220655"
+        },
+        "frameworkAssemblies": [
+          "netstandard"
+        ],
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        }
+      },
+      "Plugin.Permissions/3.0.0.12": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        }
+      },
+      "Xam.Plugins.Settings/3.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        }
+      },
+      "Xamarin.Forms/4.2.0.709249": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "build": {
+          "build/Xamarin.Forms.props": {},
+          "build/Xamarin.Forms.targets": {}
+        }
+      },
+      "BLE.Client/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Acr.UserDialogs": "7.0.4",
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Forms": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.Permissions": "3.0.0.12",
+          "Xam.Plugins.Settings": "3.1.1",
+          "Xamarin.Forms": "4.2.0.709249"
+        },
+        "compile": {
+          "bin/placeholder/BLE.Client.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLE.Client.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE.macOS/1.0.0": {
+        "type": "project",
+        "framework": "Xamarin.Mac,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.BLE.Abstractions": "1.0.0",
+          "Plugin.BLE.macOS": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        }
+      },
+      "Plugin.BLE.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        }
+      },
+      "Plugin.BLE.macOS/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        }
+      }
+    },
+    "Xamarin.Mac,Version=v2.0/win": {
+      "Acr.UserDialogs/7.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        }
+      },
+      "MvvmCross/6.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        }
+      },
+      "MvvmCross.Forms/6.3.1": {
+        "type": "package",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Xamarin.Forms": "3.6.0.220655"
+        },
+        "frameworkAssemblies": [
+          "netstandard"
+        ],
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        }
+      },
+      "Plugin.Permissions/3.0.0.12": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        }
+      },
+      "Xam.Plugins.Settings/3.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        }
+      },
+      "Xamarin.Forms/4.2.0.709249": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "build": {
+          "build/Xamarin.Forms.props": {},
+          "build/Xamarin.Forms.targets": {}
+        }
+      },
+      "BLE.Client/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Acr.UserDialogs": "7.0.4",
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Forms": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.Permissions": "3.0.0.12",
+          "Xam.Plugins.Settings": "3.1.1",
+          "Xamarin.Forms": "4.2.0.709249"
+        },
+        "compile": {
+          "bin/placeholder/BLE.Client.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLE.Client.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE.macOS/1.0.0": {
+        "type": "project",
+        "framework": "Xamarin.Mac,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.BLE.Abstractions": "1.0.0",
+          "Plugin.BLE.macOS": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        }
+      },
+      "Plugin.BLE.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        }
+      },
+      "Plugin.BLE.macOS/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        }
+      }
+    },
+    "Xamarin.Mac,Version=v2.0/win-x64": {
+      "Acr.UserDialogs/7.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        }
+      },
+      "MvvmCross/6.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        }
+      },
+      "MvvmCross.Forms/6.3.1": {
+        "type": "package",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Xamarin.Forms": "3.6.0.220655"
+        },
+        "frameworkAssemblies": [
+          "netstandard"
+        ],
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        }
+      },
+      "Plugin.Permissions/3.0.0.12": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        }
+      },
+      "Xam.Plugins.Settings/3.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        }
+      },
+      "Xamarin.Forms/4.2.0.709249": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "build": {
+          "build/Xamarin.Forms.props": {},
+          "build/Xamarin.Forms.targets": {}
+        }
+      },
+      "BLE.Client/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Acr.UserDialogs": "7.0.4",
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Forms": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.Permissions": "3.0.0.12",
+          "Xam.Plugins.Settings": "3.1.1",
+          "Xamarin.Forms": "4.2.0.709249"
+        },
+        "compile": {
+          "bin/placeholder/BLE.Client.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLE.Client.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE.macOS/1.0.0": {
+        "type": "project",
+        "framework": "Xamarin.Mac,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.BLE.Abstractions": "1.0.0",
+          "Plugin.BLE.macOS": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        }
+      },
+      "Plugin.BLE.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        }
+      },
+      "Plugin.BLE.macOS/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        }
+      }
+    },
+    "Xamarin.Mac,Version=v2.0/win-x86": {
+      "Acr.UserDialogs/7.0.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Acr.UserDialogs.dll": {}
+        }
+      },
+      "MvvmCross/6.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.dll": {}
+        }
+      },
+      "MvvmCross.Forms/6.3.1": {
+        "type": "package",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Xamarin.Forms": "3.6.0.220655"
+        },
+        "frameworkAssemblies": [
+          "netstandard"
+        ],
+        "compile": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        },
+        "runtime": {
+          "lib/xamarinmac20/MvvmCross.Forms.dll": {}
+        }
+      },
+      "Plugin.Permissions/3.0.0.12": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Plugin.Permissions.dll": {}
+        }
+      },
+      "Xam.Plugins.Settings/3.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll": {},
+          "lib/Xamarin.Mac20/Plugin.Settings.dll": {}
+        }
+      },
+      "Xamarin.Forms/4.2.0.709249": {
+        "type": "package",
+        "compile": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "runtime": {
+          "lib/Xamarin.Mac/Xamarin.Forms.Core.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll": {},
+          "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll": {}
+        },
+        "build": {
+          "build/Xamarin.Forms.props": {},
+          "build/Xamarin.Forms.targets": {}
+        }
+      },
+      "BLE.Client/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Acr.UserDialogs": "7.0.4",
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Forms": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.Permissions": "3.0.0.12",
+          "Xam.Plugins.Settings": "3.1.1",
+          "Xamarin.Forms": "4.2.0.709249"
+        },
+        "compile": {
+          "bin/placeholder/BLE.Client.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLE.Client.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.dll": {}
+        }
+      },
+      "MvvmCross.Plugins.BLE.macOS/1.0.0": {
+        "type": "project",
+        "framework": "Xamarin.Mac,Version=v2.0",
+        "dependencies": {
+          "MvvmCross": "6.3.1",
+          "MvvmCross.Plugins.BLE": "1.0.0",
+          "Plugin.BLE.Abstractions": "1.0.0",
+          "Plugin.BLE.macOS": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MvvmCross.Plugins.BLE.macOS.dll": {}
+        }
+      },
+      "Plugin.BLE.Abstractions/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.Abstractions.dll": {}
+        }
+      },
+      "Plugin.BLE.macOS/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "Plugin.BLE.Abstractions": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Plugin.BLE.macOS.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Acr.UserDialogs/7.0.4": {
+      "sha512": "J+3+rSVtAAUqvaXC0NGZ6HAcSXMaMyqvKsV1sMoraT7g+Zv/r4QmgUUITPu875n0uO57Y87Xn6IbLVDPje6tlw==",
+      "type": "package",
+      "path": "acr.userdialogs/7.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "acr.userdialogs.7.0.4.nupkg.sha512",
+        "acr.userdialogs.nuspec",
+        "lib/monoandroid81/Acr.UserDialogs.dll",
+        "lib/monoandroid81/Acr.UserDialogs.pdb",
+        "lib/monoandroid90/Acr.UserDialogs.dll",
+        "lib/monoandroid90/Acr.UserDialogs.pdb",
+        "lib/netstandard2.0/Acr.UserDialogs.dll",
+        "lib/netstandard2.0/Acr.UserDialogs.pdb",
+        "lib/uap10.0.16299/Acr.UserDialogs.dll",
+        "lib/uap10.0.16299/Acr.UserDialogs.pdb",
+        "lib/uap10.0.16299/Acr.UserDialogs.pri",
+        "lib/uap10.0.16299/Acr.UserDialogs/Acr.UserDialogs.xr.xml",
+        "lib/uap10.0.16299/Acr.UserDialogs/Platforms/Uwp/ActionSheetContentDialog.xbf",
+        "lib/uap10.0.16299/Acr.UserDialogs/Platforms/Uwp/DatePickerControl.xbf",
+        "lib/uap10.0.16299/Acr.UserDialogs/Platforms/Uwp/LoginContentDialog.xbf",
+        "lib/uap10.0.16299/Acr.UserDialogs/Platforms/Uwp/ProgressContentDialog.xbf",
+        "lib/uap10.0.16299/Acr.UserDialogs/Platforms/Uwp/TimePickerControl.xbf",
+        "lib/xamarinios10/Acr.UserDialogs.dll",
+        "lib/xamarinios10/Acr.UserDialogs.pdb"
+      ]
+    },
+    "MvvmCross/6.3.1": {
+      "sha512": "EERq0xR0gtjWfY9ljVQED8fBExTruPT2B1qxg/drJ9CImwdMXv/y4Ovf6qlusMMRj+ypCow4Slj78liTT4WZeg==",
+      "type": "package",
+      "path": "mvvmcross/6.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/monoandroid90/MvvmCross.dll",
+        "lib/monoandroid90/MvvmCross.pdb",
+        "lib/monoandroid90/MvvmCross.xml",
+        "lib/net461/MvvmCross.dll",
+        "lib/net461/MvvmCross.pdb",
+        "lib/net461/MvvmCross.xml",
+        "lib/netcoreapp2.1/MvvmCross.dll",
+        "lib/netcoreapp2.1/MvvmCross.pdb",
+        "lib/netcoreapp2.1/MvvmCross.xml",
+        "lib/netstandard2.0/MvvmCross.dll",
+        "lib/netstandard2.0/MvvmCross.pdb",
+        "lib/netstandard2.0/MvvmCross.xml",
+        "lib/tizen40/MvvmCross.dll",
+        "lib/tizen40/MvvmCross.pdb",
+        "lib/tizen40/MvvmCross.xml",
+        "lib/uap10.0.16299/MvvmCross.dll",
+        "lib/uap10.0.16299/MvvmCross.pdb",
+        "lib/uap10.0.16299/MvvmCross.pri",
+        "lib/uap10.0.16299/MvvmCross.xml",
+        "lib/xamarinios10/MvvmCross.dll",
+        "lib/xamarinios10/MvvmCross.pdb",
+        "lib/xamarinios10/MvvmCross.xml",
+        "lib/xamarinmac20/MvvmCross.dll",
+        "lib/xamarinmac20/MvvmCross.pdb",
+        "lib/xamarinmac20/MvvmCross.xml",
+        "lib/xamarintvos10/MvvmCross.dll",
+        "lib/xamarintvos10/MvvmCross.pdb",
+        "lib/xamarintvos10/MvvmCross.xml",
+        "lib/xamarinwatchos10/MvvmCross.dll",
+        "lib/xamarinwatchos10/MvvmCross.pdb",
+        "lib/xamarinwatchos10/MvvmCross.xml",
+        "mvvmcross.6.3.1.nupkg.sha512",
+        "mvvmcross.nuspec",
+        "readme.txt"
+      ]
+    },
+    "MvvmCross.Forms/6.3.1": {
+      "sha512": "QgNxvx+DA/F5Zsz8NC9QusFkzgGn4KwX7tw+p0JKxZb3f0TAFffHbRzy5sTCoelKTjZ+C3/7SIY9dKt/KII31g==",
+      "type": "package",
+      "path": "mvvmcross.forms/6.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "lib/monoandroid90/MvvmCross.Forms.dll",
+        "lib/monoandroid90/MvvmCross.Forms.pdb",
+        "lib/monoandroid90/MvvmCross.Forms.xml",
+        "lib/net461/MvvmCross.Forms.dll",
+        "lib/net461/MvvmCross.Forms.pdb",
+        "lib/net461/MvvmCross.Forms.xml",
+        "lib/netstandard2.0/MvvmCross.Forms.dll",
+        "lib/netstandard2.0/MvvmCross.Forms.pdb",
+        "lib/netstandard2.0/MvvmCross.Forms.xml",
+        "lib/tizen40/MvvmCross.Forms.dll",
+        "lib/tizen40/MvvmCross.Forms.pdb",
+        "lib/tizen40/MvvmCross.Forms.xml",
+        "lib/uap10.0.16299/MvvmCross.Forms.dll",
+        "lib/uap10.0.16299/MvvmCross.Forms.pdb",
+        "lib/uap10.0.16299/MvvmCross.Forms.pri",
+        "lib/uap10.0.16299/MvvmCross.Forms.xml",
+        "lib/xamarinios10/MvvmCross.Forms.dll",
+        "lib/xamarinios10/MvvmCross.Forms.pdb",
+        "lib/xamarinios10/MvvmCross.Forms.xml",
+        "lib/xamarinmac20/MvvmCross.Forms.dll",
+        "lib/xamarinmac20/MvvmCross.Forms.pdb",
+        "lib/xamarinmac20/MvvmCross.Forms.xml",
+        "mvvmcross.forms.6.3.1.nupkg.sha512",
+        "mvvmcross.forms.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Plugin.Permissions/3.0.0.12": {
+      "sha512": "VrYqI/ufk3bH6gTP1JJlLByjhS0CHu3riKmdozhX9/qXA9hlvLolmcqKJdyAqpzmrVC74m3ZtirUBIrBxvT1Lw==",
+      "type": "package",
+      "path": "plugin.permissions/3.0.0.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/monoandroid71/Plugin.Permissions.dll",
+        "lib/monoandroid71/Plugin.Permissions.xml",
+        "lib/netstandard1.0/Plugin.Permissions.dll",
+        "lib/netstandard1.0/Plugin.Permissions.xml",
+        "lib/netstandard2.0/Plugin.Permissions.dll",
+        "lib/netstandard2.0/Plugin.Permissions.xml",
+        "lib/uap10.0.10240/Plugin.Permissions.dll",
+        "lib/uap10.0.10240/Plugin.Permissions.pri",
+        "lib/uap10.0.10240/Plugin.Permissions.xml",
+        "lib/xamarinios10/Plugin.Permissions.dll",
+        "lib/xamarinios10/Plugin.Permissions.xml",
+        "plugin.permissions.3.0.0.12.nupkg.sha512",
+        "plugin.permissions.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Xam.Plugins.Settings/3.1.1": {
+      "sha512": "EQEYQJ64ZLqui5GWkLMavgqitHxwUHZHryTzUD1021UBuz1XwDSjPL45W0K4pPXjz9oKbg7YpRXKPR1luPr/5Q==",
+      "type": "package",
+      "path": "xam.plugins.settings/3.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/MonoAndroid10/Helpers/Settings.cs.pp",
+        "content/UAP10/Helpers/Settings.cs.pp",
+        "content/Xamarin.Mac20/Helpers/Settings.cs.pp",
+        "content/Xamarin.iOS10/Helpers/Settings.cs.pp",
+        "content/net45/Helpers/Settings.cs.pp",
+        "content/netstandard1.0/Helpers/Settings.cs.pp",
+        "content/xamarintvOS/Helpers/Settings.cs.pp",
+        "content/xamarinwatchOS/Helpers/Settings.cs.pp",
+        "lib/MonoAndroid10/Plugin.Settings.Abstractions.dll",
+        "lib/MonoAndroid10/Plugin.Settings.Abstractions.pdb",
+        "lib/MonoAndroid10/Plugin.Settings.Abstractions.xml",
+        "lib/MonoAndroid10/Plugin.Settings.dll",
+        "lib/MonoAndroid10/Plugin.Settings.pdb",
+        "lib/MonoAndroid10/Plugin.Settings.xml",
+        "lib/UAP10/Plugin.Settings.Abstractions.dll",
+        "lib/UAP10/Plugin.Settings.Abstractions.pdb",
+        "lib/UAP10/Plugin.Settings.Abstractions.xml",
+        "lib/UAP10/Plugin.Settings.XML",
+        "lib/UAP10/Plugin.Settings.dll",
+        "lib/UAP10/Plugin.Settings.pdb",
+        "lib/UAP10/Plugin.Settings.pri",
+        "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.dll",
+        "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.pdb",
+        "lib/Xamarin.Mac20/Plugin.Settings.Abstractions.xml",
+        "lib/Xamarin.Mac20/Plugin.Settings.XML",
+        "lib/Xamarin.Mac20/Plugin.Settings.dll",
+        "lib/Xamarin.Mac20/Plugin.Settings.pdb",
+        "lib/Xamarin.iOS10/Plugin.Settings.Abstractions.dll",
+        "lib/Xamarin.iOS10/Plugin.Settings.Abstractions.pdb",
+        "lib/Xamarin.iOS10/Plugin.Settings.Abstractions.xml",
+        "lib/Xamarin.iOS10/Plugin.Settings.dll",
+        "lib/Xamarin.iOS10/Plugin.Settings.xml",
+        "lib/net45/Plugin.Settings.Abstractions.dll",
+        "lib/net45/Plugin.Settings.Abstractions.pdb",
+        "lib/net45/Plugin.Settings.Abstractions.xml",
+        "lib/net45/Plugin.Settings.XML",
+        "lib/net45/Plugin.Settings.dll",
+        "lib/net45/Plugin.Settings.pdb",
+        "lib/netstandard1.0/Plugin.Settings.Abstractions.dll",
+        "lib/netstandard1.0/Plugin.Settings.Abstractions.pdb",
+        "lib/netstandard1.0/Plugin.Settings.Abstractions.xml",
+        "lib/netstandard1.0/Plugin.Settings.deps.json",
+        "lib/netstandard1.0/Plugin.Settings.dll",
+        "lib/netstandard1.0/Plugin.Settings.xml",
+        "lib/xamarintvOS/Plugin.Settings.Abstractions.dll",
+        "lib/xamarintvOS/Plugin.Settings.Abstractions.pdb",
+        "lib/xamarintvOS/Plugin.Settings.Abstractions.xml",
+        "lib/xamarintvOS/Plugin.Settings.dll",
+        "lib/xamarintvOS/Plugin.Settings.pdb",
+        "lib/xamarintvOS/Plugin.Settings.xml",
+        "lib/xamarinwatchOS/Plugin.Settings.Abstractions.dll",
+        "lib/xamarinwatchOS/Plugin.Settings.Abstractions.pdb",
+        "lib/xamarinwatchOS/Plugin.Settings.Abstractions.xml",
+        "lib/xamarinwatchOS/Plugin.Settings.dll",
+        "lib/xamarinwatchOS/Plugin.Settings.pdb",
+        "lib/xamarinwatchOS/Plugin.Settings.xml",
+        "readme.txt",
+        "xam.plugins.settings.3.1.1.nupkg.sha512",
+        "xam.plugins.settings.nuspec"
+      ]
+    },
+    "Xamarin.Forms/4.2.0.709249": {
+      "sha512": "3DWqPSn9kSKJW5mwjmICV/+4IpPQrequEN1VXUhsF0i9KKnfj49jFk9VbJnT9o2aesJAk00NED67XPbSmbxKjw==",
+      "type": "package",
+      "path": "xamarin.forms/4.2.0.709249",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/MonoAndroid10/proguard.cfg",
+        "build/Xamarin.Forms.DefaultItems.props",
+        "build/Xamarin.Forms.DefaultItems.targets",
+        "build/Xamarin.Forms.props",
+        "build/Xamarin.Forms.targets",
+        "build/net46/Mono.Cecil.Mdb.dll",
+        "build/net46/Mono.Cecil.Pdb.dll",
+        "build/net46/Mono.Cecil.Rocks.dll",
+        "build/net46/Mono.Cecil.dll",
+        "build/net46/System.ValueTuple.dll",
+        "build/net46/Xamarin.Forms.Build.Tasks.dll",
+        "build/net46/Xamarin.Forms.Core.dll",
+        "build/net46/Xamarin.Forms.Xaml.dll",
+        "build/netstandard2.0/Mono.Cecil.Mdb.dll",
+        "build/netstandard2.0/Mono.Cecil.Pdb.dll",
+        "build/netstandard2.0/Mono.Cecil.Rocks.dll",
+        "build/netstandard2.0/Mono.Cecil.dll",
+        "build/netstandard2.0/System.CodeDom.dll",
+        "build/netstandard2.0/Xamarin.Forms.Build.Tasks.dll",
+        "build/netstandard2.0/Xamarin.Forms.Core.dll",
+        "build/netstandard2.0/Xamarin.Forms.Xaml.dll",
+        "lib/MonoAndroid81/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/MonoAndroid81/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/MonoAndroid81/FormsViewGroup.dll",
+        "lib/MonoAndroid81/FormsViewGroup.pdb",
+        "lib/MonoAndroid81/Xamarin.Forms.Core.dll",
+        "lib/MonoAndroid81/Xamarin.Forms.Core.pdb",
+        "lib/MonoAndroid81/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/Xamarin.Forms.Platform.Android.dll",
+        "lib/MonoAndroid81/Xamarin.Forms.Platform.Android.pdb",
+        "lib/MonoAndroid81/Xamarin.Forms.Platform.dll",
+        "lib/MonoAndroid81/Xamarin.Forms.Xaml.dll",
+        "lib/MonoAndroid81/Xamarin.Forms.Xaml.pdb",
+        "lib/MonoAndroid81/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/de/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/de/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/es/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/es/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/fr/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/fr/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/it/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/it/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/ja/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/ja/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/ko/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/ko/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/pt-br/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/ru/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/ru/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/zh-Hans/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/zh-Hans/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid81/zh-Hant/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid81/zh-Hant/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/MonoAndroid90/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/MonoAndroid90/FormsViewGroup.dll",
+        "lib/MonoAndroid90/FormsViewGroup.pdb",
+        "lib/MonoAndroid90/Xamarin.Forms.Core.dll",
+        "lib/MonoAndroid90/Xamarin.Forms.Core.pdb",
+        "lib/MonoAndroid90/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/Xamarin.Forms.Platform.Android.dll",
+        "lib/MonoAndroid90/Xamarin.Forms.Platform.Android.pdb",
+        "lib/MonoAndroid90/Xamarin.Forms.Platform.dll",
+        "lib/MonoAndroid90/Xamarin.Forms.Xaml.dll",
+        "lib/MonoAndroid90/Xamarin.Forms.Xaml.pdb",
+        "lib/MonoAndroid90/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/de/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/de/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/es/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/es/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/fr/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/fr/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/it/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/it/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/ja/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/ja/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/ko/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/ko/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/pt-br/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/ru/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/ru/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/zh-Hans/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/zh-Hans/Xamarin.Forms.Xaml.xml",
+        "lib/MonoAndroid90/zh-Hant/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid90/zh-Hant/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.Mac/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/Xamarin.Mac/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Core.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll",
+        "lib/Xamarin.iOS10/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/Xamarin.iOS10/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Core.pdb",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.pdb",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.pdb",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/ar/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ca/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/cs/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/da/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/de/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/de/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/de/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/el/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/es/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/es/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/es/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/fi/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/fr/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/fr/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/fr/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/he/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/hi/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/hr/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/hu/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/id/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/it/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/it/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/it/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/ja/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/ja/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ja/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/ko/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/ko/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ko/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/ms/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/nb/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/nl/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pl/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pt-br/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/pt-br/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/pt/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ro/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ru/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/ru/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ru/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/sk/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/sv/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/th/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/tr/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/uk/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/vi/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-HK/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-Hans/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/zh-Hans/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-Hans/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/zh-Hant/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/zh-Hant/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-Hant/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard1.0/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/netstandard1.0/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Core.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Core.pdb",
+        "lib/netstandard1.0/Xamarin.Forms.Core.xml",
+        "lib/netstandard1.0/Xamarin.Forms.Platform.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Xaml.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Xaml.pdb",
+        "lib/netstandard1.0/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/netstandard2.0/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Core.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Core.pdb",
+        "lib/netstandard2.0/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/Xamarin.Forms.Platform.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Xaml.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Xaml.pdb",
+        "lib/netstandard2.0/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/de/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/de/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/es/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/es/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/fr/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/fr/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/it/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/it/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/ja/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/ja/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/ko/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/ko/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/pt-br/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/pt-br/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/ru/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/ru/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/zh-Hans/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/zh-Hans/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/zh-Hant/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/zh-Hant/Xamarin.Forms.Xaml.xml",
+        "lib/tizen40/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/tizen40/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/tizen40/Xamarin.Forms.Core.dll",
+        "lib/tizen40/Xamarin.Forms.Core.pdb",
+        "lib/tizen40/Xamarin.Forms.Core.xml",
+        "lib/tizen40/Xamarin.Forms.Platform.Tizen.dll",
+        "lib/tizen40/Xamarin.Forms.Platform.Tizen.pdb",
+        "lib/tizen40/Xamarin.Forms.Platform.dll",
+        "lib/tizen40/Xamarin.Forms.Xaml.dll",
+        "lib/tizen40/Xamarin.Forms.Xaml.pdb",
+        "lib/tizen40/Xamarin.Forms.Xaml.xml",
+        "lib/uap10.0/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/uap10.0/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/uap10.0/Xamarin.Forms.Core.dll",
+        "lib/uap10.0/Xamarin.Forms.Core.pdb",
+        "lib/uap10.0/Xamarin.Forms.Core.xml",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP.dll",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP.pdb",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP.pri",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/AutoSuggestStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/CollectionView/ItemsViewStyles.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsCheckBoxStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsCommandBarStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsEmbeddedPageWrapper.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsFlyout.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsProgressBarStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/FormsTextBoxStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/MasterDetailControlStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/PageControlStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/Properties/Xamarin.Forms.Platform.UAP.rd.xml",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/Resources.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/SliderStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/StepperControl.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/TabbedPageStyle.xbf",
+        "lib/uap10.0/Xamarin.Forms.Platform.UAP/Xamarin.Forms.Platform.UAP.xr.xml",
+        "lib/uap10.0/Xamarin.Forms.Platform.dll",
+        "lib/uap10.0/Xamarin.Forms.Xaml.dll",
+        "lib/uap10.0/Xamarin.Forms.Xaml.pdb",
+        "lib/uap10.0/Xamarin.Forms.Xaml.xml",
+        "xamarin.forms.4.2.0.709249.nupkg.sha512",
+        "xamarin.forms.nuspec"
+      ]
+    },
+    "BLE.Client/1.0.0": {
+      "type": "project",
+      "path": "../BLE.Client/BLE.Client.csproj",
+      "msbuildProject": "../BLE.Client/BLE.Client.csproj"
+    },
+    "MvvmCross.Plugins.BLE/1.0.0": {
+      "type": "project",
+      "path": "../../MvvmCross.Plugins.BLE/MvvmCross.Plugins.BLE.csproj",
+      "msbuildProject": "../../MvvmCross.Plugins.BLE/MvvmCross.Plugins.BLE.csproj"
+    },
+    "MvvmCross.Plugins.BLE.macOS/1.0.0": {
+      "type": "project",
+      "path": "../../MvvmCross.Plugins.BLE.macOS/MvvmCross.Plugins.BLE.macOS.csproj",
+      "msbuildProject": "../../MvvmCross.Plugins.BLE.macOS/MvvmCross.Plugins.BLE.macOS.csproj"
+    },
+    "Plugin.BLE.Abstractions/1.0.0": {
+      "type": "project",
+      "path": "../../Plugin.BLE.Abstractions/Plugin.BLE.Abstractions.csproj",
+      "msbuildProject": "../../Plugin.BLE.Abstractions/Plugin.BLE.Abstractions.csproj"
+    },
+    "Plugin.BLE.macOS/1.0.0": {
+      "type": "project",
+      "path": "../../Plugin.BLE.macOS/Plugin.BLE.macOS.csproj",
+      "msbuildProject": "../../Plugin.BLE.macOS/Plugin.BLE.macOS.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "Xamarin.Mac,Version=v2.0": [
+      "Acr.UserDialogs >= 7.0.4",
+      "BLE.Client >= 1.0.0",
+      "MvvmCross >= 6.3.1",
+      "MvvmCross.Forms >= 6.3.1",
+      "MvvmCross.Plugins.BLE >= 1.0.0",
+      "MvvmCross.Plugins.BLE.macOS >= 1.0.0",
+      "Plugin.Permissions >= 3.0.0.12",
+      "Xam.Plugins.Settings >= 3.1.1",
+      "Xamarin.Forms >= 4.2.0.709249"
+    ]
+  },
+  "packageFolders": {
+    "/Users/nico/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/BLE.Client/BLE.Client.macOS/BLE.Client.macOS.csproj",
+      "projectName": "BLE Sample",
+      "projectPath": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/BLE.Client/BLE.Client.macOS/BLE.Client.macOS.csproj",
+      "packagesPath": "/Users/nico/.nuget/packages/",
+      "outputPath": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/BLE.Client/BLE.Client.macOS/obj/",
+      "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "configFilePaths": [
+        "/Users/nico/.config/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "xamarinmac20"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "xamarinmac20": {
+          "projectReferences": {
+            "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/BLE.Client/BLE.Client/BLE.Client.csproj": {
+              "projectPath": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/BLE.Client/BLE.Client/BLE.Client.csproj"
+            },
+            "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/MvvmCross.Plugins.BLE.macOS/MvvmCross.Plugins.BLE.macOS.csproj": {
+              "projectPath": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/MvvmCross.Plugins.BLE.macOS/MvvmCross.Plugins.BLE.macOS.csproj"
+            },
+            "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/MvvmCross.Plugins.BLE/MvvmCross.Plugins.BLE.csproj": {
+              "projectPath": "/Users/nico/Downloads/xamarin-bluetooth-le-master/Source/MvvmCross.Plugins.BLE/MvvmCross.Plugins.BLE.csproj"
+            }
+          }
+        }
+      }
+    },
+    "frameworks": {
+      "xamarinmac20": {
+        "dependencies": {
+          "Acr.UserDialogs": {
+            "target": "Package",
+            "version": "[7.0.4, )"
+          },
+          "MvvmCross": {
+            "target": "Package",
+            "version": "[6.3.1, )"
+          },
+          "MvvmCross.Forms": {
+            "target": "Package",
+            "version": "[6.3.1, )"
+          },
+          "Plugin.Permissions": {
+            "target": "Package",
+            "version": "[3.0.0.12, )"
+          },
+          "Xam.Plugins.Settings": {
+            "target": "Package",
+            "version": "[3.1.1, )"
+          },
+          "Xamarin.Forms": {
+            "target": "Package",
+            "version": "[4.2.0.709249, )"
+          }
+        }
+      }
+    },
+    "runtimes": {
+      "win": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  }
+}

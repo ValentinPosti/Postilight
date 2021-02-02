@@ -48,3 +48,25 @@ Thumbs.db
 *.mov
 *.wmv
 
+
+App/Plugin.BLE/obj/
+
+App/MvvmCross.Plugins.BLE.macOS/obj/
+
+App/MvvmCross.Plugins.BLE.iOS/obj/
+
+App/MvvmCross.Plugins.BLE.Droid/obj/
+
+App/MvvmCross.Plugins.BLE/obj/
+
+App/BLE.Client/BLE.Client/obj/
+
+App/Plugin.BLE.Tests/obj/
+
+App/Plugin.BLE.macOS/obj/
+
+App/Plugin.BLE.iOS/obj/
+
+App/Plugin.BLE.Android/obj/
+
+App/Plugin.BLE.Abstractions/obj/
