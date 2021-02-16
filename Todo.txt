@@ -1,0 +1,16 @@
+
+
+- Fichier Json + bin embeded in firmware ou en flash
+-  
+
+- Bin Slot File Format 
+    - must be resilient 
+    - HEADER 16 bits ? 
+    - 1024 block descriptors 
+        - free/used   
+    - 1024*768 bytes blocks 
+
+    file size = 1024*1 + 1024*768 
+
+-Anim Bin File Format : 
+    Animation block list :  32 * 16 

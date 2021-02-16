@@ -78,3 +78,7 @@ App/BLE.Client/BLE.Client.macOS/obj/
 App/BLE.Client/BLE.Client.iOS/obj/
 
 App/.vs/
+
+Content/RAW/
+
+Old/
