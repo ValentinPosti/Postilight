@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <TargetFramework>netstandard2.0</TargetFramework>
+      <RootNamespace>ble.net.sampleapp</RootNamespace>
+      <DebugType>full</DebugType>
+      <OutputPath>..\..\artifacts\bin\$(AssemblyName)\$(Configuration)\$(Platform)</OutputPath>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AssemblyName>PostiligthApp</AssemblyName>
+   </PropertyGroup>
+
+   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="6.5.1">
+    </PackageReference>
+    <PackageReference Include="ble.net" Version="1.2.1">
+    </PackageReference>
+    <PackageReference Include="nexus.core" Version="0.34.0">
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012">
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
