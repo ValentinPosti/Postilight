@@ -10,13 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
-using PostiligthApp.util;
+using PostilightApp.util;
 using nexus.core;
 using nexus.core.logging;
 using nexus.protocols.ble;
 using Xamarin.Forms;
 
-namespace PostiligthApp.viewmodel
+namespace PostilightApp.viewmodel
 {
    public abstract class AbstractScanViewModel : BaseViewModel
    {

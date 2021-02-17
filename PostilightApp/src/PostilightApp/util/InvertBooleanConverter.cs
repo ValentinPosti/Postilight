@@ -8,7 +8,7 @@ using System;
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace PostiligthApp.util
+namespace PostilightApp.util
 {
    public class InvertBooleanConverter : IValueConverter
    {

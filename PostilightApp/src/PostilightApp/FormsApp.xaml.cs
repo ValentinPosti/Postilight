@@ -7,19 +7,21 @@
 using System;
 using System.Reflection;
 using Acr.UserDialogs;
-using PostiligthApp.view;
-using PostiligthApp.viewmodel;
+
+using PostilightApp.viewmodel;
 using nexus.core.logging;
 using nexus.protocols.ble;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
+using PostilightApp.view;
+
 #if RELEASE
 using Microsoft.Azure.Mobile;
 using Microsoft.Azure.Mobile.Analytics;
 using Microsoft.Azure.Mobile.Crashes;
 #endif
 
-namespace PostiligthApp
+namespace PostilightApp
 {
    public partial class FormsApp
    {
@@ -51,33 +53,42 @@ namespace PostiligthApp
                await bleGattServerViewModel.OpenConnection();
             } );
 
-         m_rootPage = new NavigationPage(
-            new TabbedPage
-            {
-               Title = "BLE.net Sample App",
-               Children = {new BleDeviceScannerPage( bleScanViewModel ), new LogsPage( logsVm )}
-            } );
+         var homeViewModel = new HomePageViewModel();
 
+         var homePage = new HomePage();
+         homePage.IconImageSource = "home.png";
+      
+         var tabbedPage = new TabbedPage
+         {
+            Title = "POSTILIGHT",
+            BackgroundColor = Color.DarkOrange,
+            BarTextColor = Color.White,
+            BarBackgroundColor = Color.DarkOrange,
+
+            UnselectedTabColor = Color.LightGray,
+            SelectedTabColor = Color.White,
+            Children = {
+                  new BleDeviceScannerPage( bleScanViewModel ),
+                  new DevicesPage(),
+                  homePage,
+                  new SettingsPage(),
+                  new LogsPage( logsVm ) }
+         };
+
+         tabbedPage.SelectedItem = homePage;
+
+         m_rootPage = new NavigationPage(tabbedPage);
+
+         m_rootPage.BarBackgroundColor = Color.Orange;         
          MainPage = m_rootPage;
+
+          
       }
 
       /// <inheritdoc />
       protected override void OnStart()
       {
-         base.OnStart();
-         if(Device.RuntimePlatform == Device.UWP)
-         {
-            Device.StartTimer(
-               TimeSpan.FromSeconds( 3 ),
-               () =>
-               {
-                  m_dialogs.Alert(
-                     "The UWP API can listen for advertisements but is not yet able to connect to devices.",
-                     "Quick Note",
-                     "Aww, ok" );
-                  return false;
-               } );
-         }
+         base.OnStart();       
       }
    }
 }

@@ -16,7 +16,7 @@ namespace PostilightApp.viewmodel
    /// <summary>
    /// Acts as a log sink to display logs within app without requiring a debugger connected or DEBUG mode to be active
    /// </summary>
-   public sealed class LogsViewModel
+   public sealed class HomePageViewModel
       : BaseViewModel,
         ILogSink
    {
@@ -25,7 +25,7 @@ namespace PostilightApp.viewmodel
 
       private readonly Queue<String> m_logEntries;
 
-      public LogsViewModel()
+      public HomePageViewModel()
       {
          m_logEntries = new Queue<String>( LOG_BUFFER_MAX_SIZE );
       }

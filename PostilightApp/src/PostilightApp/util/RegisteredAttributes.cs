@@ -7,7 +7,7 @@
 using System;
 using nexus.protocols.ble.gatt.adopted;
 
-namespace PostiligthApp.util
+namespace PostilightApp.util
 {
    /// <summary>
    /// Static instance of <see cref="KnownAttributes" /> for the application to use, with additional attributes added for a TI

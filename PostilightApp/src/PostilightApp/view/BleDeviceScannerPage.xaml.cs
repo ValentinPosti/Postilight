@@ -5,10 +5,10 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System;
-using PostiligthApp.viewmodel;
+using PostilightApp.viewmodel;
 using Xamarin.Forms;
 
-namespace PostiligthApp.view
+namespace PostilightApp.view
 {
    public partial class BleDeviceScannerPage
    {

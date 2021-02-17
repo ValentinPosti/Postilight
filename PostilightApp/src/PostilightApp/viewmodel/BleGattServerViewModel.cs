@@ -10,14 +10,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
-using PostiligthApp.util;
+using PostilightApp.util;
 using nexus.core;
 using nexus.core.logging;
 using nexus.protocols.ble;
 using nexus.protocols.ble.gatt;
 using Xamarin.Forms;
 
-namespace PostiligthApp.viewmodel
+namespace PostilightApp.viewmodel
 {
    public class BleGattServerViewModel : BaseViewModel
    {

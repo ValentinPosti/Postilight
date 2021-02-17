@@ -6,7 +6,7 @@
 
 using System.ComponentModel;
 
-namespace PostiligthApp.util
+namespace PostilightApp.util
 {
    public interface IBaseViewModel : INotifyPropertyChanged
    {

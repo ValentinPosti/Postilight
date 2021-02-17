@@ -8,14 +8,14 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using PostiligthApp.util;
+using PostilightApp.util;
 using nexus.core;
 using nexus.core.text;
 using nexus.protocols.ble.scan;
 using nexus.protocols.ble.scan.advertisement;
 using Xamarin.Forms;
 
-namespace PostiligthApp.viewmodel
+namespace PostilightApp.viewmodel
 {
    public class BlePeripheralViewModel
       : BaseViewModel,

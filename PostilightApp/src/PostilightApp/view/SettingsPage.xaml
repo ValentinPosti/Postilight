@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostilightApp.view.SettingsPage" Title="Settings"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.PrefersHomeIndicatorAutoHidden="true"
+             IconImageSource="settings.png"
+             >
+   <ContentPage.Content>
+      <ScrollView>
+         <StackLayout BackgroundColor="#59B2FA" Spacing="10">
+            <Frame BackgroundColor="#FFFFFF">
+               <StackLayout>
+                  <Label Text="Advanced Settings" FontSize="Title" FontAttributes="Bold"/>
+                  <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
+                     <Label Text="Scrolling" VerticalOptions="Center"/>
+                     <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
+                     <Switch IsToggled="True" HorizontalOptions="End" />
+                  </StackLayout>
+                  <BoxView BackgroundColor="Black" HeightRequest="1"/>
+                  <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
+                     <Label Text="Fading" VerticalOptions="Center"/>
+                     <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
+                     <Switch IsToggled="False" HorizontalOptions="End" />
+                  </StackLayout>
+               </StackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#FFFFFF">
+               <StackLayout Orientation="Vertical" Margin="0,0,0,0">
+                  <Label Text="Images speed" VerticalOptions="Center"/>
+                  <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="0" />
+                  <Label Text="Scrolling speed" VerticalOptions="Center"/>
+                  <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" />
+                  <Label Text="Fading speed" VerticalOptions="Center"/>
+                  <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" />
+                  <Label Text="Images translation speed" VerticalOptions="Center"/>
+                  <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" />
+                  <Label Text="Text translation speed" VerticalOptions="Center"/>
+                  <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="0" />
+               </StackLayout>
+            </Frame>
+
+
+            <StackLayout BackgroundColor="#59B2FA"  Margin="5,0,5,0">
+               <Button Text="Select mono Color" BackgroundColor="White"/>
+               <Button Text="Delete image"  BackgroundColor="White" />
+            </StackLayout>
+
+
+         </StackLayout>
+      </ScrollView>
+   </ContentPage.Content>
+</ContentPage>
+

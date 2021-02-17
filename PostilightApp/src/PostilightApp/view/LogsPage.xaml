@@ -3,20 +3,26 @@
 
 <util:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-               xmlns:util="clr-namespace:PostiligthApp.util;assembly=PostiligthApp"
-               x:Class="PostiligthApp.view.LogsPage"
-               Title="{Binding PageTitle}">
+               xmlns:util="clr-namespace:PostilightApp.util;assembly=PostilightApp"
+               x:Class="PostilightApp.view.LogsPage"
+               Title="{Binding PageTitle}"
+               xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+               ios:Page.PrefersHomeIndicatorAutoHidden="true"
+               >
    <ScrollView x:Name="scrollView"
                Orientation="Vertical"
                VerticalOptions="FillAndExpand"
-               HorizontalOptions="FillAndExpand">
+               HorizontalOptions="FillAndExpand"
+               BackgroundColor="White">      
       <Label x:Name="logsLabel"
              VerticalOptions="FillAndExpand"
              HorizontalOptions="FillAndExpand"
              FontFamily="monospace"
              Text="{Binding LogBuffer}"
              Margin="{StaticResource GridPadding}"
-             LineBreakMode="CharacterWrap">
+             LineBreakMode="CharacterWrap"
+             BackgroundColor="White"
+             >
          <Label.FontSize>
             <OnPlatform x:TypeArguments="x:Double"
                         Android="14"

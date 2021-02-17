@@ -3,8 +3,8 @@
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:util="clr-namespace:PostiligthApp.util;assembly=PostiligthApp"
-             x:Class="PostiligthApp.FormsApp">
+             xmlns:util="clr-namespace:PostilightApp.util;assembly=PostilightApp"
+             x:Class="PostilightApp.FormsApp">
    <Application.Resources>
       <ResourceDictionary>
 
@@ -17,11 +17,13 @@
                      WinPhone="10,10,10,10" />
 
          <Style TargetType="Label">
+            <Setter Property="TextColor" Value="#202020" />
             <Setter Property="FontSize">
                <OnPlatform x:TypeArguments="x:Double"
-                           iOS="12" />
+                           iOS="18" />
             </Setter>
          </Style>
+
 
          <Style TargetType="Frame">
             <Setter Property="HasShadow">
@@ -38,6 +40,16 @@
                            iOS="5,10"
                            WinPhone="5,10" />
             </Setter>
+
+         </Style>
+
+         <Style TargetType="Slider">
+            <Setter Property="MaximumTrackColor"  Value="#B5B5B5"/>
+            <Setter Property="MinimumTrackColor"  Value="#119DC8"/>            
+         </Style>
+
+         <Style TargetType="Switch">
+            <Setter Property="OnColor"  Value="DarkOrange"/>            
          </Style>
 
          <Style x:Key="LayoutStack"

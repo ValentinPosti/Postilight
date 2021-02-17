@@ -5,17 +5,18 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System;
+using System.ComponentModel;
+using PostilightApp.viewmodel;
+using Xamarin.Forms;
 
-namespace PostilightApp.util
+namespace PostilightApp.view
 {
-   internal static class BleSampleAppUtils
+   public partial class HomePage
    {
-      public const Int32 SCAN_SECONDS_DEFAULT = 10;
-      public const Int32 SCAN_SECONDS_MAX = 30;
-
-      public static Double ClampSeconds( Double seconds )
+      public HomePage( )
       {
-         return Math.Max( Math.Min( seconds, SCAN_SECONDS_MAX ), 0 );
+         InitializeComponent();
       }
+ 
    }
 }

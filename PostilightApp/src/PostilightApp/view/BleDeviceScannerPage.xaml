@@ -3,9 +3,11 @@
 
 <util:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-               xmlns:util="clr-namespace:PostiligthApp.util;assembly=PostiligthApp"
+               xmlns:util="clr-namespace:PostilightApp.util;assembly=PostilightApp"
                Title="Device Scanner"
-               x:Class="PostiligthApp.view.BleDeviceScannerPage">
+               x:Class="PostilightApp.view.BleDeviceScannerPage"
+               xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+               ios:Page.PrefersHomeIndicatorAutoHidden="true">
    <StackLayout Orientation="Vertical">
 
       <StackLayout Orientation="Horizontal"

@@ -19,7 +19,7 @@ using Xamarin.Forms.Platform.Android;
 using Application = Android.App.Application;
 using Log = Android.Util.Log;
 
-namespace PostiligthApp.android
+namespace PostilightApp.android
 {
    [Application( Debuggable = IS_DEBUG, AllowBackup = true, AllowClearUserData = true )]
    public class MyApplication : Application
@@ -72,7 +72,7 @@ namespace PostiligthApp.android
    }
 
    [Activity(
-      Label = "BLE.net Sample App",
+      Label = "Postilight",
       Theme = "@style/MainTheme",
       MainLauncher = false,
       Icon = "@drawable/icon",

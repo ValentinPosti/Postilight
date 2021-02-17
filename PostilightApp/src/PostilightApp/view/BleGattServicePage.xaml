@@ -3,9 +3,9 @@
 
 <util:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-               xmlns:util="clr-namespace:PostiligthApp.util;assembly=PostiligthApp"
+               xmlns:util="clr-namespace:PostilightApp.util;assembly=PostilightApp"
                Title="{Binding PageTitle}"
-               x:Class="PostiligthApp.view.BleGattServicePage">
+               x:Class="PostilightApp.view.BleGattServicePage">
 
    <StackLayout Orientation="Vertical"
                 VerticalOptions="FillAndExpand"

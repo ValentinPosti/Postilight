@@ -13,7 +13,8 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-namespace PostiligthApp.ios
+
+namespace PostilightApp.ios
 {
    public class MyApplication
    {
@@ -24,40 +25,40 @@ namespace PostiligthApp.ios
          false;
 #endif
 
-      internal static void Main( String[] args )
+      internal static void Main(String[] args)
       {
          // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-         if(IS_DEBUG)
+         if (IS_DEBUG)
          {
 #pragma warning disable 162
             SystemLog.Instance.AddSink(
                entry =>
                {
                   var message = entry.FormatAsString();
-                  if(entry.Severity == LogLevel.Error)
+                  if (entry.Severity == LogLevel.Error)
                   {
-                     Console.Error.WriteLine( message );
+                     Console.Error.WriteLine(message);
                   }
                   else
                   {
-                     Console.Out.WriteLine( message );
+                     Console.Out.WriteLine(message);
                   }
-               } );
+               });
 #pragma warning restore 162
          }
 
-         UIApplication.Main( args, null, nameof(AppDelegate) );
+         UIApplication.Main(args, null, nameof(AppDelegate));
       }
    }
 
-   [Register( "AppDelegate" )]
+   [Register("AppDelegate")]
    public class AppDelegate : FormsApplicationDelegate
    {
-      public override Boolean FinishedLaunching( UIApplication app, NSDictionary options )
+      public override Boolean FinishedLaunching(UIApplication app, NSDictionary options)
       {
          Forms.Init();
-         LoadApplication( new FormsApp( BluetoothLowEnergyAdapter.ObtainDefaultAdapter(), UserDialogs.Instance ) );
-         return base.FinishedLaunching( app, options );
+         LoadApplication(new FormsApp(BluetoothLowEnergyAdapter.ObtainDefaultAdapter(), UserDialogs.Instance));
+         return base.FinishedLaunching(app, options);
       }
    }
 }

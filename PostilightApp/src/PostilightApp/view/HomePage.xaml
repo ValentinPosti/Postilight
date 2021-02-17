@@ -1,0 +1,61 @@
+﻿<?xml version="1.0"
+      encoding="utf-8"?>
+
+<ContentPage xmlns:PostilightApp.util="clr-namespace:PostilightApp.util"
+               xmlns="http://xamarin.com/schemas/2014/forms"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               x:Class="PostilightApp.view.HomePage"
+               Title="Home"
+             Visual="Material"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.PrefersHomeIndicatorAutoHidden="true"
+             IconImageSource="home.png"
+             >
+   <ContentPage.IconImageSource>
+      <FontImageSource  Size="40"/>
+   </ContentPage.IconImageSource>
+   <StackLayout BackgroundColor="#59B2FA">
+      <Frame BackgroundColor="#FFFFFF">
+         <StackLayout>
+            <Label Text="Basic Settings" FontSize="Title" FontAttributes="Bold"/>
+            <StackLayout Orientation="Horizontal" Margin="10,0,10,0">
+               <Label Text="-" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Large"/>
+               <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" HeightRequest="40"/>
+               <Label Text="+" HorizontalOptions="End" VerticalOptions="Center" FontSize="Large"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
+               <Label Text="Leds on/off" VerticalOptions="Center"/>
+               <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
+               <Switch IsToggled="True" HorizontalOptions="End" />
+            </StackLayout>
+
+         </StackLayout>
+      </Frame>
+      <Frame BackgroundColor="White">
+         <StackLayout>
+            <Label Text="Mode selection" FontSize="Title" FontAttributes="Bold"/>
+            <StackLayout Orientation="Horizontal" Spacing="0">
+               <Button Text="Image"  HorizontalOptions="FillAndExpand" TextColor="DarkOrange" />
+               <Button Text="GIF"  HorizontalOptions="FillAndExpand"/>
+               <Button Text="Text" HorizontalOptions="FillAndExpand"/>
+               <Button Text="Mono"  HorizontalOptions="FillAndExpand"/>
+               <Button Text="Math"  HorizontalOptions="FillAndExpand"/>
+               <Button Text="BarGraph" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+         </StackLayout>
+      </Frame>
+      <Frame BackgroundColor="#FFFFFF">
+         <StackLayout HorizontalOptions="FillAndExpand">
+            <Label Text="Add media" FontSize="Title" FontAttributes="Bold"/>
+            <StackLayout>
+               <Button Text="Add Image"/>
+               <Button Text="Add GIF"/>
+               <Button Text="Add Text"/>
+            </StackLayout>
+         </StackLayout>
+      </Frame>
+
+
+
+   </StackLayout>
+</ContentPage>

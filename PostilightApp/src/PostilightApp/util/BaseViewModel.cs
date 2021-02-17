@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace PostiligthApp.util
+namespace PostilightApp.util
 {
    public abstract class BaseViewModel : IBaseViewModel
    {

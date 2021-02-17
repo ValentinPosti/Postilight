@@ -6,10 +6,10 @@
 
 using System;
 using System.ComponentModel;
-using PostiligthApp.viewmodel;
+using PostilightApp.viewmodel;
 using Xamarin.Forms;
 
-namespace PostiligthApp.view
+namespace PostilightApp.view
 {
    public partial class LogsPage
    {
