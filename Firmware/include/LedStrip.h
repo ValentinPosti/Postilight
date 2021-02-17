@@ -11,19 +11,28 @@
 extern NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip;
 
 extern uint8_t *g_buffer_image;
-extern uint8_t *g_raw_out;
+
+struct PostiLightData
+{
+    uint8_t luminosity;
+    uint8_t ledsOn;
+};
+
+extern PostiLightData g_Postilightdata;
 
 void SetupLedStrip();
 
-void DisplayBuffer(uint8_t *src);
+void DisplayImage(uint8_t *src);
+void DisplayBuffer();
 
 int convert_index(int index);
 
 void make_convert_index_table(void);
 
 void raz_raw(uint8_t *raw);
+void clear(uint8_t *raw, uint8_t r, uint8_t g, uint8_t b);
 
-void copy_raw(uint8_t *src);
+void copy_raw_to_strip(uint8_t *src, bool ApplyLum = false);
 
 void luminosite(uint8_t *raw_in, uint8_t *raw_out, uint8_t intensity);
 

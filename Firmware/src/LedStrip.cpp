@@ -10,11 +10,16 @@ int convert_index_table[LED_COUNT];
 uint8_t *g_buffer_image;
 uint8_t *g_raw_out;
 
+PostiLightData g_Postilightdata;
+
 int g_compteur = 0;
 
 void SetupLedStrip()
 {
-    int i;
+    // ToDo read it from the bigFile
+
+    g_Postilightdata.luminosity = 128;
+    g_Postilightdata.ledsOn = 1;
 
     make_convert_index_table();
 
@@ -25,15 +30,23 @@ void SetupLedStrip()
     g_buffer_image = (uint8_t *)malloc(RAW_SIZE);
     g_raw_out = (uint8_t *)malloc(RAW_SIZE);
 
-    raz_raw(g_buffer_image);
+    clear(g_raw_out, 255, 0, 0);
+    copy_raw_to_strip(g_raw_out, false);
+    strip.Show();
+    delay(1000);
 
-    for (i = 0; i <= 15; i = i + 2)
-    {
-        draw_vertical_bar_in_buffer(g_buffer_image, i, 15);
-    }
+    clear(g_raw_out, 0, 255, 0);
+    copy_raw_to_strip(g_raw_out, false);
+    strip.Show();
+    delay(1000);
 
-    luminosite(g_buffer_image, g_raw_out, 128);
-    copy_raw(g_raw_out);
+    clear(g_raw_out, 0, 0, 255);
+    copy_raw_to_strip(g_raw_out, false);
+    strip.Show();
+    delay(1000);
+
+    raz_raw(g_raw_out);
+    copy_raw_to_strip(g_raw_out);
     strip.Show();
     delay(1000);
 }
@@ -136,6 +149,8 @@ int convert_index(int index)
         //return(map(index, 240, 255, 0, 15));
         return (0 + (index - 240) + 0);
     }
+
+    return 0;
 }
 
 void make_convert_index_table(void)
@@ -157,24 +172,66 @@ void raz_raw(uint8_t *raw)
     }
 }
 
-void DisplayBuffer(uint8_t *src)
+void clear(uint8_t *raw, uint8_t r, uint8_t g, uint8_t b)
 {
-    copy_raw(src);
-    strip.Show();
+    int i;
+
+    for (i = 0; i <= RAW_SIZE / 3; i++)
+    {
+        raw[3 * i] = r;
+        raw[3 * i + 1] = g;
+        raw[3 * i + 2] = b;
+    }
 }
 
-void copy_raw(uint8_t *src)
+void copy_raw_to_strip(uint8_t *src, bool applyLum)
 {
     int i;
     int p;
 
     p = 0;
 
-    for (i = 0; i < LED_COUNT; i++)
+    if (0 == g_Postilightdata.ledsOn)
     {
-        strip.SetPixelColor(convert_index_table[i], RgbColor(src[p], src[p + 1], src[p + 2]));
-        p += 3;
+        for (i = 0; i < LED_COUNT; i++)
+        {
+            strip.SetPixelColor(convert_index_table[i], RgbColor(0, 0, 0));
+            p += 3;
+        }
     }
+    else if (applyLum)
+    {
+        uint8_t intensity = ((int)g_Postilightdata.luminosity * (g_Postilightdata.luminosity + 1)) >> 8; // mis au carré pour avoir une courbe plus lente. cf réponse des leds.
+        for (i = 0; i < LED_COUNT; i++)
+        {
+            uint8_t r = (src[p] * (intensity + 1)) >> 8;
+            uint8_t g = (src[p + 1] * (intensity + 1)) >> 8;
+            uint8_t b = (src[p + 2] * (intensity + 1)) >> 8;
+
+            strip.SetPixelColor(convert_index_table[i], RgbColor(r, g, b));
+            p += 3;
+        }
+    }
+    else
+    {
+        for (i = 0; i < LED_COUNT; i++)
+        {
+            strip.SetPixelColor(convert_index_table[i], RgbColor(src[p], src[p + 1], src[p + 2]));
+            p += 3;
+        }
+    }
+}
+
+void DisplayBuffer()
+{
+    copy_raw_to_strip(g_raw_out, true);
+    strip.Show();
+}
+
+void DisplayImage(uint8_t *src)
+{
+    memcpy(g_raw_out,src,RAW_SIZE);
+    DisplayBuffer();
 }
 
 void luminosite(uint8_t *raw_in, uint8_t *raw_out, uint8_t intensity)

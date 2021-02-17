@@ -25,6 +25,8 @@ namespace PostilightApp.viewmodel
       protected CancellationTokenSource m_scanCancel;
       private Boolean m_isScanning;
 
+    
+
       protected AbstractScanViewModel( IBluetoothLowEnergyAdapter bleAdapter, IUserDialogs dialogs )
       {
          m_bleAdapter = bleAdapter;

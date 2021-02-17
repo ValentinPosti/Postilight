@@ -14,6 +14,7 @@ using nexus.protocols.ble;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
 using PostilightApp.view;
+using System.Threading.Tasks;
 
 #if RELEASE
 using Microsoft.Azure.Mobile;
@@ -28,6 +29,16 @@ namespace PostilightApp
       private readonly IUserDialogs m_dialogs;
       private readonly NavigationPage m_rootPage;
 
+      BleGattServerViewModel bleGattServerViewModel;
+
+     
+
+      public async Task Disconnect()
+      {
+         await bleGattServerViewModel.CloseConnection();
+      }
+
+
       public FormsApp( IBluetoothLowEnergyAdapter adapter, IUserDialogs dialogs )
       {
          InitializeComponent();
@@ -39,43 +50,43 @@ namespace PostilightApp
          var bleAssembly = adapter.GetType().GetTypeInfo().Assembly.GetName();
          Log.Info( bleAssembly.Name + "@" + bleAssembly.Version );
 
-         var bleGattServerViewModel = new BleGattServerViewModel( dialogs, adapter );
+
+         bleGattServerViewModel = new BleGattServerViewModel( dialogs, adapter );
+
+         
          var bleScanViewModel = new BleDeviceScannerViewModel(
             bleAdapter: adapter,
             dialogs: dialogs,
             onSelectDevice: async p =>
             {
                await bleGattServerViewModel.Update( p );
-               await m_rootPage.PushAsync(
-                  new BleGattServerPage(
-                     model: bleGattServerViewModel,
-                     bleServiceSelected: async s => { await m_rootPage.PushAsync( new BleGattServicePage( s ) ); } ) );
                await bleGattServerViewModel.OpenConnection();
             } );
+         
+         //var homeViewModel = new HomePageViewModel();
 
-         var homeViewModel = new HomePageViewModel();
-
-         var homePage = new HomePage();
+         var homePage = new HomePage(bleGattServerViewModel);
          homePage.IconImageSource = "home.png";
-      
+
+
+         var devicePage = new DevicesPage(bleScanViewModel);
+
          var tabbedPage = new TabbedPage
          {
             Title = "POSTILIGHT",
             BackgroundColor = Color.DarkOrange,
             BarTextColor = Color.White,
-            BarBackgroundColor = Color.DarkOrange,
-
+            BarBackgroundColor = Color.DarkOrange,           
             UnselectedTabColor = Color.LightGray,
             SelectedTabColor = Color.White,
             Children = {
-                  new BleDeviceScannerPage( bleScanViewModel ),
-                  new DevicesPage(),
+                  devicePage,
                   homePage,
-                  new SettingsPage(),
+                  new SettingsPage(bleGattServerViewModel),
                   new LogsPage( logsVm ) }
          };
 
-         tabbedPage.SelectedItem = homePage;
+         tabbedPage.SelectedItem = devicePage;
 
          m_rootPage = new NavigationPage(tabbedPage);
 

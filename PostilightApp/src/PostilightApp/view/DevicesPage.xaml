@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PostilightApp.view.DevicesPage" Title="Devices"
-               xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PostilightApp.view.DevicesPage" 
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.PrefersHomeIndicatorAutoHidden="true"
              IconImageSource="device.png"
+             Title="Devices"      
              >
+
    <ContentPage.Content>
       <Frame BackgroundColor="White">
          <StackLayout Margin="10,0,0,0" BackgroundColor="White">
             <Label Text="Device selection" FontSize="Title" FontAttributes="Bold"/>
 
-            <StackLayout Orientation="Horizontal" Padding="{StaticResource GridPadding}" BackgroundColor="White">
-               <StackLayout HorizontalOptions="Start" Orientation="Horizontal" BackgroundColor="White">
+            <StackLayout Orientation="Horizontal"
+                   Padding="{StaticResource GridPadding}">
+               <StackLayout HorizontalOptions="Start"
+                      Orientation="Horizontal">
                   <Label Text="Scanning"
                    IsVisible="{Binding IsScanning}"
                    VerticalOptions="Center" />
@@ -42,11 +48,35 @@
                </StackLayout>
             </StackLayout>
 
-            <ListView  BackgroundColor="White">
+            <ListView x:Name="deviceListView" ItemsSource="{Binding FoundDevices}"
+                ItemTapped="ListView_OnItemTapped"
+                ItemSelected="ListView_OnItemSelected"
+                SeparatorColor="#aaaaaa"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand">
                <ListView.ItemTemplate>
-                  <DataTemplate></DataTemplate>
+                  <DataTemplate>
+                     <ViewCell>
+                        <StackLayout Grid.Row="6"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="2"
+                                     Orientation="Horizontal"
+                                     HorizontalOptions="FillAndExpand">
+                           <Label Text="{Binding DeviceName}" TextColor="Black" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+                           <Label Text="Connected" TextColor="Blue" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"  IsVisible="{Binding IsConnected}"/>
+                           <Button Text="Connect"  IsVisible="{Binding IsConnected, Converter={StaticResource InvertBoolean}}"
+                                   Command="{Binding ConnectToDeviceCommand}"
+                                   HorizontalOptions="EndAndExpand">
+                              <Button.TextColor>
+                                 <OnPlatform x:TypeArguments="Color" WinPhone="DarkOrange" />
+                              </Button.TextColor>
+                           </Button>
+                        </StackLayout>
+                     </ViewCell>
+                  </DataTemplate>
                </ListView.ItemTemplate>
             </ListView>
+
          </StackLayout>
       </Frame>
    </ContentPage.Content>

@@ -56,6 +56,8 @@ namespace PostilightApp.viewmodel
 
          FoundDevices.Clear();
 
+         await ((FormsApp)FormsApp.Current).Disconnect();
+       
          StopScan();
          IsScanning = true;
          seconds = BleSampleAppUtils.ClampSeconds( seconds );

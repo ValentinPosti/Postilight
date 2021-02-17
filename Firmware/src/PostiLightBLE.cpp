@@ -53,8 +53,40 @@ class ImageCallbacks : public BLECharacteristicCallbacks
         Serial.println(characteristic->getUUID().toString().c_str());
 
         uint8_t *data = characteristic->getData();
-        DisplayBuffer(data);
+        DisplayImage(data);
         Serial.println("Image Data Received");
+    }
+};
+
+class BrightnessCallback : public BLECharacteristicCallbacks
+{
+    void onWrite(BLECharacteristic *characteristic)
+    {
+        uint8_t *data = characteristic->getData();
+        g_Postilightdata.luminosity = *data;
+        Serial.println("Brightness Data Received");
+        DisplayBuffer();
+    }
+
+    void onRead(BLECharacteristic *characteristic)
+    {
+        characteristic->setValue(&g_Postilightdata.luminosity, sizeof(uint8_t));
+    }
+};
+
+class LedsOnOffCallback : public BLECharacteristicCallbacks
+{
+    void onWrite(BLECharacteristic *characteristic)
+    {
+        uint8_t *data = characteristic->getData();
+        g_Postilightdata.ledsOn = *data;
+        Serial.println("LedsOnOff Data Received");
+        DisplayBuffer();
+    }
+
+    void onRead(BLECharacteristic *characteristic)
+    {
+        characteristic->setValue(&g_Postilightdata.ledsOn, sizeof(uint8_t));
     }
 };
 
@@ -74,6 +106,7 @@ void SetupBLE()
 
     // Register message service that can receive messages and reply with a static message.
     BLEService *service = server->createService(SERVICE_UUID);
+    BLECharacteristic *characteristic;
 
     characteristicMessage = service->createCharacteristic(CHARACTERISTIC_MESSAGE_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY | BLECharacteristic::PROPERTY_WRITE);
     characteristicMessage->setCallbacks(new MessageCallbacks());
@@ -87,11 +120,17 @@ void SetupBLE()
     //descImage->setValue(std::string("Updload Image"));
     //characteristicImage->addDescriptor(descImage);
 
+    characteristic = service->createCharacteristic(CHARACTERISTIC_BRIGHTNESS_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
+    characteristic->setCallbacks(new BrightnessCallback());
+
+    characteristic = service->createCharacteristic(CHARACTERISTIC_ON_OFF_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
+    characteristic->setCallbacks(new LedsOnOffCallback());
+
     service->start();
 
     // Register device info service, that contains the device's UUID, manufacturer and name.
     service = server->createService(DEVINFO_UUID);
-    BLECharacteristic *characteristic = service->createCharacteristic(DEVINFO_MANUFACTURER_UUID, BLECharacteristic::PROPERTY_READ);
+    characteristic = service->createCharacteristic(DEVINFO_MANUFACTURER_UUID, BLECharacteristic::PROPERTY_READ);
     characteristic->setValue(DEVICE_MANUFACTURER);
     characteristic = service->createCharacteristic(DEVINFO_NAME_UUID, BLECharacteristic::PROPERTY_READ);
     characteristic->setValue(deviceName.c_str());
@@ -99,17 +138,6 @@ void SetupBLE()
     String chipId = String((uint32_t)(ESP.getEfuseMac() >> 24), HEX);
     characteristic->setValue(chipId.c_str());
     service->start();
-
-        /*
-    BLEAdvertising *advertisement = server->getAdvertising();
-    BLEAdvertisementData adv;
-    adv.setName(deviceName.c_str());
-    adv.setCompleteServices(BLEUUID(SERVICE_UUID));
-    advertisement->setScanResponse(true);
-    advertisement->setAdvertisementData(adv);
-    advertisement->start();
-    BLEDevice::startAdvertising();
-    */
 
     // Advertise services
     BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();

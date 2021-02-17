@@ -17,3 +17,4 @@ using Android.App;
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
 [assembly: UsesPermission(Manifest.Permission.Bluetooth)]
 [assembly: UsesPermission(Manifest.Permission.BluetoothAdmin)]
+[assembly: UsesPermission(Manifest.Permission.AccessBackgroundLocation)]

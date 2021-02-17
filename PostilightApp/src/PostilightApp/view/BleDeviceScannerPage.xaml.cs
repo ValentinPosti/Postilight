@@ -7,6 +7,9 @@
 using System;
 using PostilightApp.viewmodel;
 using Xamarin.Forms;
+using nexus.core;
+using nexus.core.logging;
+using nexus.protocols.ble;
 
 namespace PostilightApp.view
 {

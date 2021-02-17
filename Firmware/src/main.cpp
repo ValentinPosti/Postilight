@@ -66,7 +66,8 @@ void loop()
             offset = ImageIndexToBitmapOffset(i);
             data_file.seek(offset);
             data_file.readBytes((char *)imageData, image_size);
-            DisplayBuffer(imageData);
+
+            DisplayImage(imageData);
             delay(2000);
         }
 

@@ -23,6 +23,18 @@ namespace PostilightApp.viewmodel
    {
       private Boolean m_isExpanded;
 
+      public IBlePeripheral Device
+      {
+         get { return Model; }
+      }
+
+      Boolean m_isConnected;
+      public Boolean IsConnected
+      {
+         get { return m_isConnected; }
+         set { Set(ref m_isConnected, value); }
+      }
+
       public BlePeripheralViewModel( IBlePeripheral model, Func<BlePeripheralViewModel, Task> onSelectDevice )
       {
          Model = model;

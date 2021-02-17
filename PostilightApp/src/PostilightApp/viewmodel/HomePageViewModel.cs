@@ -16,49 +16,20 @@ namespace PostilightApp.viewmodel
    /// <summary>
    /// Acts as a log sink to display logs within app without requiring a debugger connected or DEBUG mode to be active
    /// </summary>
-   public sealed class HomePageViewModel
-      : BaseViewModel,
-        ILogSink
+   public sealed class HomePageViewModel : BaseViewModel
    {
-      private const Int32 LOG_BUFFER_MAX_SIZE = 100;
-      private readonly Object m_lock = new Object();
-
-      private readonly Queue<String> m_logEntries;
-
-      public HomePageViewModel()
-      {
-         m_logEntries = new Queue<String>( LOG_BUFFER_MAX_SIZE );
-      }
-
-      public String LogBuffer
+      public bool IsConnected
       {
          get
          {
-            lock(m_lock)
-            {
-               return m_logEntries.Join( "\n" );
-            }
+            return true;
          }
       }
 
-      public String PageTitle => "Logs";
-
-      /// <inheritdoc />
-      public void Handle( params ILogEntry[] entries )
+      public HomePageViewModel()
       {
-         lock(m_lock)
-         {
-            foreach(var entry in entries)
-            {
-               m_logEntries.Enqueue( entry.SequenceId + " " + entry.FormatAsString() );
-            }
-
-            while(m_logEntries.Count > LOG_BUFFER_MAX_SIZE)
-            {
-               m_logEntries.Dequeue();
-            }
-         }
-         Device.BeginInvokeOnMainThread( () => RaisePropertyChanged( nameof(LogBuffer) ) );
+        
       }
+
    }
 }
