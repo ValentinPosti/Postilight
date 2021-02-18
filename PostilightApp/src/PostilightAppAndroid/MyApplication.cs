@@ -70,13 +70,14 @@ namespace PostilightApp.android
          }
       }
    }
-
    [Activity(
       Label = "Postilight",
       Theme = "@style/MainTheme",
       MainLauncher = false,
       Icon = "@drawable/icon",
-      ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation )]
+      ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, 
+      ScreenOrientation = ScreenOrientation.Portrait)
+      ]
    public class MainActivity : FormsAppCompatActivity
    {
       /// <remarks>
