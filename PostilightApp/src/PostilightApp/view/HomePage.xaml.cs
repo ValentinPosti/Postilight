@@ -28,6 +28,9 @@ namespace PostilightApp.view
          await _model.WriteValue(BleGuids.Service, BleGuids.Brightness, (byte)v);
       }
 
-
+      void OnRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+      {
+         var v = e.Value;
+      }
    }
 }

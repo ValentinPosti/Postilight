@@ -206,6 +206,8 @@ namespace PostilightApp.viewmodel
 
       public async Task WriteValue(Guid serviceGuid, Guid characteristicGuid,  byte v)
       {
+         if (IsBusy) return;
+
          try
          {
             Byte[] val = new Byte[1];

@@ -7,6 +7,7 @@
       <OutputPath>..\..\artifacts\bin\$(AssemblyName)\$(Configuration)\$(Platform)</OutputPath>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <AssemblyName>PostilightApp</AssemblyName>
+       <SynchReleaseVersion>false</SynchReleaseVersion>
    </PropertyGroup>
 
    <ItemGroup>
@@ -18,6 +19,7 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012">
     </PackageReference>
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
 
    <ItemGroup>
@@ -36,5 +38,10 @@
    </ItemGroup>
    <ItemGroup>
      <EmbeddedResource Remove="view\MainPage.xaml" />
+   </ItemGroup>
+   <ItemGroup>
+     <Reference Include="Mono.Android">
+       <HintPath>..\..\..\..\..\..\..\..\Library\Frameworks\Xamarin.Android.framework\Versions\11.1.0.26\lib\xamarin.android\xbuild-frameworks\MonoAndroid\v10.0\Mono.Android.dll</HintPath>
+     </Reference>
    </ItemGroup>
 </Project>

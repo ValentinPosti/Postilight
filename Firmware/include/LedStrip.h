@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __LED_STRIP__
+#define __LED_STRIP__
+
 #include <NeoPixelBus.h>
 
 #define NB_LINES 16
@@ -41,3 +43,5 @@ void fondu_raw(uint8_t *raw_in1, uint8_t *raw_in2, uint8_t *raw_out, float alpha
 char fondu_pixel(char value1, char value2, float alpha);
 void draw_vertical_bar_in_buffer(uint8_t *raw, uint8_t column, uint8_t height);
 void draw_pixel_in_buffer(uint8_t *raw, uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b);
+
+#endif

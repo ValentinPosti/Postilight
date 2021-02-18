@@ -234,43 +234,6 @@ void DisplayImage(uint8_t *src)
     DisplayBuffer();
 }
 
-void luminosite(uint8_t *raw_in, uint8_t *raw_out, uint8_t intensity)
-{
-    int i;
-
-    intensity = (intensity * (intensity + 1)) >> 8; // mis au carré pour avoir une courbe plus lente. cf réponse des leds.
-    for (i = 0; i < RAW_SIZE; i++)
-    {
-        *raw_out++ = ((*raw_in++) * (intensity + 1)) >> 8;
-    }
-}
-
-void fondu_raw(uint8_t *raw_in1, uint8_t *raw_in2, uint8_t *raw_out, float alpha)
-{
-    int i;
-    int index;
-
-    for (i = 0; i < NB_PIXELS; i++)
-    {
-        index = (3 * i);
-        raw_out[index] = fondu_pixel(raw_in2[index], raw_in1[index], alpha);
-
-        index = (3 * i) + 1;
-        raw_out[index] = fondu_pixel(raw_in2[index], raw_in1[index], alpha);
-
-        index = (3 * i) + 2;
-        raw_out[index] = fondu_pixel(raw_in2[index], raw_in1[index], alpha);
-    }
-}
-
-char fondu_pixel(char value1, char value2, float alpha)
-{
-    float tmp;
-
-    tmp = ((alpha) * (float)value1) + ((1.0 - alpha) * (float)value2);
-
-    return ((char)tmp);
-}
 
 //height : hauteur de la barre verticale (entre 0 et 15)
 //column : abcisse de la barre verticale (entre 0 et 15)
