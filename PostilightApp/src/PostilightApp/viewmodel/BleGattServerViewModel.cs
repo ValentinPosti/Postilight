@@ -204,16 +204,15 @@ namespace PostilightApp.viewmodel
          IsBusy = false;
       }
 
-      public async Task WriteValue(Guid serviceGuid, Guid characteristicGuid,  byte v)
+      public async Task WriteValue(Guid serviceGuid, Guid characteristicGuid,int v)
       {
          if (IsBusy) return;
 
          try
          {
-            Byte[] val = new Byte[1];
-            val[0] = v;
+            Byte[] val = v.ToBytes();
             IsBusy = true;
-            await m_gattServer.WriteCharacteristicValue(serviceGuid, characteristicGuid, val);
+            await m_gattServer.WriteCharacteristicValue(serviceGuid, characteristicGuid,val);
       
          }
          catch (GattException ex)

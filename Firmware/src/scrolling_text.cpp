@@ -121,8 +121,8 @@ const uint8_t Font5x7[] = {
 // We walk though the 8 bits in colorbyte one at a time. If the bit is 1 then we send the 8 bits of row out. Otherwise we send 0.
 void sendBitx8(const uint8_t row, const uint8_t r, const uint8_t g, const uint8_t b)
 {
-  int index_strip;
-  uint8_t P0, P1, P2, P3, P4, P5, P6, P7;
+  //int index_strip;
+  //uint8_t P0, P1, P2, P3, P4, P5, P6, P7;
   uint8_t P[8];
   int k;
   uint8_t R, G, B;

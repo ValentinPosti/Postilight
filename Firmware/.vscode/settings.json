@@ -2,6 +2,23 @@
     "files.associations": {
         "*.ble": "cpp",
         "string": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "limits": "cpp",
+        "sstream": "cpp",
+        "system_error": "cpp",
+        "random": "cpp"
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.pio": true,
+        "**/.vscode": true,
+        "**/data": true
     }
 }

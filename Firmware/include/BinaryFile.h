@@ -1,9 +1,20 @@
 
+#include "globals.h"
 struct ImageHeader
 {
-    byte isBlockUsed;
-    byte isFirstFrame;
-    short nextImageIndex;
+    byte isBlockUsed = false;
+    byte isFirstFrame = false;
+    short nextImageIndex = INVALID_IMAGE_INDEX;
+
+    bool isImage()
+    {
+        return isBlockUsed && isFirstFrame && (nextImageIndex == INVALID_IMAGE_INDEX);
+    }
+
+    bool isAnimation()
+    {
+        return isBlockUsed && isFirstFrame && (nextImageIndex != INVALID_IMAGE_INDEX);
+    }
 };
 
 static const int image_count = 1024;

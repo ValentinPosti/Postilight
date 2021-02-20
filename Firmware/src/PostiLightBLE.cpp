@@ -25,23 +25,63 @@ class MyServerCallbacks : public BLEServerCallbacks
     }
 };
 
-class MessageCallbacks : public BLECharacteristicCallbacks
+class BaseCallback : public BLECharacteristicCallbacks
 {
-    void onWrite(BLECharacteristic *characteristic)
+public:
+    BaseCallback(BLEService *service, const char *CharaterciticGuid, uint32_t rwn)
     {
-
-        std::string data = characteristic->getValue();
-
-        Serial.print("BLECharacteristic : ");
-        Serial.println(characteristic->getUUID().toString().c_str());
-
-        Serial.print("MessageCallbacks : ");
-        Serial.println(data.c_str());
+        BLECharacteristic *characteristic = service->createCharacteristic(CharaterciticGuid, rwn);
+        characteristic->setCallbacks(this);
     }
 
-    void onRead(BLECharacteristic *characteristic)
+    virtual void onWrite(BLECharacteristic *characteristic) = 0;
+
+    virtual void onRead(BLECharacteristic *characteristic) = 0;
+};
+
+class IntCallback : public BaseCallback
+{
+protected:
+    uint32_t *_target_data;
+
+public:
+    IntCallback(BLEService *service, const char *CharaterciticGuid, uint32_t *target_data)
+        : BaseCallback(service, CharaterciticGuid, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE)
     {
-        characteristic->setValue("Foobar");
+        _target_data = target_data;
+    }
+
+    virtual void onWrite(BLECharacteristic *characteristic)
+    {
+        Serial.print("BLECharacteristic onWrite : ");
+        Serial.println(characteristic->getUUID().toString().c_str());
+
+        uint32_t *data = (uint32_t *)characteristic->getData();
+        *_target_data = *data;
+    }
+
+    virtual void onRead(BLECharacteristic *characteristic)
+    {
+        Serial.print("BLECharacteristic onRead : ");
+        Serial.println(characteristic->getUUID().toString().c_str());
+
+        characteristic->setValue((uint8_t *)_target_data, sizeof(uint32_t));
+    }
+};
+
+class IntCallbackAndDisplay : public IntCallback
+{
+
+public:
+    IntCallbackAndDisplay(BLEService *service, const char *CharaterciticGuid, uint32_t *target_data)
+        : IntCallback(service, CharaterciticGuid, target_data)
+    {
+    }
+
+    virtual void onWrite(BLECharacteristic *characteristic)
+    {
+        IntCallback::onWrite(characteristic);
+        DisplayBuffer();
     }
 };
 
@@ -58,35 +98,24 @@ class ImageCallbacks : public BLECharacteristicCallbacks
     }
 };
 
-class BrightnessCallback : public BLECharacteristicCallbacks
+class ColorCallbacks : public BLECharacteristicCallbacks
 {
-    void onWrite(BLECharacteristic *characteristic)
+    virtual void onWrite(BLECharacteristic *characteristic)
     {
         uint8_t *data = characteristic->getData();
-        g_Postilightdata.luminosity = *data;
-        Serial.println("Brightness Data Received");
-        DisplayBuffer();
+        g_Postilightdata.rgb[0] = *data;
+        g_Postilightdata.rgb[1] = *(data + 1);
+        g_Postilightdata.rgb[2] = *(data + 2);
+
+        if (g_Postilightdata.mode == MONO)
+        {
+            DisplayBuffer();
+        }
     }
 
-    void onRead(BLECharacteristic *characteristic)
+    virtual void onRead(BLECharacteristic *characteristic)
     {
-        characteristic->setValue(&g_Postilightdata.luminosity, sizeof(uint8_t));
-    }
-};
-
-class LedsOnOffCallback : public BLECharacteristicCallbacks
-{
-    void onWrite(BLECharacteristic *characteristic)
-    {
-        uint8_t *data = characteristic->getData();
-        g_Postilightdata.ledsOn = *data;
-        Serial.println("LedsOnOff Data Received");
-        DisplayBuffer();
-    }
-
-    void onRead(BLECharacteristic *characteristic)
-    {
-        characteristic->setValue(&g_Postilightdata.ledsOn, sizeof(uint8_t));
+        characteristic->setValue((uint8_t *)(&g_Postilightdata.rgb[0]), 3 * sizeof(uint8_t));
     }
 };
 
@@ -108,23 +137,25 @@ void SetupBLE()
     BLEService *service = server->createService(SERVICE_UUID);
     BLECharacteristic *characteristic;
 
-    characteristicMessage = service->createCharacteristic(CHARACTERISTIC_MESSAGE_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY | BLECharacteristic::PROPERTY_WRITE);
-    characteristicMessage->setCallbacks(new MessageCallbacks());
-    //BLEDescriptor *descMessage = new BLEDescriptor(BLEUUID((uint16_t)0x2901));
-    //descMessage->setValue(std::string("Message"));
-    //characteristicMessage->addDescriptor(descMessage);
+    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
+    characteristic->setCallbacks(new ImageCallbacks());
 
-    characteristicImage = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
-    characteristicImage->setCallbacks(new ImageCallbacks());
-    //BLEDescriptor *descImage = new BLEDescriptor(BLEUUID((uint16_t)0x2901));
-    //descImage->setValue(std::string("Updload Image"));
-    //characteristicImage->addDescriptor(descImage);
+    new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
+    new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);
+    new IntCallback(service, CHARACTERISTIC_MODE_UUID, (uint32_t *)&g_Postilightdata.mode);
 
-    characteristic = service->createCharacteristic(CHARACTERISTIC_BRIGHTNESS_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
-    characteristic->setCallbacks(new BrightnessCallback());
+    new IntCallback(service, CHARACTERISTIC_TMODE_UUID, (uint32_t *)&g_Postilightdata.trs);
 
-    characteristic = service->createCharacteristic(CHARACTERISTIC_ON_OFF_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
-    characteristic->setCallbacks(new LedsOnOffCallback());
+    new IntCallback(service, CHARACTERISTIC_IMAGE_INTERVAL_UUID, &g_Postilightdata.imt);
+
+    new IntCallback(service, CHARACTERISTIC_SCROLLING_SPEED_UUID, &g_Postilightdata.imt);
+    new IntCallback(service, CHARACTERISTIC_FADING_DURATION_UUID, &g_Postilightdata.fps);
+
+    new IntCallback(service, CHARACTERISTIC_IMAGE_TRANSLATION_SPEED_UUID, &g_Postilightdata.its);
+    new IntCallback(service, CHARACTERISTIC_TEXT_TRANSLATION_SPEED_UUID, &g_Postilightdata.tts);
+
+    characteristic = service->createCharacteristic(CHARACTERISTIC_MONO_COLOR_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ);
+    characteristic->setCallbacks(new ColorCallbacks());
 
     service->start();
 

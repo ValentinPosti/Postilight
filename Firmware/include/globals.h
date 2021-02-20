@@ -4,7 +4,13 @@
 #define __GLOBALS__
 #include <stdint.h>
 #include <NeoPixelBus.h>
-#include "LedStrip.h"
+
+#define NB_LINES 16
+#define NB_COLUMNS 16
+
+#define LED_COUNT (NB_LINES * NB_COLUMNS)
+#define RAW_SIZE (3 * NB_LINES * NB_COLUMNS)
+#define NB_PIXELS (NB_LINES * NB_COLUMNS)
 
 #define M_PI 3.14159265358979323846 /* pi */
 
@@ -21,20 +27,67 @@
 #define INTERCHAR_SPACE 1
 #define ASCII_OFFSET 0x20 // ASSCI code of 1st char in font array
 
+#define INVALID_IMAGE_INDEX -1
+
 enum MODES
 {
-    BITMAP = 0,
-    GAMEOFLIFE = 1,
-
+  IMAGE = 0,
+  GIF,
+  TEXT,
+  MONO,
+  MATH,
+  BARGRAPH
 };
 
-extern uint8_t* raw;
-extern uint8_t* raw_filt;
-extern uint8_t* raw_lum;
-extern uint8_t* raw_out;
+enum TRANSITION_MODE
+{
+  NONE = 0,
+  FADING = 1,
+  SCROLLING = 2,
+  SCROLL_AND_FADE = FADING | SCROLLING,
+};
+/*
+struct PostiLightData
+{
+  uint8_t luminosity;
+  uint8_t ledsOn;
+  MODES mode;
+  uint8_t scrolling;
+  uint8_t fading;
+  uint8_t image_interval;
+  uint8_t scrolling_speed;
+  uint8_t fading_speed;
+  uint8_t image_translation_speed;
+  uint8_t text_translation_speed;
+  uint8_t mono_r;
+  uint8_t mono_g;
+  uint8_t mono_b;
+};
+*/
+struct PostiLightData
+{
+  MODES mode = MATH;
+  uint32_t leds_on;     //LEDs allumées ou non
+  uint32_t intensity;   //intensité des LEDs
+  uint32_t imt;         //temps d'affichage en ms des images fixes
+  uint32_t fps;         //temps d'affichage en ms des images GIF
+  uint32_t nbloops;     //nombre de loops a jouer
+  uint32_t trt;         //temps d'affichage de la transition entre images fixes
+  TRANSITION_MODE trs;  //transition style 0: nothing, 1: fading, 2: scrolling
+  uint32_t its;         //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
+  uint32_t tts;         //vitesse de défilement du texte en défilement horizontal
+  unsigned char rgb[3]; //couleur de l'image mono couleur
+};
 
-extern uint8_t* g_buffer_txt;
-extern uint8_t* g_buffer_copy;
+extern PostiLightData g_Postilightdata;
+
+extern uint8_t *raw;
+extern uint8_t *raw_filt;
+extern uint8_t *raw_lum;
+extern uint8_t *raw_out;
+
+extern uint8_t *g_buffer_txt;
+extern uint8_t *g_buffer_copy;
 
 extern bool useConsole;
 extern NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip;

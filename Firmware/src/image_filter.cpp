@@ -1,6 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
 
-
 /* USER CODE BEGIN Includes */
 #include "globals.h"
 #include "image_filter.h"
@@ -217,12 +216,25 @@ void updateFilterOffsets(float *real_time, int *ioffsetX, float *goffsetX)
   }
 }
 
+unsigned char fondu_pixel(unsigned char value1, unsigned char value2, float alpha)
+{
+  float tmp;
+
+  tmp = ((alpha) * (float)value1) + ((1.0 - alpha) * (float)value2);
+
+  return ((unsigned char)tmp);
+}
+
 void fondu_raw(uint8_t *raw_in1, uint8_t *raw_in2, uint8_t *raw_out, float alpha)
 {
   int i;
   int index;
 
-  for (i = 0; i < NB_PIXELS; i++)
+  Serial.println(alpha);
+
+  
+
+      for (i = 0; i < NB_PIXELS; i++)
   {
     index = (3 * i);
     raw_out[index] = fondu_pixel(raw_in2[index], raw_in1[index], alpha);
@@ -233,15 +245,6 @@ void fondu_raw(uint8_t *raw_in1, uint8_t *raw_in2, uint8_t *raw_out, float alpha
     index = (3 * i) + 2;
     raw_out[index] = fondu_pixel(raw_in2[index], raw_in1[index], alpha);
   }
-}
-
-char fondu_pixel(char value1, char value2, float alpha)
-{
-  float tmp;
-
-  tmp = ((alpha) * (float)value1) + ((1.0 - alpha) * (float)value2);
-
-  return ((char)tmp);
 }
 
 // POWER LIMITER CODE START
@@ -307,4 +310,4 @@ uint8_t totalPowerLimiter(uint8_t *raw, uint8_t intensity)
 }
 
 // POWER LIMITER CODE END
-#endif 
+#endif

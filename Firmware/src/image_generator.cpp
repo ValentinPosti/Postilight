@@ -62,7 +62,7 @@ uint8_t generatePlasma(uint8_t *raw, float u_time, uint8_t plasma_type)
   float v;
   float c[2];
   uint8_t x;
-  uint8_t s1, s2, s4, c1;
+  uint8_t s1 = 0, s2 = 0, s4 = 0, c1 = 0;
 
   u_k[0] = u_k[1] = 4;
 
@@ -239,7 +239,7 @@ uint8_t generatePlasma(uint8_t *raw, float u_time, uint8_t plasma_type)
 // manages modes 1..5,11,12..20
 uint8_t imageGenerator(uint32_t currentMode, uint8_t *raw, float time)
 {
-  uint8_t dynamic;
+  uint8_t dynamic = 0;
   switch (currentMode)
   {
   case 1:

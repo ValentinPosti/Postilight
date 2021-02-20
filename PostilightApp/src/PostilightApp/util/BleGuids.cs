@@ -11,6 +11,7 @@ namespace PostilightApp.util
       public static Guid Image = new Guid("506f7374-694c-6967-6875-000000000003");
       public static Guid Brightness = new Guid("506f7374-694c-6967-6875-000000000004");
       public static Guid LedsOnOff = new Guid("506f7374-694c-6967-6875-000000000005");
+      public static Guid Mode = new Guid("506f7374-694c-6967-6875-000000000006");
 
 
 

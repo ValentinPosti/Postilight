@@ -6,7 +6,10 @@ float myfsin(float x);
 
 float myfcos(float x);
 
-inline uint32_t getRawOffset(uint32_t column, uint32_t line);
+inline uint32_t getRawOffset(uint32_t column, uint32_t line)
+{
+    return 3 * (column + line * NB_COLUMNS);
+}
 
 // plasma type values managed : 1,2,3,4,5,12..20
 

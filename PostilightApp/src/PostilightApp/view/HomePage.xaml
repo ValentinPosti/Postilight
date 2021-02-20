@@ -101,7 +101,7 @@
                      <Label Text="Mode selection" FontSize="Title" FontAttributes="Bold"/>
                      <StackLayout RadioButtonGroup.GroupName="Mode"
                                   Orientation="Horizontal" Spacing="0" Margin="0,0,0,0">
-                        <RadioButton Value="Image" IsChecked="true" CheckedChanged="OnRadioButtonCheckedChanged">
+                        <RadioButton Value="0" IsChecked="true" CheckedChanged="OnRadioButtonCheckedChanged">
                            <RadioButton.Content>
                               <StackLayout>
                                  <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
@@ -109,7 +109,7 @@
                               </StackLayout>
                            </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Value="GIF">
+                        <RadioButton Value="1" CheckedChanged="OnRadioButtonCheckedChanged">
                            <RadioButton.Content>
                               <StackLayout>
                                  <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
@@ -117,7 +117,7 @@
                               </StackLayout>
                            </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Value="Text">
+                        <RadioButton Value="2" CheckedChanged="OnRadioButtonCheckedChanged">
                            <RadioButton.Content>
                               <StackLayout>
                                  <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
@@ -125,7 +125,7 @@
                               </StackLayout>
                            </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Value="Mono">
+                        <RadioButton Value="3" CheckedChanged="OnRadioButtonCheckedChanged">
                            <RadioButton.Content>
                               <StackLayout>
                                  <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
@@ -133,7 +133,7 @@
                               </StackLayout>
                            </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Value="Math">
+                        <RadioButton Value="4" CheckedChanged="OnRadioButtonCheckedChanged">
                            <RadioButton.Content>
                               <StackLayout>
                                  <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
@@ -141,7 +141,7 @@
                               </StackLayout>
                            </RadioButton.Content>
                         </RadioButton>
-                        <RadioButton Value="BarGraph">
+                        <RadioButton Value="5" CheckedChanged="OnRadioButtonCheckedChanged">
                            <RadioButton.Content>
                               <StackLayout>
                                  <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />

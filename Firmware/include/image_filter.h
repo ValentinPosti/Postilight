@@ -15,8 +15,6 @@ void filtreGaussienX(float sigma, uint16_t sizexin, uint16_t sizeyin, uint8_t *r
 
 void make_convert_index_table(void);
 
-void copy_raw(uint8_t *src);
-
 void translate_image_by_x(uint8_t *raw_in, uint8_t *raw_out, int integer_offset);
 
 void luminosite(uint8_t *raw_in, uint8_t *raw_out, uint8_t intensity);

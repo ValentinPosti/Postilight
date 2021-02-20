@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "LedStrip.h"
 
 // Which pin on the Arduino is connected to the NeoPixels?
@@ -10,16 +11,11 @@ int convert_index_table[LED_COUNT];
 uint8_t *g_buffer_image;
 uint8_t *g_raw_out;
 
-PostiLightData g_Postilightdata;
-
 int g_compteur = 0;
 
 void SetupLedStrip()
 {
     // ToDo read it from the bigFile
-
-    g_Postilightdata.luminosity = 128;
-    g_Postilightdata.ledsOn = 1;
 
     make_convert_index_table();
 
@@ -29,26 +25,6 @@ void SetupLedStrip()
     //init buffer image et raw out
     g_buffer_image = (uint8_t *)malloc(RAW_SIZE);
     g_raw_out = (uint8_t *)malloc(RAW_SIZE);
-
-    clear(g_raw_out, 255, 0, 0);
-    copy_raw_to_strip(g_raw_out, false);
-    strip.Show();
-    delay(1000);
-
-    clear(g_raw_out, 0, 255, 0);
-    copy_raw_to_strip(g_raw_out, false);
-    strip.Show();
-    delay(1000);
-
-    clear(g_raw_out, 0, 0, 255);
-    copy_raw_to_strip(g_raw_out, false);
-    strip.Show();
-    delay(1000);
-
-    raz_raw(g_raw_out);
-    copy_raw_to_strip(g_raw_out);
-    strip.Show();
-    delay(1000);
 }
 
 //convertir les index dans un monde parfait vers les index dans le monde bizarre avec sauts de pixels à chaque ligne
@@ -162,14 +138,9 @@ void make_convert_index_table(void)
     }
 }
 
-void raz_raw(uint8_t *raw)
+void clear_buffer(uint8_t r, uint8_t g, uint8_t b)
 {
-    int i;
-
-    for (i = 0; i <= RAW_SIZE; i++)
-    {
-        raw[i] = 0;
-    }
+    clear(g_raw_out, r, g, b);
 }
 
 void clear(uint8_t *raw, uint8_t r, uint8_t g, uint8_t b)
@@ -191,7 +162,7 @@ void copy_raw_to_strip(uint8_t *src, bool applyLum)
 
     p = 0;
 
-    if (0 == g_Postilightdata.ledsOn)
+    if (0 == g_Postilightdata.leds_on)
     {
         for (i = 0; i < LED_COUNT; i++)
         {
@@ -201,7 +172,7 @@ void copy_raw_to_strip(uint8_t *src, bool applyLum)
     }
     else if (applyLum)
     {
-        uint8_t intensity = ((int)g_Postilightdata.luminosity * (g_Postilightdata.luminosity + 1)) >> 8; // mis au carré pour avoir une courbe plus lente. cf réponse des leds.
+        uint8_t intensity = ((int)g_Postilightdata.intensity * (g_Postilightdata.intensity + 1)) >> 8; // mis au carré pour avoir une courbe plus lente. cf réponse des leds.
         for (i = 0; i < LED_COUNT; i++)
         {
             uint8_t r = (src[p] * (intensity + 1)) >> 8;
@@ -230,14 +201,13 @@ void DisplayBuffer()
 
 void DisplayImage(uint8_t *src)
 {
-    memcpy(g_raw_out,src,RAW_SIZE);
+    memcpy(g_raw_out, src, RAW_SIZE);
     DisplayBuffer();
 }
 
-
 //height : hauteur de la barre verticale (entre 0 et 15)
 //column : abcisse de la barre verticale (entre 0 et 15)
-void draw_vertical_bar_in_buffer(uint8_t *raw, uint8_t column, uint8_t height)
+void draw_vertical_bar_in_buffer(uint8_t column, uint8_t height)
 {
     int y;
     uint8_t r, v, b;
@@ -275,11 +245,11 @@ void draw_vertical_bar_in_buffer(uint8_t *raw, uint8_t column, uint8_t height)
             b = 0;
         }
 
-        draw_pixel_in_buffer(raw, column, y, r, v, b);
+        draw_pixel_in_buffer(column, y, r, v, b);
     }
 }
 
-void draw_pixel_in_buffer(uint8_t *raw, uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b)
+void draw_pixel_in_buffer(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b)
 {
     int index;
 
@@ -287,7 +257,7 @@ void draw_pixel_in_buffer(uint8_t *raw, uint8_t x, uint8_t y, uint8_t r, uint8_t
 
     index = 3 * ((y * NB_COLUMNS) + x);
 
-    raw[index] = r;
-    raw[index + 1] = g;
-    raw[index + 2] = b;
+    g_raw_out[index] = r;
+    g_raw_out[index + 1] = g;
+    g_raw_out[index + 2] = b;
 }

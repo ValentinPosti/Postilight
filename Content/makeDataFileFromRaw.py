@@ -39,7 +39,7 @@ raw_count = len(raw_list)
 
 assert raw_count > 0
 
-datafilePath = "./Firmware/data/data.bin"
+datafilePath = "../Firmware/data/data.bin"
 
 ensure_dir(datafilePath)
 bf = open(datafilePath, "wb")
@@ -84,11 +84,21 @@ for i in range(1024):
                 packed = pack("??h", False, False, -1)
 
         bf.write(packed)
+        print(
+            "Added "
+            + item
+            + " at position "
+            + str(i)
+            + " Animation Frame ? : "
+            + str(is_anim)
+        )
+
     else:
         packed = pack("??h", False, False, -1)
         bf.write(packed)
 
-img = [0] * 192
+img = [0] * 192  # 768/4
+
 zero_packed = pack("i" * len(img), *img)
 
 
@@ -98,7 +108,7 @@ for i in range(1024):
         data = f.read()
         datalen = len(data)
         if datalen == 768:
-            print("Added " + raw_list[i])
+            print("Added " + raw_list[i] + " at position " + str(i))
             bf.write(data)
         else:
             print("File size of " + raw_list[i] + " is invalid")
