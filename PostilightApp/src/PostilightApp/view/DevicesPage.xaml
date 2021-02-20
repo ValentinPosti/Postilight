@@ -76,7 +76,9 @@
                   </DataTemplate>
                </ListView.ItemTemplate>
             </ListView>
-
+            <StackLayout BackgroundColor="#59B2FA">
+            <Label Text="Version" x:Name="VersionNumber" HeightRequest="40" VerticalTextAlignment="Center" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="End" HorizontalOptions="CenterAndExpand" MaxLines="2"/>        
+         </StackLayout>      
          </StackLayout>
       </Frame>
    </ContentPage.Content>

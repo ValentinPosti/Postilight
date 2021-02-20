@@ -114,6 +114,8 @@ namespace PostilightApp.viewmodel
             m_gattServer = connection.GattServer;
             Log.Debug("Connected to device. id={0} status={1}", m_peripheral.Id, m_gattServer.State);
 
+            ((PostilightApp.FormsApp)FormsApp.Current).SwitchTab(1);
+
             m_peripheral.IsConnected = true;
             RaisePropertyChanged(nameof(IsConnected));
 
@@ -198,6 +200,13 @@ namespace PostilightApp.viewmodel
             await m_gattServer.Disconnect();
             m_gattServer = null;
             RaisePropertyChanged(nameof(IsConnected));
+
+            Device.BeginInvokeOnMainThread(
+                 () =>
+                 {
+                    ((PostilightApp.FormsApp)FormsApp.Current).SwitchTab(0);
+                 });
+
          }
 
          Services.Clear();

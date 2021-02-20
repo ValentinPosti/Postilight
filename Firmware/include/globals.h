@@ -71,7 +71,7 @@ struct PostiLightData
   uint32_t intensity;   //intensité des LEDs
   uint32_t imt;         //temps d'affichage en ms des images fixes
   uint32_t fps;         //temps d'affichage en ms des images GIF
-  uint32_t nbloops;     //nombre de loops a jouer
+  uint32_t gad;         //Gif loop duration
   uint32_t trt;         //temps d'affichage de la transition entre images fixes
   TRANSITION_MODE trs;  //transition style 0: nothing, 1: fading, 2: scrolling
   uint32_t its;         //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal

@@ -20,28 +20,38 @@
                      <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
                         <Label Text="Scrolling" VerticalOptions="Center"/>
                         <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
-                        <Switch IsToggled="True" HorizontalOptions="End" />
+                        <Switch IsToggled="True" HorizontalOptions="End" x:Name="scrolling_toggle" Toggled="OnChangeTransitionMode"/>
                      </StackLayout>
                      <BoxView BackgroundColor="Black" HeightRequest="1"/>
                      <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
                         <Label Text="Fading" VerticalOptions="Center"/>
                         <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
-                        <Switch IsToggled="False" HorizontalOptions="End" />
+                        <Switch IsToggled="False" HorizontalOptions="End"  x:Name="fading_toggle" Toggled="OnChangeTransitionMode"/>
                      </StackLayout>
                   </StackLayout>
                </Frame>
                <Frame BackgroundColor="#FFFFFF">
                   <StackLayout Orientation="Vertical" Margin="0,0,0,0">
-                     <Label Text="Images speed" VerticalOptions="Center"/>
-                     <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="0" />
-                     <Label Text="Scrolling speed" VerticalOptions="Center"/>
-                     <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" />
-                     <Label Text="Fading speed" VerticalOptions="Center"/>
-                     <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" />
+
+                     
+                     <Label Text="Image Display Time" VerticalOptions="Center"/>
+                     <Slider Maximum="20000" Minimum="100"  HorizontalOptions="FillAndExpand" Value="2000" x:Name="imt" ValueChanged="OnSliderValueChanged_imt"/>
+
+                     <Label Text="Fade transition Time" VerticalOptions="Center"/>
+                     <Slider Maximum="10000" Minimum="100"  HorizontalOptions="FillAndExpand" Value="1000" x:Name="trt"  ValueChanged="OnSliderValueChanged_trt"/>
+
+                      <Label Text="GIF loop duration" VerticalOptions="Center"/>
+                     <Slider Maximum="10000" Minimum="1000"  HorizontalOptions="FillAndExpand" Value="4000" x:Name="gad" ValueChanged="OnSliderValueChanged_gad"/>
+
+                     <Label Text="GIF FPS" VerticalOptions="Center"/>
+                     <Slider Maximum="30" Minimum="1"  HorizontalOptions="FillAndExpand" Value="4" x:Name="fps" ValueChanged="OnSliderValueChanged_fps"/>
+
                      <Label Text="Images translation speed" VerticalOptions="Center"/>
-                     <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" />
+                     <Slider Maximum="50" Minimum="1"  HorizontalOptions="FillAndExpand" Value="10" x:Name="its" ValueChanged="OnSliderValueChanged_its"/>
+
                      <Label Text="Text translation speed" VerticalOptions="Center"/>
-                     <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="0" />
+                     <Slider Maximum="10" Minimum="1"  HorizontalOptions="FillAndExpand" Value="2" x:Name="tts" ValueChanged="OnSliderValueChanged_tts"/>
+
                   </StackLayout>
                </Frame>
                <StackLayout BackgroundColor="#59B2FA"  Margin="5,0,5,0">
@@ -50,9 +60,7 @@
                </StackLayout>
             </StackLayout>
          </ScrollView>
-         <StackLayout BackgroundColor="#59B2FA">
-            <Label Text="Version" x:Name="VersionNumber" HeightRequest="40" VerticalTextAlignment="Center" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="End" HorizontalOptions="CenterAndExpand" MaxLines="2"/>        
-         </StackLayout>         
+            
       </StackLayout>
    </ContentPage.Content>
 </ContentPage>

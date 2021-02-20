@@ -1,21 +1,7 @@
 using System;
-using System.Security;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Acr.UserDialogs;
-using PostilightApp.util;
-using nexus.core;
-using nexus.core.logging;
-using nexus.protocols.ble;
 using Xamarin.Forms;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using nexus.protocols.ble.scan;
-using System.Linq;
 using PostilightApp.viewmodel;
+using Xamarin.Essentials;
 
 namespace PostilightApp.view
 {
@@ -26,6 +12,20 @@ namespace PostilightApp.view
       {
          InitializeComponent();
          BindingContext = vm;
+
+         // Application Name
+         var appName = AppInfo.Name;
+
+         // Package Name/Application Identifier (com.microsoft.testapp)
+         var packageName = AppInfo.PackageName;
+
+         // Application Version (1.0.0)
+         var version = AppInfo.VersionString;
+
+         // Application Build Number (1)
+         var build = AppInfo.BuildString;
+
+         VersionNumber.Text = version;
       }
 
       private void ListView_OnItemSelected(Object sender, SelectedItemChangedEventArgs e)

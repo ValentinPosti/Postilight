@@ -25,7 +25,7 @@ namespace PostilightApp.view
       async void OnBrightnessSliderValueChanged(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int) e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.Brightness, v);
+         await _model.WriteValue(BleGuids.Service, BleGuids.Brightness, v);         
       }
 
       async void OnRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)

@@ -53,10 +53,12 @@ public:
 
     virtual void onWrite(BLECharacteristic *characteristic)
     {
-        Serial.print("BLECharacteristic onWrite : ");
-        Serial.println(characteristic->getUUID().toString().c_str());
-
         uint32_t *data = (uint32_t *)characteristic->getData();
+
+        Serial.print("BLECharacteristic onWrite : ");
+        Serial.print(characteristic->getUUID().toString().c_str());
+        Serial.print(" Value =  ");
+        Serial.println(*data);
         *_target_data = *data;
     }
 
@@ -134,11 +136,11 @@ void SetupBLE()
     server->setCallbacks(new MyServerCallbacks());
 
     // Register message service that can receive messages and reply with a static message.
-    BLEService *service = server->createService(SERVICE_UUID);
+    BLEService *service = server->createService(BLEUUID(SERVICE_UUID), 48);
     BLECharacteristic *characteristic;
 
-    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
-    characteristic->setCallbacks(new ImageCallbacks());
+//    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
+//    characteristic->setCallbacks(new ImageCallbacks());
 
     new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
     new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);
@@ -147,9 +149,10 @@ void SetupBLE()
     new IntCallback(service, CHARACTERISTIC_TMODE_UUID, (uint32_t *)&g_Postilightdata.trs);
 
     new IntCallback(service, CHARACTERISTIC_IMAGE_INTERVAL_UUID, &g_Postilightdata.imt);
+    new IntCallback(service, CHARACTERISTIC_TRANSITION_DURATION_UUID, &g_Postilightdata.trt);
 
-    new IntCallback(service, CHARACTERISTIC_SCROLLING_SPEED_UUID, &g_Postilightdata.imt);
-    new IntCallback(service, CHARACTERISTIC_FADING_DURATION_UUID, &g_Postilightdata.fps);
+    new IntCallback(service, CHARACTERISTIC_GAD_UUID, &g_Postilightdata.gad);
+    new IntCallback(service, CHARACTERISTIC_GIF_FPS_DURATION_UUID, &g_Postilightdata.fps);
 
     new IntCallback(service, CHARACTERISTIC_IMAGE_TRANSLATION_SPEED_UUID, &g_Postilightdata.its);
     new IntCallback(service, CHARACTERISTIC_TEXT_TRANSLATION_SPEED_UUID, &g_Postilightdata.tts);

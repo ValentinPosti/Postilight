@@ -64,8 +64,8 @@ float g_alpha = (float)100.0;
 
 char g_text[1024] = "Postilight : Please send text from the smartphone app";
 
-static const MODES default_mode = GIF;
-static const TRANSITION_MODE default_trs = SCROLL_AND_FADE;
+static const MODES default_mode = IMAGE;
+static const TRANSITION_MODE default_trs = NONE;
 
 void InitDefaultValues()
 {
@@ -80,11 +80,11 @@ void InitDefaultValues()
     g_Postilightdata.imt = 1000; //temps d'affichage en ms des images fixes
     g_Postilightdata.trt = 1000; //temps d'affichage de la transition entre images fixes
 
-    g_Postilightdata.nbloops = 5; // Nombre de loops d'animation
-    g_Postilightdata.fps = 250;   //temps d'affichage en ms des images GIF
+    g_Postilightdata.gad = 4000; // Gif Animation duration
+    g_Postilightdata.fps = 4;    //temps d'affichage en ms des images GIF
 
-    g_Postilightdata.its = 100;  //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
-    g_Postilightdata.tts = 1000; //vitesse de défilement du texte en défilement horizontal
+    g_Postilightdata.its = 100; //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
+    g_Postilightdata.tts = 100; //vitesse de défilement du texte en défilement horizontal
 
     g_Postilightdata.rgb[0] = 255; //couleur de l'image mono couleur
     g_Postilightdata.rgb[1] = 255; //couleur de l'image mono couleur
@@ -251,7 +251,7 @@ void Mono_mode()
 
 void Text_mode()
 {
-    if ((g_current_time - g_last_time) > g_Postilightdata.tts)
+    if ((g_current_time - g_last_time) > (1000 / g_Postilightdata.tts))
     {
         g_last_time = g_current_time;
 
@@ -337,7 +337,7 @@ float easeInOutCubic(float x)
     return x < 0.5 ? 4 * x * x * x : 1 - pow(-2 * x + 2, 3) / 2;
 }
 
-void fading_images(uint8_t *buff_in1, uint8_t *buff_in2, uint8_t *buff_out, float alpha)
+void fading_images(uint8_t *buff_in1, uint8_t *buff_in2, uint8_t *buff_out, float alpha, bool cubic = false)
 {
     int i;
 
@@ -351,7 +351,10 @@ void fading_images(uint8_t *buff_in1, uint8_t *buff_in2, uint8_t *buff_out, floa
         alpha = 0;
     }
 
-    alpha = easeInOutCubic(alpha);
+    if (cubic)
+    {
+        alpha = easeInOutCubic(alpha);
+    }
 
     for (i = 0; i < NB_PIXELS; i++)
     {
@@ -449,11 +452,13 @@ int FindNextImage(int start_index)
 
 bool image_mode_exit_condition(bool animation)
 {
-    if(!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF))){
+    if (!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF)))
+    {
         return true;
     }
 
-    if(g_Postilightdata.mode == GIF && !animation){
+    if (g_Postilightdata.mode == GIF && !animation)
+    {
         return true;
     }
 
@@ -480,35 +485,29 @@ void PlayAnimation(int image_index, ImageHeader &hCurrent)
 {
     //Serial.println("Display Animation");
 
-    StopWatch st(StopWatch::MILLIS);
+    StopWatch st;
+    StopWatch lt;
 
     CopyImage(g_current_image1616, g_B1_image1616);
     CopyImage(g_current_image1616, g_B0_image1616);
 
-    st.reset();
     st.start();
+    lt.start();
 
-    int l = g_Postilightdata.nbloops;
     int next_frame_index;
     int elapsed;
-    while (!image_mode_exit_condition(true))
+    while (!image_mode_exit_condition(true) && lt.elapsed() < g_Postilightdata.gad)
     {
         elapsed = st.elapsed();
+        float ms_per_frame = 1000 / g_Postilightdata.fps;
 
-        if (elapsed > g_Postilightdata.fps || image_mode_exit_condition(true))
+        if (elapsed > ms_per_frame || image_mode_exit_condition(true))
         {
 
             if (hCurrent.nextImageIndex == INVALID_IMAGE_INDEX)
             {
-                l--;
-                if (l == 0 || image_mode_exit_condition(true))
-                {
-                    break;
-                }
-                else
-                {
-                    next_frame_index = image_index;
-                }
+                // Looping
+                next_frame_index = image_index;
             }
             else
             {
@@ -549,10 +548,10 @@ void PlayAnimation(int image_index, ImageHeader &hCurrent)
     }
 }
 
-void FadeIn(image1616 &fromImage, image1616 &toImage, bool animations)
+void FadeIn(image1616 &fromImage, image1616 &toImage, bool animations, bool quad = true)
 {
 
-    uint32_t total_time_ms = g_Postilightdata.imt;
+    uint32_t total_time_ms = g_Postilightdata.trt;
     int elapsed;
     StopWatch w;
     w.start();
@@ -562,15 +561,15 @@ void FadeIn(image1616 &fromImage, image1616 &toImage, bool animations)
         elapsed = w.elapsed();
         float a = (float)elapsed / (float)g_Postilightdata.trt;
         // Fade In
-        fading_images(toImage.buffer_image, fromImage.buffer_image, g_display_image1616.buffer_image, a);
+        fading_images(toImage.buffer_image, fromImage.buffer_image, g_display_image1616.buffer_image, a, quad);
         DisplayImage(g_display_image1616.buffer_image);
     }
 }
 
 void FadeToBlack(image1616 &fromImage, image1616 &toImage, bool animations)
 {
-    FadeIn(fromImage, black_image, animations);
-    FadeIn(black_image, toImage, animations);
+    FadeIn(fromImage, black_image, animations, false);
+    FadeIn(black_image, toImage, animations, false);
 }
 
 void Image_mode(bool animations)
@@ -625,9 +624,6 @@ void Image_mode(bool animations)
             {
             case NONE:
             {
-                w.reset();
-                w.start();
-                uint32_t total_time_ms = g_Postilightdata.imt;
 
                 if (animations)
                 {
@@ -635,6 +631,10 @@ void Image_mode(bool animations)
                 }
                 else
                 {
+                    uint32_t total_time_ms = g_Postilightdata.imt;
+                    w.reset();
+                    w.start();
+
                     while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition(animations))
                     {
                         // Still
@@ -646,10 +646,6 @@ void Image_mode(bool animations)
 
             case FADING:
             {
-                uint32_t total_time_ms = g_Postilightdata.imt;
-
-                w.reset();
-                w.start();
 
                 FadeToBlack(g_prev_image1616, g_current_image1616, animations);
 
@@ -659,6 +655,9 @@ void Image_mode(bool animations)
                 }
                 else
                 {
+                    w.reset();
+                    w.start();
+                    uint32_t total_time_ms = g_Postilightdata.imt;
                     while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition(animations))
                     {
                         // Still
@@ -681,7 +680,7 @@ void Image_mode(bool animations)
                 {
                     int elapsed = w.elapsed();
 
-                    if (elapsed > g_Postilightdata.its)
+                    if (elapsed > (1000 / g_Postilightdata.its))
                     {
                         //Serial.println(step);
                         //Advance on col
@@ -700,7 +699,7 @@ void Image_mode(bool animations)
 
                         if (g_Postilightdata.trs & FADING)
                         {
-                            float a = (float)elapsed / (float)g_Postilightdata.its;
+                            float a = (float)elapsed / (1000 / (float)g_Postilightdata.its);
                             // Fade In
                             fading_images(g_B1_image1616.buffer_image, g_B0_image1616.buffer_image, g_display_image1616.buffer_image, a);
                             DisplayImage(g_display_image1616.buffer_image);
@@ -730,8 +729,9 @@ void Image_mode(bool animations)
                         else
                         {
                             // Still
-                            Serial.println("Display Still Image");
+                            // Serial.println("Display Still Image");
                             DisplayImage(g_B1_image1616.buffer_image);
+                            delay(5);
                         }
                     }
                 }

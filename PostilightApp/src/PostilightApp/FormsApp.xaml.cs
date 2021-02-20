@@ -31,7 +31,8 @@ namespace PostilightApp
 
       BleGattServerViewModel bleGattServerViewModel;
 
-     
+      TabbedPage _tabbedPage;
+         
 
       public async Task Disconnect()
       {
@@ -43,6 +44,7 @@ namespace PostilightApp
       {
          InitializeComponent();
 
+        
          m_dialogs = dialogs;
          var logsVm = new LogsViewModel();
          SystemLog.Instance.AddSink( logsVm );
@@ -71,7 +73,7 @@ namespace PostilightApp
 
          var devicePage = new DevicesPage(bleScanViewModel);
 
-         var tabbedPage = new TabbedPage
+         _tabbedPage = new TabbedPage
          {
             Title = "POSTILIGHT",
             BackgroundColor = Color.DarkOrange,
@@ -82,18 +84,27 @@ namespace PostilightApp
             Children = {
                   devicePage,
                   homePage,
-                  new SettingsPage(bleGattServerViewModel),
-                  new LogsPage( logsVm ) }
+                  new SettingsPage(bleGattServerViewModel)
+            //      , new LogsPage( logsVm )
+            }
          };
 
-         tabbedPage.SelectedItem = devicePage;
+         Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(_tabbedPage, false);
 
-         m_rootPage = new NavigationPage(tabbedPage);
+
+         _tabbedPage.SelectedItem = devicePage;
+
+         m_rootPage = new NavigationPage(_tabbedPage);
 
          m_rootPage.BarBackgroundColor = Color.Orange;         
          MainPage = m_rootPage;
 
           
+      }
+
+      public void SwitchTab(int tabIndex)
+      {
+         _tabbedPage.SelectedItem = _tabbedPage.Children[tabIndex];
       }
 
       /// <inheritdoc />
