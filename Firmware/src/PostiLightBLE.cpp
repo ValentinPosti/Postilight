@@ -71,6 +71,31 @@ public:
     }
 };
 
+class ControlCallback : public BaseCallback
+{
+
+public:
+    ControlCallback(BLEService *service, const char *CharaterciticGuid)
+        : BaseCallback(service, CharaterciticGuid, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ)
+    {
+    }
+
+    virtual void onWrite(BLECharacteristic *characteristic)
+    {
+        uint32_t *data = (uint32_t *)characteristic->getData();
+
+        Serial.print("ControlCallback onWrite : ");
+        Serial.print(characteristic->getUUID().toString().c_str());
+        Serial.print(" Value =  ");
+        Serial.println(*data);
+    }
+
+    virtual void onRead(BLECharacteristic *characteristic)
+    {
+        // TODO
+    }
+};
+
 class IntCallbackAndDisplay : public IntCallback
 {
 
@@ -139,8 +164,8 @@ void SetupBLE()
     BLEService *service = server->createService(BLEUUID(SERVICE_UUID), 48);
     BLECharacteristic *characteristic;
 
-//    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
-//    characteristic->setCallbacks(new ImageCallbacks());
+    //    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
+    //    characteristic->setCallbacks(new ImageCallbacks());
 
     new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
     new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);
@@ -156,6 +181,8 @@ void SetupBLE()
 
     new IntCallback(service, CHARACTERISTIC_IMAGE_TRANSLATION_SPEED_UUID, &g_Postilightdata.its);
     new IntCallback(service, CHARACTERISTIC_TEXT_TRANSLATION_SPEED_UUID, &g_Postilightdata.tts);
+
+    new ControlCallback(service, CHARACTERISTIC_IMAGE_CONTROL_UUID);
 
     characteristic = service->createCharacteristic(CHARACTERISTIC_MONO_COLOR_UUID, BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_READ);
     characteristic->setCallbacks(new ColorCallbacks());

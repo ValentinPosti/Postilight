@@ -16,7 +16,7 @@ using nexus.core.logging;
 using nexus.protocols.ble;
 using nexus.protocols.ble.scan;
 using Xamarin.Forms;
-
+using Xamarin.Essentials;
 namespace PostilightApp.viewmodel
 {
    public class BleDeviceScannerViewModel : AbstractScanViewModel
@@ -43,7 +43,13 @@ namespace PostilightApp.viewmodel
 
       private async void StartScan( Double seconds )
       {
-         if(IsScanning)
+
+         var status = await Permissions.RequestAsync<Permissions.LocationAlways>();
+         if (status != PermissionStatus.Granted ){
+            return;
+         }
+
+         if (IsScanning)
          {
             return;
          }

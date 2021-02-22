@@ -153,6 +153,27 @@
     <BundleResource Include="Resources\splash%403x.png" />
     <BundleResource Include="Resources\splash%402x.png" />
     <BundleResource Include="Resources\splash.png" />
+    <BundleResource Include="Resources\typing-machine%402x.png" />
+    <BundleResource Include="Resources\graph-bar%402x.png" />
+    <BundleResource Include="Resources\bin_2%402x.png" />
+    <BundleResource Include="Resources\famous%402x.png" />
+    <BundleResource Include="Resources\stats-circle%402x.png" />
+    <BundleResource Include="Resources\game-gamasutra%402x.png" />
+    <BundleResource Include="Resources\screen_1%402x.png" />
+    <BundleResource Include="Resources\graph_bar.png" />
+    <BundleResource Include="Resources\screen_1.png" />
+    <BundleResource Include="Resources\stats_circle.png" />
+    <BundleResource Include="Resources\famous.png" />
+    <BundleResource Include="Resources\bin_2.png" />
+    <BundleResource Include="Resources\typing_machine.png" />
+    <BundleResource Include="Resources\game_gamasutra.png" />
+    <BundleResource Include="Resources\famous%403x.png" />
+    <BundleResource Include="Resources\bin_2%403x.png" />
+    <BundleResource Include="Resources\graph_bar%403x.png" />
+    <BundleResource Include="Resources\stats_circle%403x.png" />
+    <BundleResource Include="Resources\typing_machine%403x.png" />
+    <BundleResource Include="Resources\gamasutra%403x.png" />
+    <BundleResource Include="Resources\screen_1%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon%402x.png" />
@@ -202,6 +223,15 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.2012</Version>
+    </PackageReference>
+    <PackageReference Include="ColorPicker.Xamarin.Forms">
+      <Version>1.3.4.11</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.ImagePicker">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="SixLabors.ImageSharp">
+      <Version>1.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

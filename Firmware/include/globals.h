@@ -36,7 +36,8 @@ enum MODES
   TEXT,
   MONO,
   MATH,
-  BARGRAPH
+  BARGRAPH,
+  CONTROL
 };
 
 enum TRANSITION_MODE

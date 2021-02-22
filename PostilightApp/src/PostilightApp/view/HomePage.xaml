@@ -9,13 +9,11 @@
             >
    <ContentPage.Resources>
       <ControlTemplate x:Key="RadioButtonTemplate">
-         <Frame BorderColor="#F3F2F1"
-                   BackgroundColor="#F3F2F1"
+         <Frame BorderColor="#FFFFFF"
+                   BackgroundColor="#FFFFFF"
                    HasShadow="False"
-                   HeightRequest="100"
-                   WidthRequest="100"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand"
                    Padding="0">
             <VisualStateManager.VisualStateGroups>
                <VisualStateGroupList>
@@ -23,7 +21,7 @@
                      <VisualState x:Name="Checked">
                         <VisualState.Setters>
                            <Setter Property="BorderColor"
-                                            Value="#FF3300" />
+                                            Value="#59B2FA" />
                            <Setter TargetName="check"
                                             Property="Opacity"
                                             Value="1" />
@@ -32,9 +30,9 @@
                      <VisualState x:Name="Unchecked">
                         <VisualState.Setters>
                            <Setter Property="BackgroundColor"
-                                            Value="#F3F2F1" />
+                                            Value="#FFFFFF" />
                            <Setter Property="BorderColor"
-                                            Value="#F3F2F1" />
+                                            Value="#FFFFFF" />
                            <Setter TargetName="check"
                                             Property="Opacity"
                                             Value="0" />
@@ -46,20 +44,16 @@
             <Grid Margin="4"
                       WidthRequest="100">
                <ContentPresenter />
-               <Grid WidthRequest="18"
-                          HeightRequest="18"
-                          HorizontalOptions="End"
-                          VerticalOptions="Start">
-                  <Ellipse Stroke="Blue"
-                                 Fill="White"
-                                 WidthRequest="16"
-                                 HeightRequest="16"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center" />
+               <Grid
+                  WidthRequest="18"
+                  HeightRequest="18"
+                  HorizontalOptions="End"
+                  VerticalOptions="Start">
+
                   <Ellipse x:Name="check"
                                  Fill="Blue"
-                                 WidthRequest="8"
-                                 HeightRequest="8"
+                                 WidthRequest="0"
+                                 HeightRequest="0"
                                  HorizontalOptions="Center"
                                  VerticalOptions="Center" />
                </Grid>
@@ -74,8 +68,9 @@
       </Style>
    </ContentPage.Resources>
    <ContentPage.Content>
-      <StackLayout >
-         <StackLayout BackgroundColor="#59B2FA"  HeightRequest="100" IsVisible="{Binding IsConnected,  Converter={StaticResource InvertBoolean}}"  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+      <StackLayout  BackgroundColor="#59B2FA" VerticalOptions="FillAndExpand">
+         <StackLayout BackgroundColor="#59B2FA"  HeightRequest="100" IsVisible="{Binding IsConnected,  Converter={StaticResource InvertBoolean}}"
+                      VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <Label Text="You must be connected to a Postilight&#10;to interact here" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" MaxLines="2">
             </Label>
          </StackLayout>
@@ -85,6 +80,7 @@
                   <StackLayout>
                      <Label Text="Basic Settings" FontSize="Title" FontAttributes="Bold"/>
                      <StackLayout Orientation="Horizontal" Margin="10,0,10,0">
+                        <Label Text="Luminosity" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand"/>
                         <Label Text="-" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Large"/>
                         <Slider Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" HeightRequest="40" ValueChanged="OnBrightnessSliderValueChanged" />
                         <Label Text="+" HorizontalOptions="End" VerticalOptions="Center" FontSize="Large"/>
@@ -98,67 +94,83 @@
                </Frame>
                <Frame BackgroundColor="White">
                   <StackLayout>
-                     <Label Text="Mode selection" FontSize="Title" FontAttributes="Bold"/>
+                     <Label Text="Mode selection" FontSize="Title" FontAttributes="Bold" HeightRequest="40"/>
                      <StackLayout RadioButtonGroup.GroupName="Mode"
-                                  Orientation="Horizontal" Spacing="0" Margin="0,0,0,0">
-                        <RadioButton Value="0" IsChecked="true" CheckedChanged="OnRadioButtonCheckedChanged">
-                           <RadioButton.Content>
-                              <StackLayout>
-                                 <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-                                 <Label Text="Image" HorizontalOptions="Center" VerticalOptions="End" />
-                              </StackLayout>
-                           </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton Value="1" CheckedChanged="OnRadioButtonCheckedChanged">
-                           <RadioButton.Content>
-                              <StackLayout>
-                                 <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-                                 <Label Text="GIF" HorizontalOptions="Center" VerticalOptions="End" />
-                              </StackLayout>
-                           </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton Value="2" CheckedChanged="OnRadioButtonCheckedChanged">
-                           <RadioButton.Content>
-                              <StackLayout>
-                                 <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-                                 <Label Text="Text" HorizontalOptions="Center" VerticalOptions="End" />
-                              </StackLayout>
-                           </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton Value="3" CheckedChanged="OnRadioButtonCheckedChanged">
-                           <RadioButton.Content>
-                              <StackLayout>
-                                 <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-                                 <Label Text="Mono" HorizontalOptions="Center" VerticalOptions="End" />
-                              </StackLayout>
-                           </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton Value="4" CheckedChanged="OnRadioButtonCheckedChanged">
-                           <RadioButton.Content>
-                              <StackLayout>
-                                 <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-                                 <Label Text="Math" HorizontalOptions="Center" VerticalOptions="End" />
-                              </StackLayout>
-                           </RadioButton.Content>
-                        </RadioButton>
-                        <RadioButton Value="5" CheckedChanged="OnRadioButtonCheckedChanged">
-                           <RadioButton.Content>
-                              <StackLayout>
-                                 <Image Source="Icon.png" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
-                                 <Label Text="BarGraph" HorizontalOptions="Center" VerticalOptions="End" />
-                              </StackLayout>
-                           </RadioButton.Content>
-                        </RadioButton>
+                                  Orientation="Horizontal"
+                                  VerticalOptions="CenterAndExpand"
+                                  Spacing="0" Margin="0,0,0,0"
+                                  HorizontalOptions="CenterAndExpand"                                 
+                                  >
+                        <Grid >
+                           <Grid.RowDefinitions>
+                              <RowDefinition Height="auto" />
+                              <RowDefinition Height="auto" />
+                           </Grid.RowDefinitions>
+                           <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="0.33*" />
+                              <ColumnDefinition Width="0.33*" />
+                              <ColumnDefinition Width="0.33*" />
+                           </Grid.ColumnDefinitions>
+
+                           <RadioButton  x:Name="btn1" Value="0" Grid.Row="0" Grid.Column="0"   IsChecked="true" CheckedChanged="OnRadioButtonCheckedChanged"
+                                       VerticalOptions="CenterAndExpand"
+                                       HorizontalOptions="Center"
+                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">                                       
+                              <RadioButton.Content>
+                                 <Image Source="famous.png"/>                                 
+                              </RadioButton.Content>
+                           </RadioButton>
+
+                           <RadioButton Value="1" Grid.Row="0" Grid.Column="1"  CheckedChanged="OnRadioButtonCheckedChanged"
+                                       HorizontalOptions="Center"
+                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">                                       
+                              <RadioButton.Content>
+                                 <Image Source="gamasutra.png"/>
+                              </RadioButton.Content>
+                           </RadioButton>
+
+                           <RadioButton Value="2" Grid.Row="0" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
+                                       HorizontalOptions="Center"
+                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                              <RadioButton.Content>
+                                 <Image Source="typing_machine.png" Aspect="AspectFit" />
+                              </RadioButton.Content>
+                           </RadioButton>
+
+                           <RadioButton Value="3" Grid.Row="1" Grid.Column="0" CheckedChanged="OnRadioButtonCheckedChanged"
+                                       HorizontalOptions="Center"
+                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                              <RadioButton.Content>
+                                 <Image Source="screen_1.png"/>
+                              </RadioButton.Content>
+                           </RadioButton>
+
+                           <RadioButton Value="4" Grid.Row="1" Grid.Column="1" CheckedChanged="OnRadioButtonCheckedChanged"
+                                        HorizontalOptions="Center"
+                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                              <RadioButton.Content>
+                                 <Image Source="stats_circle.png" Aspect="AspectFit" />
+                              </RadioButton.Content>
+                           </RadioButton>
+
+                           <RadioButton Value="5" Grid.Row="1" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
+                                        HorizontalOptions="Center"
+                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                              <RadioButton.Content>
+                                 <Image Source="graph_bar.png" Aspect="AspectFit"/>
+                              </RadioButton.Content>
+                           </RadioButton>
+
+                        </Grid>
                      </StackLayout>
                   </StackLayout>
                </Frame>
                <Frame BackgroundColor="#FFFFFF">
                   <StackLayout HorizontalOptions="FillAndExpand">
                      <Label Text="Add media" FontSize="Title" FontAttributes="Bold"/>
-                     <StackLayout>
-                        <Button Text="Add Image"/>
-                        <Button Text="Add GIF"/>
-                        <Button Text="Add Text"/>
+                     <StackLayout Orientation="Horizontal">
+                        <Button Text="Image or GIF" HorizontalOptions="FillAndExpand" Clicked="Image_Button_Clicked" />
+                        <Button Text="Text" HorizontalOptions="FillAndExpand" Clicked="Text_Button_Clicked" />
                      </StackLayout>
                   </StackLayout>
                </Frame>

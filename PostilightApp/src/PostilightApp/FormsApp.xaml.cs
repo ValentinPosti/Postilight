@@ -5,9 +5,13 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+
 using System.Reflection;
 using Acr.UserDialogs;
 
+using PostilightApp.util;
 using PostilightApp.viewmodel;
 using nexus.core.logging;
 using nexus.protocols.ble;
@@ -37,6 +41,14 @@ namespace PostilightApp
       public async Task Disconnect()
       {
          await bleGattServerViewModel.CloseConnection();
+      }
+
+      public static FormsApp Instance
+      {
+         get
+         {
+            return FormsApp.Current as FormsApp;
+         }
       }
 
 
@@ -98,8 +110,26 @@ namespace PostilightApp
 
          m_rootPage.BarBackgroundColor = Color.Orange;         
          MainPage = m_rootPage;
+       
+      }
 
-          
+      public void Toast(string message)
+      {
+         m_dialogs.Toast(message);
+      }
+
+      async public void PushPage(ContentPage page)
+      {
+
+         await m_rootPage.PushAsync(page);
+
+      }
+
+      async public void PopPage()
+      {
+
+         await m_rootPage.PopAsync();
+
       }
 
       public void SwitchTab(int tabIndex)

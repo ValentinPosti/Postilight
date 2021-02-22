@@ -13,6 +13,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
+using ColorPicker.iOS;
 
 namespace PostilightApp.ios
 {
@@ -57,6 +58,8 @@ namespace PostilightApp.ios
       public override Boolean FinishedLaunching(UIApplication app, NSDictionary options)
       {
          Forms.Init();
+         ColorPickerEffects.Init();
+         DependencyService.Register<Xamarin.Forms.ImagePicker.IImagePickerService, Xamarin.Forms.ImagePicker.iOS.ImagePickerService>();
          LoadApplication(new FormsApp(BluetoothLowEnergyAdapter.ObtainDefaultAdapter(), UserDialogs.Instance));
          return base.FinishedLaunching(app, options);
       }

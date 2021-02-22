@@ -28,10 +28,7 @@
 	<string>10</string>
 	<key>MinimumOSVersion</key>
 	<string>11</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>I would like to use bluetooth.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>I would like to use bluetooth.</string>
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
@@ -51,5 +48,13 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>I would like to use bluetooth.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>I would like to use bluetooth.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>A custom message (will be shown to the user when iOS ask him for permission to access camera).</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>A custom message (will be shown to the user when iOS ask him for permission to access photo library).</string>
 </dict>
 </plist>

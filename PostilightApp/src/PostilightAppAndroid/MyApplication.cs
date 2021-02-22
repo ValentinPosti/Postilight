@@ -80,6 +80,8 @@ namespace PostilightApp.android
       ]
    public class MainActivity : FormsAppCompatActivity
    {
+      static bool adapter_inited = false;
+      
       /// <remarks>
       /// This must be implemented if you want to Subscribe() to IBluetoothLowEnergyAdapter.State to be notified when the
       /// bluetooth adapter state changes (i.e., it is enabled or disabled). If you don't care about that in your use-case, then
@@ -97,23 +99,33 @@ namespace PostilightApp.android
          ToolbarResource = Resource.Layout.Toolbar;
 
          base.OnCreate( bundle );
+         Xamarin.Essentials.Platform.Init(this, bundle);
 
          UserDialogs.Init( this );
          Forms.Init( this, bundle );
 
          // If you want to enable/disable the Bluetooth adapter from code, you must call this.
-         /*
-         try
+
+         if (!adapter_inited)
          {
+            adapter_inited = true;
             BluetoothLowEnergyAdapter.Init(this);
          }
-         */
+         
          // Obtain the bluetooth adapter so we can pass it into our (shared-code) Xamarin Forms app. There are
          // additional Obtain() methods on BluetoothLowEnergyAdapter if you have more specific needs (e.g. if you
          // need to support devices with multiple Bluetooth adapters)
          var bluetooth = BluetoothLowEnergyAdapter.ObtainDefaultAdapter( ApplicationContext );
 
          LoadApplication( new FormsApp( bluetooth, UserDialogs.Instance ) );
+      }
+
+
+      public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+      {
+         Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+         base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
       }
    }
 

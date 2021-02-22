@@ -114,7 +114,7 @@ namespace PostilightApp.viewmodel
             m_gattServer = connection.GattServer;
             Log.Debug("Connected to device. id={0} status={1}", m_peripheral.Id, m_gattServer.State);
 
-            ((PostilightApp.FormsApp)FormsApp.Current).SwitchTab(1);
+            FormsApp.Instance.SwitchTab(1);
 
             m_peripheral.IsConnected = true;
             RaisePropertyChanged(nameof(IsConnected));
@@ -130,7 +130,7 @@ namespace PostilightApp.viewmodel
 
                   Connection = c.ToString();
                });
-
+            /*
             Connection = "Reading Services";
             try
             {
@@ -157,6 +157,7 @@ namespace PostilightApp.viewmodel
                Log.Warn(ex);
                m_dialogManager.Toast(ex.Message, TimeSpan.FromSeconds(3));
             }
+            */
          }
          else
          {
@@ -204,7 +205,7 @@ namespace PostilightApp.viewmodel
             Device.BeginInvokeOnMainThread(
                  () =>
                  {
-                    ((PostilightApp.FormsApp)FormsApp.Current).SwitchTab(0);
+                    FormsApp.Instance.SwitchTab(0);
                  });
 
          }
@@ -213,16 +214,31 @@ namespace PostilightApp.viewmodel
          IsBusy = false;
       }
 
-      public async Task WriteValue(Guid serviceGuid, Guid characteristicGuid,int v)
+      public async Task SetMode(int mode)
+      {
+         await WriteValue(BleGuids.Service, BleGuids.Mode, mode);
+      }
+
+      public async Task SetRGB(Color color)
+      {
+         byte[] r = new byte[3];
+
+         r[0] = (byte)(color.R * 255);
+         r[1] = (byte)(color.G * 255);
+         r[2] = (byte)(color.B * 255);
+
+         await WriteValueByteArray(BleGuids.Service, BleGuids.mono_color, r);
+      }
+
+      public async Task WriteValueByteArray(Guid serviceGuid, Guid characteristicGuid, byte[] buffer)
       {
          if (IsBusy) return;
 
          try
          {
-            Byte[] val = v.ToBytes();
             IsBusy = true;
-            await m_gattServer.WriteCharacteristicValue(serviceGuid, characteristicGuid,val);
-      
+            await m_gattServer.WriteCharacteristicValue(serviceGuid, characteristicGuid, buffer);
+
          }
          catch (GattException ex)
          {
@@ -233,6 +249,12 @@ namespace PostilightApp.viewmodel
          {
             IsBusy = false;
          }
+      }
+
+      public async Task WriteValue(Guid serviceGuid, Guid characteristicGuid, int v)
+      {
+         Byte[] val = v.ToBytes();
+         await WriteValueByteArray(serviceGuid, characteristicGuid, val);
       }
    }
 }

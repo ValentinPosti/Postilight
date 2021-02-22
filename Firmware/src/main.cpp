@@ -64,7 +64,7 @@ float g_alpha = (float)100.0;
 
 char g_text[1024] = "Postilight : Please send text from the smartphone app";
 
-static const MODES default_mode = IMAGE;
+static const MODES default_mode = GIF;
 static const TRANSITION_MODE default_trs = NONE;
 
 void InitDefaultValues()
@@ -80,11 +80,11 @@ void InitDefaultValues()
     g_Postilightdata.imt = 1000; //temps d'affichage en ms des images fixes
     g_Postilightdata.trt = 1000; //temps d'affichage de la transition entre images fixes
 
-    g_Postilightdata.gad = 4000; // Gif Animation duration
-    g_Postilightdata.fps = 4;    //temps d'affichage en ms des images GIF
+    g_Postilightdata.gad = 4000; // Gif loop Animation duration
+    g_Postilightdata.fps = 5;  // FPS des GIF
 
-    g_Postilightdata.its = 100; //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
-    g_Postilightdata.tts = 100; //vitesse de défilement du texte en défilement horizontal
+    g_Postilightdata.its = 10; //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
+    g_Postilightdata.tts = 10; //vitesse de défilement du texte en défilement horizontal
 
     g_Postilightdata.rgb[0] = 255; //couleur de l'image mono couleur
     g_Postilightdata.rgb[1] = 255; //couleur de l'image mono couleur
@@ -205,6 +205,7 @@ void Mono_mode();
 void Text_mode();
 void Math_mode();
 void Bargraph_mode();
+void Control_mode();
 
 void loop()
 {
@@ -229,6 +230,9 @@ void loop()
         break;
     case BARGRAPH:
         Bargraph_mode();
+        break;
+    case CONTROL:
+        Control_mode();
         break;
     }
 }
@@ -402,6 +406,11 @@ void Math_mode()
 }
 
 void Bargraph_mode()
+{
+    todo_mode();
+}
+
+void Control_mode()
 {
     todo_mode();
 }

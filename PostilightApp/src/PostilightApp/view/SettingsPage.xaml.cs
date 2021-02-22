@@ -1,6 +1,7 @@
-using PostilightApp.util;
+
 using Xamarin.Forms;
 
+using PostilightApp.util;
 using PostilightApp.viewmodel;
 
 namespace PostilightApp.view
@@ -29,10 +30,7 @@ namespace PostilightApp.view
          await _model.WriteValue(BleGuids.Service, BleGuids.transitionMode, t);
       }
 
-
-  
-
-      async void OnSliderValueChanged_imt(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
+       async void OnSliderValueChanged_imt(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
          await _model.WriteValue(BleGuids.Service, BleGuids.imt, v);
@@ -68,5 +66,13 @@ namespace PostilightApp.view
          _model.WriteValue(BleGuids.Service, BleGuids.tts, v).RunSynchronously();
       }
 
+      void Mono_Button_Clicked(System.Object sender, System.EventArgs e)
+      {
+         FormsApp.Instance.PushPage(new ColorPickerPage(_model));
+      }
+
+      void Delete_Button_Clicked(System.Object sender, System.EventArgs e)
+      {
+      }
    }
 }

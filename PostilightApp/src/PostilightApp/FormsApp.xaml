@@ -3,12 +3,17 @@
 
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:PostilightApp="clr-namespace:PostilightApp;assembly=PostilightApp"
              xmlns:util="clr-namespace:PostilightApp.util;assembly=PostilightApp"
+
              x:Class="PostilightApp.FormsApp">
    <Application.Resources>
       <ResourceDictionary>
 
          <util:InvertBooleanConverter x:Key="InvertBoolean" />
+
+           <PostilightApp:BoolToShowTriangleSwitchConverter x:Key="BoolToShowTriangleSwitchConverter"/>
+            <PostilightApp:InverseBoolConverter x:Key="InverseBoolConverter"/>
 
          <OnPlatform x:TypeArguments="Thickness"
                      x:Key="GridPadding"

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<util:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+   xmlns:util="clr-namespace:PostilightApp.util;assembly=PostilightApp"               
+   xmlns:PostilightApp="clr-namespace:PostilightApp;assembly=PostilightApp"
+   xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
+   xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+   xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"            
+   ios:Page.UseSafeArea="true"
+   Title="Pick Color"
+   x:Class="PostilightApp.view.ColorPickerPage"  
+   >
+   <StackLayout>
+        
+      <StackLayout BackgroundColor="{Binding Source={x:Reference ColorWheel1}, Path=SelectedColor}"  Grid.Row="0" HeightRequest="60"/>
+      <PostilightApp:PostilightColorWheel x:Name="ColorWheel1"
+                                ShowAlphaSlider="False"
+                                ShowLuminositySlider="True"
+                                ShowLuminosityWheel="False"
+                                Padding="5"
+                                Grid.Row="1"/>
+     
+   </StackLayout>
+
+</util:BasePage>
