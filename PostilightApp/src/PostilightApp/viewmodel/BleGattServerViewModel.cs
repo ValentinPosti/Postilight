@@ -112,6 +112,7 @@ namespace PostilightApp.viewmodel
          if (connection.IsSuccessful())
          {
             m_gattServer = connection.GattServer;
+            //m_gattServer.
             Log.Debug("Connected to device. id={0} status={1}", m_peripheral.Id, m_gattServer.State);
 
             FormsApp.Instance.SwitchTab(1);
@@ -205,7 +206,8 @@ namespace PostilightApp.viewmodel
             Device.BeginInvokeOnMainThread(
                  () =>
                  {
-                    FormsApp.Instance.SwitchTab(0);
+                      FormsApp.Instance.PopPage();
+                      FormsApp.Instance.SwitchTab(0);
                  });
 
          }
@@ -217,6 +219,22 @@ namespace PostilightApp.viewmodel
       public async Task SetMode(int mode)
       {
          await WriteValue(BleGuids.Service, BleGuids.Mode, mode);
+      }
+
+      public async Task SendImageBuffer(byte[] buffer)
+      {
+
+         Log.Trace("Buffer Size ={0}", buffer.Length);
+
+         int partSize = 32;
+         byte[] part = new byte[partSize];
+
+         for(int i= 0; i < partSize; i++)
+         {
+            part[i] = buffer[i];
+         }
+         
+         await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
       }
 
       public async Task SetRGB(Color color)

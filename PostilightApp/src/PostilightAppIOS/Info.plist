@@ -23,12 +23,25 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.posti.postilight</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.10</string>
+	<string>1.0.13</string>
 	<key>CFBundleVersion</key>
-	<string>10</string>
+	<string>13</string>
 	<key>MinimumOSVersion</key>
 	<string>11</string>
-
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>I would like to use bluetooth.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>I would like to use bluetooth.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>A custom message (will be shown to the user when iOS ask him for permission to access camera).</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>I would like to use it really.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I would like to use it.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>I would like to use really bad.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>A custom message (will be shown to the user when iOS ask him for permission to access photo library).</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
@@ -48,13 +61,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>I would like to use bluetooth.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>I would like to use bluetooth.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>A custom message (will be shown to the user when iOS ask him for permission to access camera).</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>A custom message (will be shown to the user when iOS ask him for permission to access photo library).</string>
 </dict>
 </plist>

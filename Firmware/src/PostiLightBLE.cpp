@@ -31,6 +31,7 @@ public:
     BaseCallback(BLEService *service, const char *CharaterciticGuid, uint32_t rwn)
     {
         BLECharacteristic *characteristic = service->createCharacteristic(CharaterciticGuid, rwn);
+        characteristic->addDescriptor(new BLE2902());
         characteristic->setCallbacks(this);
     }
 
@@ -111,17 +112,17 @@ public:
         DisplayBuffer();
     }
 };
-
+extern void SaveImageToFreeSlotAndDisplay(uint8_t *data);
 class ImageCallbacks : public BLECharacteristicCallbacks
 {
     void onWrite(BLECharacteristic *characteristic)
     {
         Serial.print("BLECharacteristic : ");
         Serial.println(characteristic->getUUID().toString().c_str());
-
-        uint8_t *data = characteristic->getData();
-        DisplayImage(data);
         Serial.println("Image Data Received");
+
+        //uint8_t *data = characteristic->getData();
+        //SaveImageToFreeSlotAndDisplay(data);
     }
 };
 
@@ -164,8 +165,8 @@ void SetupBLE()
     BLEService *service = server->createService(BLEUUID(SERVICE_UUID), 48);
     BLECharacteristic *characteristic;
 
-    //    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
-    //    characteristic->setCallbacks(new ImageCallbacks());
+    characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
+    characteristic->setCallbacks(new ImageCallbacks());
 
     new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
     new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);

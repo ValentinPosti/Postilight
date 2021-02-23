@@ -26,6 +26,11 @@ namespace PostilightApp.view
          var build = AppInfo.BuildString;
 
          VersionNumber.Text = version;
+
+         if (! FormsApp.Instance.isConnected)
+         {
+            vm.ScanForDevicesCommand.Execute(null);
+         }
       }
 
       private void ListView_OnItemSelected(Object sender, SelectedItemChangedEventArgs e)

@@ -51,6 +51,22 @@ namespace PostilightApp
          }
       }
 
+      public bool isConnected
+      {
+         get
+         {
+            return bleGattServerViewModel == null ? false : bleGattServerViewModel.IsConnectedOrConnecting;
+         }
+      }
+
+      public async Task SendImageBuffer(byte[] buffer)
+      {
+         if (!isConnected)
+            return;
+
+         await bleGattServerViewModel.SendImageBuffer(buffer);
+      }
+
 
       public FormsApp( IBluetoothLowEnergyAdapter adapter, IUserDialogs dialogs )
       {
@@ -128,7 +144,7 @@ namespace PostilightApp
       async public void PopPage()
       {
 
-         await m_rootPage.PopAsync();
+         await m_rootPage.PopAsync(true);
 
       }
 

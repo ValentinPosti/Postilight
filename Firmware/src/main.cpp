@@ -14,8 +14,6 @@
 
 #include <StopWatch.h>
 
-File data_file;
-
 PostiLightData g_Postilightdata;
 
 extern uint8_t *g_buffer_image;
@@ -64,7 +62,7 @@ float g_alpha = (float)100.0;
 
 char g_text[1024] = "Postilight : Please send text from the smartphone app";
 
-static const MODES default_mode = GIF;
+static const MODES default_mode = IMAGE;
 static const TRANSITION_MODE default_trs = NONE;
 
 void InitDefaultValues()
@@ -81,7 +79,7 @@ void InitDefaultValues()
     g_Postilightdata.trt = 1000; //temps d'affichage de la transition entre images fixes
 
     g_Postilightdata.gad = 4000; // Gif loop Animation duration
-    g_Postilightdata.fps = 5;  // FPS des GIF
+    g_Postilightdata.fps = 5;    // FPS des GIF
 
     g_Postilightdata.its = 10; //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
     g_Postilightdata.tts = 10; //vitesse de défilement du texte en défilement horizontal
@@ -91,16 +89,6 @@ void InitDefaultValues()
     g_Postilightdata.rgb[2] = 255; //couleur de l'image mono couleur
 }
 
-void LoadSettingsFromFlash()
-{
-    // Todo
-    InitDefaultValues();
-}
-
-void SaveSettingsToflash()
-{
-    // Todo
-}
 
 void setup()
 {
@@ -122,20 +110,7 @@ void setup()
 
     InitDefaultValues();
 
-    if (!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED))
-    {
-        Serial.println("An Error has occurred while mounting SPIFFS");
-    }
-    else
-    {
-        data_file = SPIFFS.open("/data.bin");
-        if (!data_file)
-        {
-            Serial.println("Failed to open file data.bin for reading");
-        }
-        Serial.println("DataFile Opened");
-        LoadSettingsFromFlash();
-    }
+    OpenDataFile();
 
     raw = (uint8_t *)malloc(RAW_SIZE);
     raw_filt = (uint8_t *)malloc(RAW_SIZE);
@@ -206,6 +181,21 @@ void Text_mode();
 void Math_mode();
 void Bargraph_mode();
 void Control_mode();
+void Display_mode();
+
+void SaveImageToFreeSlotAndDisplay(uint8_t *data)
+{
+
+    int index = FindFreeSlot();    
+    if(index == INVALID_IMAGE_INDEX){
+        return;
+    }
+    Serial.print("Free slot found : ");
+    Serial.println(index);
+
+    SaveBitmapToBinaryFile(index, data);
+    g_Postilightdata.mode = IMAGE;
+}
 
 void loop()
 {
@@ -234,6 +224,8 @@ void loop()
     case CONTROL:
         Control_mode();
         break;
+    case DISPLAY_NEW_IMAGE:
+        Display_mode();
     }
 }
 
@@ -415,34 +407,15 @@ void Control_mode()
     todo_mode();
 }
 
-void LoadHeader(int index, ImageHeader &h)
+void Display_mode()
 {
-    int offset = ImageIndexToHeaderOffset(index);
-    data_file.seek(offset);
-    data_file.readBytes((char *)&h, sizeof(ImageHeader));
-    /*
-    Serial.print("ImageHeader #");
-    Serial.print(index);
-    Serial.print(" ");
-    Serial.print(h.isBlockUsed);
-    Serial.print(" ");
-    Serial.print(h.isFirstFrame);
-    Serial.print(" ");
-    Serial.println(h.nextImageIndex);
-    */
-}
-
-void LoadBitmap(int index, uint8_t *dst)
-{
-    int offset = ImageIndexToBitmapOffset(index);
-    data_file.seek(offset);
-    data_file.readBytes((char *)dst, image_size);
+    todo_mode();
 }
 
 int FindNextImage(int start_index)
 {
 
-    int index = start_index + 1 % image_count;
+    int index = start_index + 1 % max_image_count;
     ImageHeader h;
     while (true)
     {
@@ -450,12 +423,12 @@ int FindNextImage(int start_index)
         {
             return start_index; // Only one image
         }
-        LoadHeader(index, h);
+        LoadImageHeader(index, h);
         if (h.isImage())
         {
             return index;
         }
-        index = (index + 1) % image_count;
+        index = (index + 1) % max_image_count;
     }
 }
 
@@ -527,7 +500,7 @@ void PlayAnimation(int image_index, ImageHeader &hCurrent)
             //Serial.print("Load Next Animation frame : ");
             //Serial.println(next_frame_index);
 
-            LoadHeader(next_frame_index, hCurrent);
+            LoadImageHeader(next_frame_index, hCurrent);
 
             if (true || g_Postilightdata.trs & FADING)
             {
@@ -599,7 +572,7 @@ void Image_mode(bool animations)
     {
         do
         {
-            image_index = random(0, image_count);
+            image_index = random(0, max_image_count);
         } while (previmage_index == image_index);
 
         previmage_index = image_index;
@@ -611,7 +584,7 @@ void Image_mode(bool animations)
                 return;
             }
 
-            LoadHeader(image_index, hCurrent);
+            LoadImageHeader(image_index, hCurrent);
 
             if ((hCurrent.isImage() && !animations) || (hCurrent.isAnimation() && animations))
             {

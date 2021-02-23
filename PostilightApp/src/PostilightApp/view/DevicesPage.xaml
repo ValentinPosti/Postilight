@@ -33,11 +33,12 @@
                       AbsoluteLayout.LayoutFlags="PositionProportional"
                       Text="{Binding ScanTimeRemaining}" />
                   </AbsoluteLayout>
-                  <Button Text="Start Scan"
+                  <Button Text="Find Postilights"
                     IsVisible="{Binding IsScanning, Converter={StaticResource InvertBoolean}}"
                     Command="{Binding ScanForDevicesCommand}"
                     HorizontalOptions="Start" />
                </StackLayout>
+               <!--
                <StackLayout HorizontalOptions="EndAndExpand"
                       Orientation="Horizontal">
                   <Label Text="Bluetooth"
@@ -46,6 +47,7 @@
                     VerticalOptions="Center"
                     Toggled="Switch_OnToggled" />
                </StackLayout>
+                  -->
             </StackLayout>
 
             <ListView x:Name="deviceListView" ItemsSource="{Binding FoundDevices}"
@@ -53,7 +55,8 @@
                 ItemSelected="ListView_OnItemSelected"
                 SeparatorColor="#aaaaaa"
                 VerticalOptions="FillAndExpand"
-                HorizontalOptions="FillAndExpand">
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="White">
                <ListView.ItemTemplate>
                   <DataTemplate>
                      <ViewCell>
@@ -77,8 +80,8 @@
                </ListView.ItemTemplate>
             </ListView>
             <StackLayout BackgroundColor="#59B2FA">
-            <Label Text="Version" x:Name="VersionNumber" HeightRequest="40" VerticalTextAlignment="Center" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="End" HorizontalOptions="CenterAndExpand" MaxLines="2"/>        
-         </StackLayout>      
+               <Label Text="Version" x:Name="VersionNumber" HeightRequest="40" VerticalTextAlignment="Center" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="End" HorizontalOptions="CenterAndExpand" MaxLines="2"/>
+            </StackLayout>
          </StackLayout>
       </Frame>
    </ContentPage.Content>

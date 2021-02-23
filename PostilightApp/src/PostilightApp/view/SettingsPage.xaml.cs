@@ -60,10 +60,10 @@ namespace PostilightApp.view
          await _model.WriteValue(BleGuids.Service, BleGuids.its, v);
       }
 
-       void OnSliderValueChanged_tts(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
+      async  void OnSliderValueChanged_tts(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         _model.WriteValue(BleGuids.Service, BleGuids.tts, v).RunSynchronously();
+         await _model.WriteValue(BleGuids.Service, BleGuids.tts, v);
       }
 
       void Mono_Button_Clicked(System.Object sender, System.EventArgs e)

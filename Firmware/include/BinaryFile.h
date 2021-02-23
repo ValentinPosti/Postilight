@@ -17,19 +17,25 @@ struct ImageHeader
     }
 };
 
-static const int image_count = 1024;
-static const int header_Size = image_count * sizeof(ImageHeader);
+static const int max_image_count = 1024;
+static const int header_Size = max_image_count * sizeof(ImageHeader);
 static const int image_size = (3 * 16 * 16);
 
-int ImageIndexToHeaderOffset(int index)
+inline int ImageIndexToHeaderOffset(int index)
 {
     return sizeof(ImageHeader) * index;
 }
 
-int ImageIndexToBitmapOffset(int index)
+inline int ImageIndexToBitmapOffset(int index)
 {
     return header_Size + image_size * index;
 }
+
+bool OpenDataFile();
+int FindFreeSlot(int startIndex = 0);
+bool LoadImageHeader(int index, ImageHeader &header);
+bool LoadBitmap(int index, uint8_t *dst);
+bool SaveBitmapToBinaryFile(int index, const uint8_t *dst);
 
 /* 
 

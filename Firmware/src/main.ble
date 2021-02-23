@@ -10,7 +10,7 @@
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
 
-#define SERVICE_UUID "506f7374-694c-6967-6874-000000000001"
+#define SERVICE_UUID "506F7374-694C-6967-6874-000000000001"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
 void setup()
@@ -21,7 +21,7 @@ void setup()
     BLEDevice::init("Long name works now");
     BLEServer *pServer = BLEDevice::createServer();
     BLEService *pService = pServer->createService(SERVICE_UUID);
-    
+
     BLECharacteristic *pCharacteristic = pService->createCharacteristic(
         CHARACTERISTIC_UUID,
         BLECharacteristic::PROPERTY_READ |

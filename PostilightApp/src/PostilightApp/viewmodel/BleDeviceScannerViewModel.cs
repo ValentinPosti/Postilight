@@ -82,12 +82,12 @@ namespace PostilightApp.viewmodel
                return IsScanning;
             } );
 
-         var filter = new ScanFilter().AddAdvertisedService("506f7374-694c-6967-6874-000000000001");
+         // var filter = new ScanFilter().AddAdvertisedService("506F7374-694c-6967-6874-000000000001");
 
          await m_bleAdapter.ScanForBroadcasts(new ScanSettings()
                 {
                    Mode = ScanMode.HighPower,
-                   Filter = new ScanFilter().AddAdvertisedService("506f7374-694c-6967-6874-000000000001")
+                   Filter = new ScanFilter().AddAdvertisedService("506F7374-694c-6967-6874-000000000001")
                },            
             // NOTE:
             //
