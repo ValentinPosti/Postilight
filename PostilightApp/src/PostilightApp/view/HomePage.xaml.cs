@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 using nexus.core.logging;
 
 using PostilightApp.util;
@@ -7,7 +9,6 @@ using PostilightApp.viewmodel;
 using Xamarin.Forms;
 using Xamarin.Forms.ImagePicker;
 using Xamarin.Essentials;
-using System;
 using SkiaSharp;
 
 namespace PostilightApp.view
@@ -91,14 +92,36 @@ namespace PostilightApp.view
          try
          {
             Log.Trace("Pick");
-            var result = await FilePicker.PickAsync(PickOptions.Images);
+
+
+
+
+            var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+             {
+                 { DevicePlatform.iOS, new []{ "public.image" } }, // or general UTType values
+                 { DevicePlatform.Android, new[] { "image/png", "image/jpg", "image/gif", "image/jpeg" } },
+                 //{ DevicePlatform.iOS, new[] { "public.my.comic.extension" } }, // or general UTType values
+                 //{ DevicePlatform.Android, new[] { "application/comics" } },
+                 // { DevicePlatform.UWP, new[] { ".cbr", ".cbz" } },
+                 //{ DevicePlatform.Tizen, new[] { "*/*" } },
+                 //{ DevicePlatform.macOS, new[] { "cbr", "cbz" } }, // or general UTType values
+             });
+
+            var options = new PickOptions
+            {
+               PickerTitle = "Please select an image file",
+               FileTypes = customFileType,
+            };
+
+            var result = await FilePicker.PickAsync(options);
+
             //var result = await MediaPicker.PickPhotoAsync();
             if (result != null)
             {
                Log.Trace("Picked");
 
                if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
-                   result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("gif", StringComparison.OrdinalIgnoreCase)) 
+                   result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("gif", StringComparison.OrdinalIgnoreCase))
                {
                   Log.Trace("OpenReadAsync");
 
