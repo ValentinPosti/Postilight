@@ -225,6 +225,9 @@
     <PackageReference Include="SixLabors.ImageSharp">
       <Version>1.0.3</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Forms">
+      <Version>2.4.11.982</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PostilightApp\PostilightApp.csproj">

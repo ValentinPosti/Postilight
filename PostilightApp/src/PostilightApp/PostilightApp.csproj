@@ -28,7 +28,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
     <PackageReference Include="ColorPicker.Xamarin.Forms" Version="1.3.4.11" />
     <PackageReference Include="Xamarin.Forms.ImagePicker" Version="1.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
   </ItemGroup>
 
    <ItemGroup>

@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+
 using Xamarin.Forms;
 using PostilightApp.viewmodel;
 using Xamarin.Essentials;
@@ -27,10 +29,22 @@ namespace PostilightApp.view
 
          VersionNumber.Text = version;
 
-         if (! FormsApp.Instance.isConnected)
+         Task.Run(async delegate
          {
-            vm.ScanForDevicesCommand.Execute(null);
-         }
+            await Task.Delay(500); // On iOS scanning immediatly is not working
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+               if (!FormsApp.Instance.isConnected)
+               {
+                  vm.ScanForDevicesCommand.Execute(null);
+               }
+            });
+         });
+
+         
+         
+
       }
 
       private void ListView_OnItemSelected(Object sender, SelectedItemChangedEventArgs e)

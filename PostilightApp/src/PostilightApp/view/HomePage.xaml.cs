@@ -7,6 +7,8 @@ using PostilightApp.viewmodel;
 using Xamarin.Forms;
 using Xamarin.Forms.ImagePicker;
 using Xamarin.Essentials;
+using System;
+using SkiaSharp;
 
 namespace PostilightApp.view
 {
@@ -17,6 +19,8 @@ namespace PostilightApp.view
 
       IImagePickerService _imagePickerService;
 
+      ImageSource imageSource;
+      SKBitmap skBitmap;
 
       public HomePage(BaseViewModel vm)
       {
@@ -73,7 +77,7 @@ namespace PostilightApp.view
 
          if (status != PermissionStatus.Granted)
          {
-            if(status == PermissionStatus.Denied)
+            if (status == PermissionStatus.Denied)
             {
                FormsApp.Instance.Toast("Storage Permission Denied, enable it app settings");
             }
@@ -84,6 +88,45 @@ namespace PostilightApp.view
             return;
          }
 
+         try
+         {
+            Log.Trace("Pick");
+            var result = await FilePicker.PickAsync(PickOptions.Images);
+            //var result = await MediaPicker.PickPhotoAsync();
+            if (result != null)
+            {
+               Log.Trace("Picked");
+
+               if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
+                   result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("gif", StringComparison.OrdinalIgnoreCase)) 
+               {
+                  Log.Trace("OpenReadAsync");
+
+                  using (var stream = await result.OpenReadAsync())
+                  {
+                     Log.Trace("FromFile " + result.FullPath);
+                     ImageSource imageSource = ImageSource.FromFile(result.FullPath);
+
+                     Log.Trace("Decode");
+                     skBitmap = SKBitmap.Decode(stream);
+
+                     Log.Trace("Image Acquired :", result.FileName);
+                     FormsApp.Instance.PushPage(new ImagePage(imageSource, skBitmap));
+                  }
+               }
+               else
+               {
+                  FormsApp.Instance.Toast("Unsupported File Type");
+               }
+
+            }
+         }
+         catch (Exception ex)
+         {
+            // The user canceled or something went wrong
+         }
+
+         /*
          
          ImageSource imageSource = await _imagePickerService.PickImageAsync();
 
@@ -98,6 +141,7 @@ namespace PostilightApp.view
             Log.Trace("Image empty");
 
          }
+         */
       }
 
       async void Text_Button_Clicked(object sender, System.EventArgs e)
