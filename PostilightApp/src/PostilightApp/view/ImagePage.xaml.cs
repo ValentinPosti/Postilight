@@ -85,27 +85,73 @@ namespace PostilightApp.view
                               
 
                Log.Trace("skBitmap = " + skBitmap.ColorType + " " + skBitmap.Width + "x" + skBitmap.Height);
-               
+
                //if (skBitmap.ColorType != SKColorType.Rgba8888 || skBitmap.Width != 16 || skBitmap.Height != 16 )
                //{
 
+               if (true)
+               {
+
+                  
+                  b16x16 = new SKBitmap(16, 16, SKColorType.Rgba8888, SKAlphaType.Opaque);
+
+                  using (var srcPix = skBitmap.PeekPixels())
+                  using (var dstPix = b16x16.PeekPixels())
+                  {
+
+                     var imgInfo = skBitmap.Info.WithAlphaType(SKAlphaType.Opaque);
+
+                     SKPixmap srcPixNoAlpha = new SKPixmap(imgInfo, srcPix.GetPixels());
+
+
+                     if (SKPixmap.Resize(dstPix, srcPixNoAlpha, SKBitmapResizeMethod.Box))
+                     {
+                        Log.Trace("KPixmap.Resize OK");
+                     }
+                     else
+                     {
+                        Log.Trace("KPixmap.Resize KO");
+                     }
+                  }
+
+               }
+               /*
+               else
+               {
                   b16x16 = skBitmap.Resize(new SKImageInfo(16, 16, SKColorType.Rgba8888, skBitmap.AlphaType), SKBitmapResizeMethod.Box);
+
+               }
+               */
+
+
 
                //}
 
-               //if (applyGamma)
+               if (applyGamma)
                {
                   unsafe
                   {
                      byte* ptr = (byte*)b16x16.GetPixels().ToPointer();
                      int pixelCount = b16x16.Width * b16x16.Height * 4;
 
-                     for (int i = 0; i < pixelCount; i++)
+                     for (int i = 0; i < pixelCount /4 ; i++)
                      {
-                        byte v = *ptr;
-                        byte cv = gammaTable[v];
-                        *ptr = cv;
-                        ptr++;
+                        byte R = *ptr;
+                        byte G = *(ptr+1);
+                        byte B = *(ptr+2);
+                        
+                        byte cvR = gammaTable[R];
+                        byte cvG = gammaTable[G];
+                        byte cvB = gammaTable[B];
+                        byte cvA = 255;
+
+
+                        *ptr = cvR;
+                        *(ptr+1) = cvG;
+                        *(ptr+2) = cvB;
+                        *(ptr+3) = cvA;
+
+                        ptr += 4;
                      }
                   }
                }
