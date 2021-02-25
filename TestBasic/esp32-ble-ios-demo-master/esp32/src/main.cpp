@@ -10,14 +10,14 @@ void setup()
 {
     Serial.begin(115200);
     SetupBLE();
-    SetupWifi();
-    Serial.print("SetupLedStrip");
+    //SetupWifi();
+    Serial.println("SetupLedStrip");
     SetupLedStrip();
 }
 
 void loop()
 {
-    Wifiloop();
+    //Wifiloop();
     /*
     for (int i = 0; i < NB_LINES; i++)
     {

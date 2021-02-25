@@ -26,6 +26,7 @@ namespace PostilightApp.view
       //MemoryStream pixelatedMemoryStream = null;
 
       byte[] buffer16x16 = new byte[3 * 16 * 16];
+      byte[] buffer16x16Gamma = new byte[3 * 16 * 16];
 
 
       public ImagePage(ImageSource imageSource)
@@ -80,14 +81,88 @@ namespace PostilightApp.view
                   skBitmap = SKBitmap.Decode(imgStream);
                }
 
-               SKBitmap scaledBitmap = skBitmap.Resize(new SKImageInfo(16, 16, SKColorType.Rgb565), SKBitmapResizeMethod.Box);
+               byte[] gammaTable = new byte[256];
 
-               SKImage skImage = SKImage.FromBitmap(scaledBitmap);
+               double gamma = 0.5;
+
+               for (int i = 0; i < 256; i++)
+               {
+                  gammaTable[i] = (byte)(255 * Math.Pow(i / 255.0, 1.0 / gamma));
+               }
+
+
+
+               SKBitmap b16x16 = skBitmap.Resize(new SKImageInfo(16, 16, SKColorType.Rgba8888, SKAlphaType.Opaque, SKColorSpace.CreateSrgb()), SKBitmapResizeMethod.Box);
+
+               unsafe
+               {
+                  byte* ptr = (byte*) b16x16.GetPixels().ToPointer();
+                  int pixelCount = b16x16.Width * b16x16.Height * 4;
+
+                  for (int i = 0; i < pixelCount; i++)
+                  {
+                     byte v = *ptr;
+                     byte cv = gammaTable[v];
+                     *ptr = cv;
+                     ptr++;
+                  }
+               }
+
+
+               // TODO Rescale properly to preserve blocks 
+               SKBitmap scaledBitmapGamma512x512 = new SKBitmap(512, 512,SKColorType.Rgba8888,SKAlphaType.Opaque);
+
+               unsafe
+               {
+                  uint* ptr = (uint*)b16x16.GetPixels().ToPointer();
+                  uint* dstPtr = (uint*)scaledBitmapGamma512x512.GetPixels().ToPointer();
+
+
+                  const int dstStride = 512;
+                  const int blockSize = dstStride / 16;
+
+                  //int pixelCount = b16x16.Width * b16x16.Height * 4;
+                  uint sp;
+                  for (int i = 0; i < 16; i++)
+                  {
+                     for (int j = 0; j < 16; j++)
+                     {
+                        sp = *ptr;
+
+                        // Start of the block
+                        uint* writeptr = dstPtr + (dstStride * i * blockSize) + (blockSize * j);
+
+                        *writeptr = 0xFFFFFFFF;
+
+                        for (int l = 0; l < blockSize; l++)
+                        {
+                           for (int k = 0; k < blockSize; k++)
+                           {
+                              uint* p = writeptr + l*dstStride + k;
+                              *p = sp;
+                              
+                           }
+                        }
+                        
+                        ptr++;
+                     }
+                  }
+                  
+               }
+
+
+               SKBitmap scaledBitmap16x16_565 = b16x16.Resize(new SKImageInfo(16, 16, SKColorType.Rgb565), SKBitmapResizeMethod.Box);
+             
+
+               buffer16x16 = scaledBitmap16x16_565.Bytes;
+
+               // Create Dispay Image
+
+               SKImage skImage = SKImage.FromBitmap(scaledBitmapGamma512x512);
                SKData encoded = skImage.Encode();
                // get a stream over the encoded data
                Stream encodedStream = encoded.AsStream();
 
-               buffer16x16 = scaledBitmap.Bytes;
 
                Device.BeginInvokeOnMainThread(() =>
                {

@@ -28,9 +28,11 @@ namespace PostilightApp.viewmodel
       private IBleGattServerConnection m_gattServer;
       private Boolean m_isBusy;
       private BlePeripheralViewModel m_peripheral;
+      private int MTU = 20;
 
       public bool IsConnected => m_gattServer != null;
 
+      
       public BleGattServerViewModel(IUserDialogs dialogsManager, IBluetoothLowEnergyAdapter bleAdapter)
       {
          m_bleAdapter = bleAdapter;
@@ -223,7 +225,7 @@ namespace PostilightApp.viewmodel
 
       public async Task SendImageBuffer(byte[] buffer)
       {
-
+         /*
          Log.Trace("Buffer Size ={0}", buffer.Length);
 
          int partSize = 32;
@@ -235,7 +237,64 @@ namespace PostilightApp.viewmodel
          }
          
          await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
+         */
+
+         await SendImageBuffer(buffer, MTU);
       }
+
+      public async Task SendImageBuffer(byte[] data, int MTU)
+      {
+
+         try
+         {
+
+            int partCount = data.Length / MTU;
+            int remaining = data.Length - partCount * MTU;
+            int totalPartCount = partCount + ((remaining > 0) ? 1 : 0);
+
+            byte[] part = new byte[MTU + 2];
+
+            for (int i = 0; i < partCount; i++)
+            {
+               part[0] = (byte)i;
+               part[1] = (byte)totalPartCount;
+
+               Array.Copy(data, i * MTU, part, 2, MTU);
+               await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
+            }
+
+            if (remaining > 0)
+            {
+               part = new byte[remaining + 2];
+
+               part[0] = (byte)partCount; // PartIndex
+               part[1] = (byte)totalPartCount; // PartCount
+
+               Array.Copy(data, partCount * MTU, part, 2, remaining);
+               await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
+            }
+
+         }
+         catch (Exception e)
+         {
+            Console.Write(e);
+         }
+
+         /*
+         Log.Trace("Buffer Size ={0}", buffer.Length);
+
+         int partSize = 32;
+         byte[] part = new byte[partSize];
+
+         for (int i = 0; i < partSize; i++)
+         {
+            part[i] = buffer[i];
+         }
+
+         await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
+         */
+      }
+
 
       public async Task SetRGB(Color color)
       {

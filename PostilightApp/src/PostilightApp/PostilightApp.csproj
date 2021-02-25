@@ -10,6 +10,12 @@
        <SynchReleaseVersion>false</SynchReleaseVersion>
    </PropertyGroup>
 
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+   </PropertyGroup>
    <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="6.5.1">
     </PackageReference>
