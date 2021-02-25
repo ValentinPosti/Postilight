@@ -27,7 +27,7 @@ namespace PostilightApp.view
 
       static bool applyGamma = true;
       static byte[] gammaTable = null;
-      double gamma = 2.2;
+      double gamma = 0.7;
       
       public ImagePage(ImageSource imageSource, SKBitmap bitmap)
       {
@@ -42,7 +42,8 @@ namespace PostilightApp.view
             gammaTable = new byte[256];
             for (int i = 0; i < 256; i++)
             {
-               gammaTable[i] = (byte)(255 * Math.Pow(i / 255.0, 1.0 / gamma));
+               var v = (byte)(255 * Math.Pow(i / 255.0, 1.0 / gamma));
+               gammaTable[i] = v;
             }
          }
 
@@ -85,12 +86,14 @@ namespace PostilightApp.view
 
                Log.Trace("skBitmap = " + skBitmap.ColorType + " " + skBitmap.Width + "x" + skBitmap.Height);
                
-               if (skBitmap.ColorType != SKColorType.Rgba8888 || skBitmap.Width != 16 || skBitmap.Height != 16 )
-               {
-                  b16x16 = skBitmap.Resize(new SKImageInfo(16, 16, SKColorType.Rgba8888, skBitmap.AlphaType, SKColorSpace.CreateSrgb()), SKBitmapResizeMethod.Box);
-               }
+               //if (skBitmap.ColorType != SKColorType.Rgba8888 || skBitmap.Width != 16 || skBitmap.Height != 16 )
+               //{
 
-               if (applyGamma)
+                  b16x16 = skBitmap.Resize(new SKImageInfo(16, 16, SKColorType.Rgba8888, skBitmap.AlphaType), SKBitmapResizeMethod.Box);
+
+               //}
+
+               //if (applyGamma)
                {
                   unsafe
                   {
@@ -109,7 +112,7 @@ namespace PostilightApp.view
 
 
                // TODO Rescale properly to preserve blocks 
-               SKBitmap scaledBitmapGamma512x512 = new SKBitmap(16 * blockSize, 16 * blockSize, SKColorType.Rgba8888, skBitmap.AlphaType);
+               SKBitmap scaledBitmapGamma512x512 = new SKBitmap(16 * blockSize, 16 * blockSize, SKColorType.Rgba8888, skBitmap.AlphaType) ;
 
 
                // upscale to 512x512 with 32x32 blocks
