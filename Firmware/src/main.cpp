@@ -18,12 +18,6 @@ PostiLightData g_Postilightdata;
 
 extern uint8_t *g_buffer_image;
 
-struct image1616
-{
-    bool valid = false;
-    uint8_t *buffer_image = 0; //Null if nothing, or pointing to 16 by 16 (R,G,B) pixels
-};
-
 image1616 g_current_image1616;
 image1616 g_prev_image1616;
 
@@ -89,7 +83,6 @@ void InitDefaultValues()
     g_Postilightdata.rgb[2] = 255; //couleur de l'image mono couleur
 }
 
-
 void setup()
 {
 
@@ -111,6 +104,8 @@ void setup()
     InitDefaultValues();
 
     OpenDataFile();
+
+    FindFreeSlot();
 
     raw = (uint8_t *)malloc(RAW_SIZE);
     raw_filt = (uint8_t *)malloc(RAW_SIZE);
@@ -183,17 +178,28 @@ void Bargraph_mode();
 void Control_mode();
 void Display_mode();
 
+bool randomImage = false;
+int g_image_index = 258, g_previmage_index = -1;
+
 void SaveImageToFreeSlotAndDisplay(uint8_t *data)
 {
 
-    int index = FindFreeSlot();    
-    if(index == INVALID_IMAGE_INDEX){
+    g_Postilightdata.mode = DISPLAY_NEW_IMAGE;
+    delay(500);
+
+    int index = FindFreeSlot(0);
+    if (index == INVALID_IMAGE_INDEX)
+    {
         return;
     }
     Serial.print("Free slot found : ");
     Serial.println(index);
 
     SaveBitmapToBinaryFile(index, data);
+    delay(500);
+
+    g_image_index = index-1;
+
     g_Postilightdata.mode = IMAGE;
 }
 
@@ -409,7 +415,7 @@ void Control_mode()
 
 void Display_mode()
 {
-    todo_mode();
+    //todo_mode();
 }
 
 int FindNextImage(int start_index)
@@ -434,18 +440,22 @@ int FindNextImage(int start_index)
 
 bool image_mode_exit_condition(bool animation)
 {
+
     if (!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF)))
     {
+        Serial.println("Exit image mode 1");
         return true;
     }
 
     if (g_Postilightdata.mode == GIF && !animation)
     {
+        Serial.println("Exit image mode 2");
         return true;
     }
 
     if (g_Postilightdata.mode == IMAGE && animation)
     {
+        Serial.println("Exit image mode 3");
         return true;
     }
 
@@ -554,6 +564,23 @@ void FadeToBlack(image1616 &fromImage, image1616 &toImage, bool animations)
     FadeIn(black_image, toImage, animations, false);
 }
 
+int nextImage()
+{
+
+    if (randomImage)
+    {
+        do
+        {
+            g_image_index = random(0, max_image_count);
+        } while (g_previmage_index == g_image_index);
+    }
+    else
+    {
+        g_image_index = (g_image_index + 1) % max_image_count;
+    }
+    return g_image_index;
+}
+
 void Image_mode(bool animations)
 {
     ImageHeader hCurrent;
@@ -567,40 +594,36 @@ void Image_mode(bool animations)
         Serial.println("Image mode");
     }
 
-    int image_index, previmage_index = -1;
     while (1)
     {
-        do
-        {
-            image_index = random(0, max_image_count);
-        } while (previmage_index == image_index);
 
-        previmage_index = image_index;
+        g_image_index = nextImage();
+        g_previmage_index = g_image_index;
 
-        //for (int image_index = 0; image_index < 1024; image_index++)
+        //for (int image_index = 0; image_index < max_image_count; image_index++)
         {
             if (image_mode_exit_condition(animations))
             {
                 return;
             }
 
-            LoadImageHeader(image_index, hCurrent);
+            LoadImageHeader(g_image_index, hCurrent);
 
             if ((hCurrent.isImage() && !animations) || (hCurrent.isAnimation() && animations))
             {
 
-                //Serial.print("Loading #");
-                //Serial.print(image_index);
-                //Serial.println(animations ? " (Animation) " : " (Image)");
+                // Serial.print("Loading #");
+                // Serial.print(g_image_index);
+                // Serial.println(animations ? " (Animation) " : " (Image)");
             }
             else
             {
-                //Serial.print("Skipping #");
-                //Serial.println(image_index);
+                // Serial.print("Skipping #");
+                // Serial.println(g_image_index);
                 continue;
             }
 
-            LoadBitmap(image_index, g_current_image1616.buffer_image);
+            LoadBitmap(g_image_index, g_current_image1616.buffer_image);
 
             switch (g_Postilightdata.trs)
             {
@@ -609,7 +632,7 @@ void Image_mode(bool animations)
 
                 if (animations)
                 {
-                    PlayAnimation(image_index, hCurrent);
+                    PlayAnimation(g_image_index, hCurrent);
                 }
                 else
                 {
@@ -633,7 +656,7 @@ void Image_mode(bool animations)
 
                 if (animations)
                 {
-                    PlayAnimation(image_index, hCurrent);
+                    PlayAnimation(g_image_index, hCurrent);
                 }
                 else
                 {
@@ -699,7 +722,7 @@ void Image_mode(bool animations)
                 if (animations)
                 {
 
-                    PlayAnimation(image_index, hCurrent);
+                    PlayAnimation(g_image_index, hCurrent);
                 }
                 else
                 {

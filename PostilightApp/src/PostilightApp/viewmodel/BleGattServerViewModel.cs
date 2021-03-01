@@ -28,7 +28,7 @@ namespace PostilightApp.viewmodel
       private IBleGattServerConnection m_gattServer;
       private Boolean m_isBusy;
       private BlePeripheralViewModel m_peripheral;
-      private int MTU = 20;
+      private int MTU = 16;
 
       public bool IsConnected => m_gattServer != null;
 

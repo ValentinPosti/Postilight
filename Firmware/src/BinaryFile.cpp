@@ -15,35 +15,6 @@ void SaveSettingsToflash()
     // Todo
 }
 
-bool SaveBitmapToBinaryFile(int index, const uint8_t *data)
-{
-    if (_data_file == 0)
-        return false;
-
-    Serial.println("Saving Image Data");
-    int offset = ImageIndexToBitmapOffset(index);
-    //_data_file.seek(offset, fs::SeekSet);
-    //_data_file.write(data, RAW_SIZE);
-    Serial.println("Done");
-
-    Serial.println("Saving Header");
-
-    ImageHeader h;
-    h.isBlockUsed = true;
-    h.isFirstFrame = true;
-    h.nextImageIndex = INVALID_IMAGE_INDEX;
-
-    offset = ImageIndexToHeaderOffset(index);
-    //_data_file.seek(offset, fs::SeekSet);
-    //_data_file.write((uint8_t *)&h, sizeof(h));
-
-    Serial.println("Done");
-
-    //_data_file.flush();
-
-    return true;
-}
-
 bool OpenDataFile()
 {
 
@@ -54,10 +25,10 @@ bool OpenDataFile()
     }
     else
     {
-        _data_file = SPIFFS.open("/data.bin");
+        _data_file = SPIFFS.open("/data.bin", "rw+");
         if (!_data_file)
         {
-            Serial.println("Failed to open file data.bin for reading");
+            Serial.println("Failed to open file data.bin for r/w");
             return false;
         }
     }
@@ -73,10 +44,11 @@ int FindFreeSlot(int startindex)
     ImageHeader h;
     for (int i = startindex; i < max_image_count; i++)
     {
-        int offet = ImageIndexToHeaderOffset(i);
-        LoadImageHeader(offet, h);
+        LoadImageHeader(i, h);
         if (h.isBlockUsed == false)
         {
+            Serial.print("First Free slot is # ");
+            Serial.println(i);
             return i;
         }
     }
@@ -94,18 +66,22 @@ bool LoadImageHeader(int index, ImageHeader &h)
     }
 
     int offset = ImageIndexToHeaderOffset(index);
+
     _data_file.seek(offset);
     _data_file.readBytes((char *)&h, sizeof(ImageHeader));
     /*
-    Serial.print("ImageHeader #");
+    Serial.print("ImageHeader # ");
     Serial.print(index);
-    Serial.print(" ");
+    Serial.print(" at Offset ");
+    Serial.print(offset);
+    Serial.print(" [");
     Serial.print(h.isBlockUsed);
     Serial.print(" ");
     Serial.print(h.isFirstFrame);
     Serial.print(" ");
-    Serial.println(h.nextImageIndex);
-    */
+    Serial.print(h.nextImageIndex);
+    Serial.println("]");
+*/
     return true;
 }
 
@@ -119,5 +95,52 @@ bool LoadBitmap(int index, uint8_t *dst)
     int offset = ImageIndexToBitmapOffset(index);
     _data_file.seek(offset, fs::SeekSet);
     _data_file.readBytes((char *)dst, image_size);
+    return true;
+}
+
+bool SaveBitmapToBinaryFile(int index, const uint8_t *data)
+{
+    if (_data_file == 0)
+        return false;
+
+    //  _data_file.close();
+    //  delay(100);
+    //  _data_file = SPIFFS.open("/data.bin", FILE_APPEND);
+
+    Serial.print("Saving Image Data offset : ");
+    int offset = ImageIndexToBitmapOffset(index);
+    Serial.print(" ");
+    Serial.print(offset);
+    bool seek = _data_file.seek(offset, fs::SeekSet);
+    Serial.print(" seek:");
+    Serial.print(seek ? "ok " : "ko ");
+
+    size_t written = _data_file.write(data, RAW_SIZE);
+    Serial.print(" written : ");
+    Serial.print(written);
+    Serial.print("/");
+    Serial.print(RAW_SIZE);
+    Serial.println(" Done");
+
+    ImageHeader h;
+    h.isBlockUsed = true;
+    h.isFirstFrame = true;
+    h.nextImageIndex = INVALID_IMAGE_INDEX;
+
+    offset = ImageIndexToHeaderOffset(index);
+    Serial.print("Saving Header at Offset : ");
+    Serial.print(offset);
+    _data_file.seek(offset, fs::SeekSet);
+    written = _data_file.write((uint8_t *)&h, sizeof(ImageHeader));
+    Serial.print(" written : ");
+    Serial.print(written);
+    Serial.print("/");
+    Serial.print(sizeof(ImageHeader));
+    Serial.println(" Done");
+
+    _data_file.flush();
+
+    //  _data_file = SPIFFS.open("/data.bin", "r");
+
     return true;
 }

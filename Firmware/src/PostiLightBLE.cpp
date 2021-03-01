@@ -8,10 +8,12 @@
 
 #include "PostiLightBLE.h"
 #include "LedStrip.h"
+#include "globals.h"
 
 BLECharacteristic *characteristicMessage;
 BLECharacteristic *characteristicImage;
 
+Image1616 g_receiveBuffer;
 class MyServerCallbacks : public BLEServerCallbacks
 {
     void onConnect(BLEServer *server)
@@ -113,16 +115,61 @@ public:
     }
 };
 extern void SaveImageToFreeSlotAndDisplay(uint8_t *data);
+
+inline void Convert565_888(const uint8_t *src, uint8_t *dst, uint32_t len)
+{
+    for (int i = 0, j = 0; i < len; i += 2)
+    {
+        int c = src[i] + (src[i + 1] << 8);
+        byte r = byte(((c & 0xF800) >> 11) << 3);
+        byte g = byte(((c & 0x7E0) >> 5) << 2);
+        byte b = byte(((c & 0x1F)) << 3);
+        dst[j++] = r;
+        dst[j++] = g;
+        dst[j++] = b;
+    }
+}
+
 class ImageCallbacks : public BLECharacteristicCallbacks
 {
     void onWrite(BLECharacteristic *characteristic)
     {
-        Serial.print("BLECharacteristic : ");
-        Serial.println(characteristic->getUUID().toString().c_str());
-        Serial.println("Image Data Received");
+        uint8_t *data = characteristic->getData();
+        uint32_t l = characteristic->getValue().length();
 
-        //uint8_t *data = characteristic->getData();
-        //SaveImageToFreeSlotAndDisplay(data);
+        //RGB565 Buffer in parts
+        int partNumber = *data;
+        int partCount = *(data + 1);
+        int part_size = 512 / partCount;
+
+        if ((512 % part_size) > 0)
+        {
+            part_size++;
+        }
+
+        int dest_offset = partNumber * (3 * part_size) / 2;
+
+        Serial.print("Part# : ");
+        Serial.print(partNumber);
+
+        Serial.print(" Partcount : ");
+        Serial.print(partCount);
+
+        Serial.print(" PartSize : ");
+        Serial.print(part_size);
+
+        Serial.print(" l : ");
+        Serial.print(l);
+
+        Serial.print(" offset : ");
+        Serial.println(dest_offset);
+
+        Convert565_888(data + 2, &g_receiveBuffer.buffer_image[dest_offset], l - 2);
+
+        if (partNumber == partCount - 1)
+        {
+            SaveImageToFreeSlotAndDisplay(g_receiveBuffer.buffer_image);
+        }
     }
 };
 
@@ -149,7 +196,7 @@ class ColorCallbacks : public BLECharacteristicCallbacks
 
 void SetupBLE()
 {
-    // Serial.println(addr.toString().c_str());
+    g_receiveBuffer.buffer_image = (uint8_t *)malloc(RAW_SIZE);
 
     // Setup BLE Server
 
@@ -157,7 +204,10 @@ void SetupBLE()
 
     Serial.printf("BLE Name : %s\n", deviceName.c_str());
 
+    Serial.println("Init Ble");
     BLEDevice::init(deviceName.c_str());
+    Serial.println("setMTU to 300");
+    BLEDevice::setMTU(300);
     BLEServer *server = BLEDevice::createServer();
     server->setCallbacks(new MyServerCallbacks());
 

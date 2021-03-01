@@ -127,6 +127,11 @@ namespace PostilightApp.view
 
                   using (var stream = await result.OpenReadAsync())
                   {
+
+                  //   DecodeGifFrames decoder = new DecodeGifFrames();
+                  //   decoder.InitFromFile(result.FullPath);
+                  //   Log.Trace("Gif Frames count = " + decoder.FrameCount);
+
                      Log.Trace("FromFile " + result.FullPath);
                      ImageSource imageSource = ImageSource.FromFile(result.FullPath);
 

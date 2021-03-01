@@ -29,6 +29,12 @@
 
 #define INVALID_IMAGE_INDEX -1
 
+typedef struct image1616
+{
+  bool valid = false;
+  uint8_t *buffer_image = 0; //Null if nothing, or pointing to 16 by 16 (R,G,B) pixels
+} Image1616;
+
 enum MODES
 {
   IMAGE = 0,
