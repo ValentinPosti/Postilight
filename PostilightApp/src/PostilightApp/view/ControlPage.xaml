@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PostilightApp.view.ControlPage">
-    <ContentPage.Content>
-    </ContentPage.Content>
+   <ContentPage.Content>
+       <StackLayout Orientation="Horizontal"
+                    HeightRequest="60"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Start" >
+
+      <Button Text="-" HorizontalOptions="FillAndExpand" Clicked="Minus_Button_Clicked"/>
+      <Button Text="Delete" HorizontalOptions="FillAndExpand" Clicked="Delete_Button_Clicked"/>
+      <Button Text="+" HorizontalOptions="FillAndExpand" Clicked="Plus_Button_Clicked"/>
+      
+   </StackLayout>
+   </ContentPage.Content>
+  
 </ContentPage>
 

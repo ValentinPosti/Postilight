@@ -127,20 +127,25 @@ bool SaveBitmapToBinaryFile(int index, const uint8_t *data)
     h.isFirstFrame = true;
     h.nextImageIndex = INVALID_IMAGE_INDEX;
 
-    offset = ImageIndexToHeaderOffset(index);
-    Serial.print("Saving Header at Offset : ");
-    Serial.print(offset);
-    _data_file.seek(offset, fs::SeekSet);
-    written = _data_file.write((uint8_t *)&h, sizeof(ImageHeader));
-    Serial.print(" written : ");
-    Serial.print(written);
-    Serial.print("/");
-    Serial.print(sizeof(ImageHeader));
-    Serial.println(" Done");
+    SaveHeader(index, h);
 
     _data_file.flush();
 
     //  _data_file = SPIFFS.open("/data.bin", "r");
 
     return true;
+}
+
+void SaveHeader(int index, const ImageHeader &h)
+{
+    int offset = ImageIndexToHeaderOffset(index);
+    Serial.print("Saving Header at Offset : ");
+    Serial.print(offset);
+    _data_file.seek(offset, fs::SeekSet);
+    int written = _data_file.write((uint8_t *)&h, sizeof(ImageHeader));
+    Serial.print(" written : ");
+    Serial.print(written);
+    Serial.print("/");
+    Serial.print(sizeof(ImageHeader));
+    Serial.println(" Done");
 }

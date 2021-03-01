@@ -26,6 +26,7 @@ namespace PostilightApp.util
       public static Guid tts = new Guid("506F7374-694c-6967-6875-000000000013");
 
       public static Guid mono_color = new Guid("506F7374-694c-6967-6875-000000000014");
+      public static Guid command = new Guid("506F7374-694c-6967-6875-000000000015");
 
 
    }

@@ -16,6 +16,7 @@ using nexus.core.logging;
 using nexus.protocols.ble;
 using nexus.protocols.ble.gatt;
 using Xamarin.Forms;
+using System.Text;
 
 namespace PostilightApp.viewmodel
 {
@@ -28,11 +29,11 @@ namespace PostilightApp.viewmodel
       private IBleGattServerConnection m_gattServer;
       private Boolean m_isBusy;
       private BlePeripheralViewModel m_peripheral;
-      private int MTU = 16;
+      private int _MTU = 16;
 
       public bool IsConnected => m_gattServer != null;
 
-      
+
       public BleGattServerViewModel(IUserDialogs dialogsManager, IBluetoothLowEnergyAdapter bleAdapter)
       {
          m_bleAdapter = bleAdapter;
@@ -208,8 +209,8 @@ namespace PostilightApp.viewmodel
             Device.BeginInvokeOnMainThread(
                  () =>
                  {
-                      FormsApp.Instance.PopPage();
-                      FormsApp.Instance.SwitchTab(0);
+                    FormsApp.Instance.PopPage();
+                    FormsApp.Instance.SwitchTab(0);
                  });
 
          }
@@ -223,43 +224,36 @@ namespace PostilightApp.viewmodel
          await WriteValue(BleGuids.Service, BleGuids.Mode, mode);
       }
 
-      public async Task SendImageBuffer(byte[] buffer)
+      public async Task SendCommand(string command)
       {
-         /*
-         Log.Trace("Buffer Size ={0}", buffer.Length);
 
-         int partSize = 32;
-         byte[] part = new byte[partSize];
-
-         for(int i= 0; i < partSize; i++)
-         {
-            part[i] = buffer[i];
-         }
-         
-         await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
-         */
-
-         await SendImageBuffer(buffer, MTU);
+         var b = Encoding.ASCII.GetBytes(command);
+         await WriteValueByteArray(BleGuids.Service, BleGuids.command, b);
       }
 
-      public async Task SendImageBuffer(byte[] data, int MTU)
+      public async Task SendImageBuffer(byte[] data)
+      {
+         await SendImageBuffer(data, _MTU);
+      }
+
+      public async Task SendImageBuffer(byte[] data, int mtu)
       {
 
          try
          {
 
-            int partCount = data.Length / MTU;
-            int remaining = data.Length - partCount * MTU;
+            int partCount = data.Length / mtu;
+            int remaining = data.Length - partCount * mtu;
             int totalPartCount = partCount + ((remaining > 0) ? 1 : 0);
 
-            byte[] part = new byte[MTU + 2];
+            byte[] part = new byte[mtu + 2];
 
             for (int i = 0; i < partCount; i++)
             {
                part[0] = (byte)i;
                part[1] = (byte)totalPartCount;
 
-               Array.Copy(data, i * MTU, part, 2, MTU);
+               Array.Copy(data, i * mtu, part, 2, mtu);
                await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
             }
 
@@ -270,7 +264,7 @@ namespace PostilightApp.viewmodel
                part[0] = (byte)partCount; // PartIndex
                part[1] = (byte)totalPartCount; // PartCount
 
-               Array.Copy(data, partCount * MTU, part, 2, remaining);
+               Array.Copy(data, partCount * mtu, part, 2, remaining);
                await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
             }
 

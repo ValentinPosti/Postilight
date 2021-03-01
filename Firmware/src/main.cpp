@@ -169,7 +169,7 @@ void setup()
 
 void todo_mode();
 
-void Image_mode(bool animations);
+void Image_mode();
 void GIF_mode();
 void Mono_mode();
 void Text_mode();
@@ -178,8 +178,11 @@ void Bargraph_mode();
 void Control_mode();
 void Display_mode();
 
-bool randomImage = false;
-int g_image_index = 258, g_previmage_index = -1;
+int FindNextImage(int current_index);
+int FindPrevImage(int current_index);
+
+bool randomImage = true;
+int g_image_index = -1, g_previmage_index = -1;
 
 void SaveImageToFreeSlotAndDisplay(uint8_t *data)
 {
@@ -198,7 +201,7 @@ void SaveImageToFreeSlotAndDisplay(uint8_t *data)
     SaveBitmapToBinaryFile(index, data);
     delay(500);
 
-    g_image_index = index-1;
+    g_image_index = index - 1;
 
     g_Postilightdata.mode = IMAGE;
 }
@@ -209,14 +212,14 @@ void loop()
 
     switch (g_Postilightdata.mode)
     {
+    case CONTROL:
     case IMAGE:
-        Image_mode(false);
+    case GIF:
+        Image_mode();
         break;
     case MONO:
         Mono_mode();
         break;
-    case GIF:
-        Image_mode(true);
         break;
     case TEXT:
         Text_mode();
@@ -227,8 +230,6 @@ void loop()
     case BARGRAPH:
         Bargraph_mode();
         break;
-    case CONTROL:
-        Control_mode();
         break;
     case DISPLAY_NEW_IMAGE:
         Display_mode();
@@ -249,6 +250,27 @@ void Mono_mode()
 {
     clear_buffer(g_Postilightdata.rgb[0], g_Postilightdata.rgb[1], g_Postilightdata.rgb[2]);
     DisplayBuffer();
+}
+
+void DisplayNextImage()
+{
+    g_image_index = FindNextImage(g_image_index);
+}
+
+void DisplayPrevImage()
+{
+    g_image_index = FindPrevImage(g_image_index);
+}
+
+void DeleteCurrentImage()
+{
+    ImageHeader h;
+    h.isBlockUsed = false;
+    h.isFirstFrame = false;
+    h.nextImageIndex = INVALID_IMAGE_INDEX;
+
+    SaveHeader(g_image_index, h);
+    g_image_index = FindNextImage(g_image_index);
 }
 
 void Text_mode()
@@ -421,7 +443,7 @@ void Display_mode()
 int FindNextImage(int start_index)
 {
 
-    int index = start_index + 1 % max_image_count;
+    int index = (start_index + 1) % max_image_count;
     ImageHeader h;
     while (true)
     {
@@ -430,7 +452,7 @@ int FindNextImage(int start_index)
             return start_index; // Only one image
         }
         LoadImageHeader(index, h);
-        if (h.isImage())
+        if (h.isBlockUsed && h.isFirstFrame)
         {
             return index;
         }
@@ -438,24 +460,37 @@ int FindNextImage(int start_index)
     }
 }
 
-bool image_mode_exit_condition(bool animation)
+int FindPrevImage(int start_index)
 {
 
-    if (!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF)))
+    int index = (start_index - 1) % max_image_count;
+    ImageHeader h;
+    while (true)
+    {
+        if (index < 0)
+        {
+            index += max_image_count;
+        }
+
+        if (index == start_index)
+        {
+            return start_index; // Only one image
+        }
+        LoadImageHeader(index, h);
+        if (h.isBlockUsed && h.isFirstFrame)
+        {
+            return index;
+        }
+        index = (index - 1) % max_image_count;
+    }
+}
+
+bool image_mode_exit_condition()
+{
+
+    if (!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF) || g_Postilightdata.mode == CONTROL))
     {
         Serial.println("Exit image mode 1");
-        return true;
-    }
-
-    if (g_Postilightdata.mode == GIF && !animation)
-    {
-        Serial.println("Exit image mode 2");
-        return true;
-    }
-
-    if (g_Postilightdata.mode == IMAGE && animation)
-    {
-        Serial.println("Exit image mode 3");
         return true;
     }
 
@@ -488,12 +523,12 @@ void PlayAnimation(int image_index, ImageHeader &hCurrent)
 
     int next_frame_index;
     int elapsed;
-    while (!image_mode_exit_condition(true) && lt.elapsed() < g_Postilightdata.gad)
+    while (!image_mode_exit_condition() && lt.elapsed() < g_Postilightdata.gad)
     {
         elapsed = st.elapsed();
         float ms_per_frame = 1000 / g_Postilightdata.fps;
 
-        if (elapsed > ms_per_frame || image_mode_exit_condition(true))
+        if (elapsed > ms_per_frame || image_mode_exit_condition())
         {
 
             if (hCurrent.nextImageIndex == INVALID_IMAGE_INDEX)
@@ -548,7 +583,7 @@ void FadeIn(image1616 &fromImage, image1616 &toImage, bool animations, bool quad
     StopWatch w;
     w.start();
 
-    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition(animations))
+    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition())
     {
         elapsed = w.elapsed();
         float a = (float)elapsed / (float)g_Postilightdata.trt;
@@ -564,7 +599,7 @@ void FadeToBlack(image1616 &fromImage, image1616 &toImage, bool animations)
     FadeIn(black_image, toImage, animations, false);
 }
 
-int nextImage()
+int nextImageIndex()
 {
 
     if (randomImage)
@@ -581,45 +616,41 @@ int nextImage()
     return g_image_index;
 }
 
-void Image_mode(bool animations)
+void Image_mode()
 {
     ImageHeader hCurrent;
     StopWatch w;
-    if (animations)
-    {
-        Serial.println("Animaton mode");
-    }
-    else
-    {
-        Serial.println("Image mode");
-    }
+    Serial.println("Image mode");
 
     while (1)
     {
 
-        g_image_index = nextImage();
-        g_previmage_index = g_image_index;
+        if (g_Postilightdata.mode != CONTROL)
+        {
+            g_image_index = nextImageIndex();
+            g_previmage_index = g_image_index;
+        }
 
         //for (int image_index = 0; image_index < max_image_count; image_index++)
         {
-            if (image_mode_exit_condition(animations))
+            if (image_mode_exit_condition())
             {
                 return;
             }
 
             LoadImageHeader(g_image_index, hCurrent);
 
-            if ((hCurrent.isImage() && !animations) || (hCurrent.isAnimation() && animations))
+            if (hCurrent.isUsed() && hCurrent.isFirstFrame)
             {
 
-                // Serial.print("Loading #");
-                // Serial.print(g_image_index);
-                // Serial.println(animations ? " (Animation) " : " (Image)");
+                Serial.print("Loading #");
+                Serial.print(g_image_index);
+                Serial.println(hCurrent.isAnimation() ? " (Animation) " : " (Image)");
             }
             else
             {
-                // Serial.print("Skipping #");
-                // Serial.println(g_image_index);
+                Serial.print("Skipping #");
+                Serial.println(g_image_index);
                 continue;
             }
 
@@ -630,7 +661,7 @@ void Image_mode(bool animations)
             case NONE:
             {
 
-                if (animations)
+                if (hCurrent.isAnimation())
                 {
                     PlayAnimation(g_image_index, hCurrent);
                 }
@@ -640,7 +671,7 @@ void Image_mode(bool animations)
                     w.reset();
                     w.start();
 
-                    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition(animations))
+                    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition())
                     {
                         // Still
                         DisplayImage(g_current_image1616.buffer_image);
@@ -652,9 +683,9 @@ void Image_mode(bool animations)
             case FADING:
             {
 
-                FadeToBlack(g_prev_image1616, g_current_image1616, animations);
+                FadeToBlack(g_prev_image1616, g_current_image1616, hCurrent.isAnimation());
 
-                if (animations)
+                if (hCurrent.isAnimation())
                 {
                     PlayAnimation(g_image_index, hCurrent);
                 }
@@ -663,7 +694,7 @@ void Image_mode(bool animations)
                     w.reset();
                     w.start();
                     uint32_t total_time_ms = g_Postilightdata.imt;
-                    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition(animations))
+                    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition())
                     {
                         // Still
                         DisplayImage(g_current_image1616.buffer_image);
@@ -719,16 +750,16 @@ void Image_mode(bool animations)
                 w.reset();
                 w.start();
 
-                if (animations)
+                if (hCurrent.isAnimation())
                 {
 
                     PlayAnimation(g_image_index, hCurrent);
                 }
                 else
                 {
-                    while ((w.elapsed() < g_Postilightdata.imt) && !image_mode_exit_condition(animations))
+                    while ((w.elapsed() < g_Postilightdata.imt) && !image_mode_exit_condition())
                     {
-                        if (animations)
+                        if (hCurrent.isAnimation())
                         {
                         }
                         else

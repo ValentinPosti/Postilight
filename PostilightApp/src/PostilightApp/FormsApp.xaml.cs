@@ -59,6 +59,7 @@ namespace PostilightApp
          }
       }
 
+      
       public async Task SendImageBuffer(byte[] buffer)
       {
          if (!isConnected)
@@ -66,7 +67,7 @@ namespace PostilightApp
 
          await bleGattServerViewModel.SendImageBuffer(buffer);
       }
-
+      
 
       public FormsApp( IBluetoothLowEnergyAdapter adapter, IUserDialogs dialogs )
       {

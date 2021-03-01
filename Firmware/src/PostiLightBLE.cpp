@@ -13,6 +13,10 @@
 BLECharacteristic *characteristicMessage;
 BLECharacteristic *characteristicImage;
 
+extern void DisplayNextImage();
+extern void DisplayPrevImage();
+extern void DeleteCurrentImage();
+
 Image1616 g_receiveBuffer;
 class MyServerCallbacks : public BLEServerCallbacks
 {
@@ -85,12 +89,35 @@ public:
 
     virtual void onWrite(BLECharacteristic *characteristic)
     {
-        uint32_t *data = (uint32_t *)characteristic->getData();
+        uint8_t *data = (uint8_t *)characteristic->getData();
 
         Serial.print("ControlCallback onWrite : ");
         Serial.print(characteristic->getUUID().toString().c_str());
         Serial.print(" Value =  ");
         Serial.println(*data);
+
+        g_Postilightdata.mode = CONTROL;
+
+        switch (*data)
+        {
+        case '+':
+            // Next Image or Animation
+            DisplayNextImage();
+            break;
+
+        case '-':
+            // Previous image or animation
+            DisplayPrevImage();
+            break;
+
+        case 'd':
+            // Delete current image or animation
+            DeleteCurrentImage();
+            break;
+
+        default:
+            break;
+        }
     }
 
     virtual void onRead(BLECharacteristic *characteristic)

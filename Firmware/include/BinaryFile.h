@@ -6,6 +6,11 @@ struct ImageHeader
     byte isFirstFrame = false;
     short nextImageIndex = INVALID_IMAGE_INDEX;
 
+    bool isUsed()
+    {
+        return isBlockUsed;
+    }
+
     bool isImage()
     {
         return isBlockUsed && isFirstFrame && (nextImageIndex == INVALID_IMAGE_INDEX);
@@ -36,6 +41,7 @@ int FindFreeSlot(int startIndex = 0);
 bool LoadImageHeader(int index, ImageHeader &header);
 bool LoadBitmap(int index, uint8_t *dst);
 bool SaveBitmapToBinaryFile(int index, const uint8_t *dst);
+void SaveHeader(int index, const ImageHeader &h);
 
 /* 
 

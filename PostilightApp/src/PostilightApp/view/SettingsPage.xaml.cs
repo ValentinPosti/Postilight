@@ -73,6 +73,7 @@ namespace PostilightApp.view
 
       void Delete_Button_Clicked(System.Object sender, System.EventArgs e)
       {
+         FormsApp.Instance.PushPage(new ControlPage(_model));
       }
    }
 }
