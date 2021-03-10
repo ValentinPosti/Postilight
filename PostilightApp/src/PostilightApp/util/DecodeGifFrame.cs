@@ -59,7 +59,7 @@ public class DecodeGifFrames
 
       var opts = new SKCodecOptions();
       opts.FrameIndex = frameIndex;
-      
+      opts.PriorFrame = frameIndex > 0 ? frameIndex -1 : 0;
       var res = codec?.GetPixels(info, bitmap.GetPixels(), opts);
       if (res == SKCodecResult.Success)
       {
