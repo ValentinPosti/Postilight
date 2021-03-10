@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 using nexus.core.logging;
 
+using PostilightApp;
 using PostilightApp.util;
 using PostilightApp.viewmodel;
 
 using Xamarin.Forms;
-using Xamarin.Forms.ImagePicker;
 using Xamarin.Essentials;
 using SkiaSharp;
 
@@ -18,21 +18,65 @@ namespace PostilightApp.view
 
       BleGattServerViewModel _model;
 
-      IImagePickerService _imagePickerService;
 
       ImageSource imageSource;
       SKBitmap skBitmap;
 
       public HomePage(BaseViewModel vm)
       {
-         _imagePickerService = DependencyService.Get<IImagePickerService>();
 
          InitializeComponent();
          BindingContext = vm;
          _model = vm as BleGattServerViewModel;
       }
 
-      async void OnLedsToggled(object sender, ToggledEventArgs e)
+      protected override void OnAppearing()
+      {
+         base.OnAppearing();
+
+         // Get Current Light mode
+
+        GetMode();
+      }
+
+      async void GetMode()
+      {
+         LightMode mode = (LightMode) await _model.ReadValue(BleGuids.Service, BleGuids.Mode);
+
+         //TODO Select the corresponding button
+
+         switch (mode)
+         {
+            case LightMode.IMAGE:
+               imageModeButton.IsChecked = true;
+               break;
+
+            case LightMode.GIF:
+               animatonModeButton.IsChecked = true;
+               break;
+
+            case LightMode.TEXT:
+               textModeButton.IsChecked = true;
+               break;
+
+            case LightMode.MONO:
+               monoColorModeButton.IsChecked = true;
+               break;
+
+            case LightMode.MATH:
+               mathModeButton.IsChecked = true;
+               break;
+
+            case LightMode.BARGRAPH:
+               barGraphModeButton.IsChecked = true;
+               break;
+
+         }
+
+      }
+     
+
+         async void OnLedsToggled(object sender, ToggledEventArgs e)
       {
          var b = e.Value;
          await _model.WriteValue(BleGuids.Service, BleGuids.LedsOnOff, b ? 1 : 0);
@@ -51,9 +95,8 @@ namespace PostilightApp.view
          if (v == true)
          {
             var rb = sender as RadioButton;
-            var v2 = rb.Value as string;
-            var i = int.Parse(v2);
-            await _model.SetMode(i);
+            var val = rb.Value;
+            await _model.SetMode((LightMode)val);
          }
       }
 
@@ -93,9 +136,6 @@ namespace PostilightApp.view
          {
             Log.Trace("Pick");
 
-
-
-
             var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
              {
                  { DevicePlatform.iOS, new []{ "public.image" } }, // or general UTType values
@@ -120,17 +160,24 @@ namespace PostilightApp.view
             {
                Log.Trace("Picked");
 
+               bool isGif = result.FileName.EndsWith("gif", StringComparison.OrdinalIgnoreCase);
+
                if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
-                   result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase) || result.FileName.EndsWith("gif", StringComparison.OrdinalIgnoreCase))
+                   result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase) || isGif)
                {
                   Log.Trace("OpenReadAsync");
 
                   using (var stream = await result.OpenReadAsync())
                   {
 
-                  //   DecodeGifFrames decoder = new DecodeGifFrames();
-                  //   decoder.InitFromFile(result.FullPath);
-                  //   Log.Trace("Gif Frames count = " + decoder.FrameCount);
+                     DecodeGifFrames decoder = null;
+
+                     if (isGif)
+                     {
+                        decoder =  new DecodeGifFrames();
+                        decoder.InitFromFile(result.FullPath);
+                        Log.Trace("Gif Frames count = " + decoder.FrameCount);
+                     }
 
                      Log.Trace("FromFile " + result.FullPath);
                      ImageSource imageSource = ImageSource.FromFile(result.FullPath);
@@ -139,7 +186,7 @@ namespace PostilightApp.view
                      skBitmap = SKBitmap.Decode(stream);
 
                      Log.Trace("Image Acquired :", result.FileName);
-                     FormsApp.Instance.PushPage(new ImagePage(imageSource, skBitmap));
+                     FormsApp.Instance.PushPage(new ImagePage(imageSource, skBitmap, decoder));
                   }
                }
                else
@@ -154,22 +201,7 @@ namespace PostilightApp.view
             // The user canceled or something went wrong
          }
 
-         /*
-         
-         ImageSource imageSource = await _imagePickerService.PickImageAsync();
-
-         if (imageSource != null) // it will be null when user cancel
-         {
-            Log.Trace("Image Acquired :", imageSource.ToString());
-            FormsApp.Instance.PushPage(new ImagePage(imageSource));
-
-         }
-         else
-         {
-            Log.Trace("Image empty");
-
-         }
-         */
+       
       }
 
       async void Text_Button_Clicked(object sender, System.EventArgs e)

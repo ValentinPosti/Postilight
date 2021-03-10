@@ -2,6 +2,7 @@
 <ContentPage   xmlns="http://xamarin.com/schemas/2014/forms"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                x:Class="PostilightApp.view.HomePage"
+               xmlns:local="clr-namespace:PostilightApp"
                xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
                ios:Page.PrefersHomeIndicatorAutoHidden="true"
                IconImageSource="home.png"
@@ -112,50 +113,50 @@
                               <ColumnDefinition Width="0.33*" />
                            </Grid.ColumnDefinitions>
 
-                           <RadioButton  x:Name="btn1" Value="0" Grid.Row="0" Grid.Column="0"   IsChecked="true" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton  x:Name="imageModeButton" Value="{x:Static local:LightMode.IMAGE}" Grid.Row="0" Grid.Column="0"   IsChecked="true" CheckedChanged="OnRadioButtonCheckedChanged"
                                        VerticalOptions="CenterAndExpand"
                                        HorizontalOptions="Center"
-                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">                                       
+                                       HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">                                       
                               <RadioButton.Content>
                                  <Image Source="famous.png"/>                                 
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton Value="1" Grid.Row="0" Grid.Column="1"  CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="animatonModeButton"  Value="{x:Static local:LightMode.GIF}" Grid.Row="0" Grid.Column="1"  CheckedChanged="OnRadioButtonCheckedChanged"
                                        HorizontalOptions="Center"
-                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">                                       
+                                       HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">                                       
                               <RadioButton.Content>
                                  <Image Source="gamasutra.png"/>
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton Value="2" Grid.Row="0" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="textModeButton" Value="{x:Static local:LightMode.TEXT}" Grid.Row="0" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
                                        HorizontalOptions="Center"
-                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                                       HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
                                  <Image Source="typing_machine.png" Aspect="AspectFit" />
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton Value="3" Grid.Row="1" Grid.Column="0" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="monoColorModeButton" Value="{x:Static local:LightMode.MONO}" Grid.Row="1" Grid.Column="0" CheckedChanged="OnRadioButtonCheckedChanged"
                                        HorizontalOptions="Center"
-                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                                       HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
                                  <Image Source="screen_1.png"/>
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton Value="4" Grid.Row="1" Grid.Column="1" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="mathModeButton" Value="{x:Static local:LightMode.MATH}" Grid.Row="1" Grid.Column="1" CheckedChanged="OnRadioButtonCheckedChanged"
                                         HorizontalOptions="Center"
-                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                                       HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
                                  <Image Source="stats_circle.png" Aspect="AspectFit" />
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton Value="5" Grid.Row="1" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="barGraphModeButton" Value="{x:Static local:LightMode.BARGRAPH}" Grid.Row="1" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
                                         HorizontalOptions="Center"
-                                       HeightRequest="{Binding Width, Source={x:Reference btn1}}">
+                                       HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
                                  <Image Source="graph_bar.png" Aspect="AspectFit"/>
                               </RadioButton.Content>

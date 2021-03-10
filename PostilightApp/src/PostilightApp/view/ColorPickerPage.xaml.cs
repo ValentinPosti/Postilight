@@ -90,7 +90,7 @@ namespace PostilightApp.view
       protected override void OnAppearing()
       {
          base.OnAppearing();
-         _ = _model.SetMode(3);
+         _ = _model.SetMode(LightMode.MONO);
                   
       }
 

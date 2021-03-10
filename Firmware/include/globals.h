@@ -44,7 +44,7 @@ enum MODES
   MATH,
   BARGRAPH,
   CONTROL,
-  DISPLAY_NEW_IMAGE
+  UPLOAD,
 };
 
 enum TRANSITION_MODE
@@ -86,6 +86,8 @@ struct PostiLightData
   uint32_t tts;         //vitesse de défilement du texte en défilement horizontal
   unsigned char rgb[3]; //couleur de l'image mono couleur
 };
+
+extern bool interrupt_playback;
 
 extern PostiLightData g_Postilightdata;
 

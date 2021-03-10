@@ -55,6 +55,8 @@ int FindFreeSlot(int startindex)
     return -1; // Sorry we're full
 }
 
+#define DEBUG_IMAGE_HEADER 0
+
 bool LoadImageHeader(int index, ImageHeader &h)
 {
     if (_data_file == 0)
@@ -69,7 +71,8 @@ bool LoadImageHeader(int index, ImageHeader &h)
 
     _data_file.seek(offset);
     _data_file.readBytes((char *)&h, sizeof(ImageHeader));
-    /*
+
+#if DEBUG_IMAGE_HEADER
     Serial.print("ImageHeader # ");
     Serial.print(index);
     Serial.print(" at Offset ");
@@ -81,7 +84,7 @@ bool LoadImageHeader(int index, ImageHeader &h)
     Serial.print(" ");
     Serial.print(h.nextImageIndex);
     Serial.println("]");
-*/
+#endif
     return true;
 }
 
@@ -98,7 +101,7 @@ bool LoadBitmap(int index, uint8_t *dst)
     return true;
 }
 
-bool SaveBitmapToBinaryFile(int index, const uint8_t *data)
+bool SaveBitmapToBinaryFile(int index, const uint8_t *data, int frame_index, int frame_count)
 {
     if (_data_file == 0)
         return false;
@@ -124,8 +127,8 @@ bool SaveBitmapToBinaryFile(int index, const uint8_t *data)
 
     ImageHeader h;
     h.isBlockUsed = true;
-    h.isFirstFrame = true;
-    h.nextImageIndex = INVALID_IMAGE_INDEX;
+    h.isFirstFrame = frame_index == 0;
+    h.nextImageIndex = (frame_index == frame_count - 1) ? INVALID_IMAGE_INDEX : FindFreeSlot(index + 1);
 
     SaveHeader(index, h);
 

@@ -40,7 +40,7 @@ bool OpenDataFile();
 int FindFreeSlot(int startIndex = 0);
 bool LoadImageHeader(int index, ImageHeader &header);
 bool LoadBitmap(int index, uint8_t *dst);
-bool SaveBitmapToBinaryFile(int index, const uint8_t *dst);
+bool SaveBitmapToBinaryFile(int index, const uint8_t *dst, int frame_index, int frame_count);
 void SaveHeader(int index, const ImageHeader &h);
 
 /* 

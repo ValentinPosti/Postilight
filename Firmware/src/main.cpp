@@ -15,6 +15,7 @@
 #include <StopWatch.h>
 
 PostiLightData g_Postilightdata;
+bool interrupt_playback = false;
 
 extern uint8_t *g_buffer_image;
 
@@ -58,6 +59,8 @@ char g_text[1024] = "Postilight : Please send text from the smartphone app";
 
 static const MODES default_mode = IMAGE;
 static const TRANSITION_MODE default_trs = NONE;
+
+void displayCurrentImage();
 
 void InitDefaultValues()
 {
@@ -170,7 +173,6 @@ void setup()
 void todo_mode();
 
 void Image_mode();
-void GIF_mode();
 void Mono_mode();
 void Text_mode();
 void Math_mode();
@@ -183,12 +185,12 @@ int FindPrevImage(int current_index);
 
 bool randomImage = true;
 int g_image_index = -1, g_previmage_index = -1;
+int g_displayed_image_index = -1;
 
-void SaveImageToFreeSlotAndDisplay(uint8_t *data)
+int last_saved_image_index;
+
+void SaveImageToFreeSlotAndDisplay(uint8_t *data, int frame_index, int frame_count)
 {
-
-    g_Postilightdata.mode = DISPLAY_NEW_IMAGE;
-    delay(500);
 
     int index = FindFreeSlot(0);
     if (index == INVALID_IMAGE_INDEX)
@@ -198,12 +200,20 @@ void SaveImageToFreeSlotAndDisplay(uint8_t *data)
     Serial.print("Free slot found : ");
     Serial.println(index);
 
-    SaveBitmapToBinaryFile(index, data);
-    delay(500);
+    SaveBitmapToBinaryFile(index, data, frame_index, frame_count);
 
-    g_image_index = index - 1;
+    if (frame_index == 0)
+    {
+        g_image_index = index;
+        Serial.print("Current slot is : ");
+        Serial.println(g_image_index);
+    }
 
-    g_Postilightdata.mode = IMAGE;
+    if (frame_index == frame_count - 1)
+    {
+        g_Postilightdata.mode = CONTROL;
+        displayCurrentImage();
+    }
 }
 
 void loop()
@@ -213,8 +223,15 @@ void loop()
     switch (g_Postilightdata.mode)
     {
     case CONTROL:
+        Serial.println("Control Mode");
+        Image_mode();
+        break;
     case IMAGE:
+        Serial.println("Image Mode");
+        Image_mode();
+        break;
     case GIF:
+        Serial.println("GIF Mode");
         Image_mode();
         break;
     case MONO:
@@ -230,9 +247,14 @@ void loop()
     case BARGRAPH:
         Bargraph_mode();
         break;
+    case UPLOAD:
+        Serial.println("UPLOAD Mode");
+        while (g_Postilightdata.mode == UPLOAD)
+        {
+            delay(100);
+        }
+        //Display_mode();
         break;
-    case DISPLAY_NEW_IMAGE:
-        Display_mode();
     }
 }
 
@@ -254,22 +276,37 @@ void Mono_mode()
 
 void DisplayNextImage()
 {
+    interrupt_playback = true;
     g_image_index = FindNextImage(g_image_index);
 }
 
 void DisplayPrevImage()
 {
+    interrupt_playback = true;
     g_image_index = FindPrevImage(g_image_index);
 }
 
 void DeleteCurrentImage()
 {
-    ImageHeader h;
-    h.isBlockUsed = false;
-    h.isFirstFrame = false;
-    h.nextImageIndex = INVALID_IMAGE_INDEX;
+    ImageHeader clearHeader;
+    clearHeader.isBlockUsed = false;
+    clearHeader.isFirstFrame = false;
+    clearHeader.nextImageIndex = INVALID_IMAGE_INDEX;
 
-    SaveHeader(g_image_index, h);
+    ImageHeader currentHeader;
+    LoadImageHeader(g_image_index, currentHeader);
+    do
+    {
+        SaveHeader(g_image_index, clearHeader);
+
+        if (currentHeader.nextImageIndex != INVALID_IMAGE_INDEX)
+        {
+            g_image_index = currentHeader.nextImageIndex;
+            LoadImageHeader(g_image_index, currentHeader);
+        }
+
+    } while (currentHeader.nextImageIndex != INVALID_IMAGE_INDEX);
+
     g_image_index = FindNextImage(g_image_index);
 }
 
@@ -437,7 +474,10 @@ void Control_mode()
 
 void Display_mode()
 {
-    //todo_mode();
+    Serial.print("Displaying #");
+    Serial.println(g_image_index);
+
+    displayCurrentImage();
 }
 
 int FindNextImage(int start_index)
@@ -490,7 +530,12 @@ bool image_mode_exit_condition()
 
     if (!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF) || g_Postilightdata.mode == CONTROL))
     {
-        Serial.println("Exit image mode 1");
+        return true;
+    }
+
+    if ((g_Postilightdata.mode == CONTROL) && interrupt_playback)
+    {
+        interrupt_playback = false;
         return true;
     }
 
@@ -523,7 +568,7 @@ void PlayAnimation(int image_index, ImageHeader &hCurrent)
 
     int next_frame_index;
     int elapsed;
-    while (!image_mode_exit_condition() && lt.elapsed() < g_Postilightdata.gad)
+    do
     {
         elapsed = st.elapsed();
         float ms_per_frame = 1000 / g_Postilightdata.fps;
@@ -572,7 +617,7 @@ void PlayAnimation(int image_index, ImageHeader &hCurrent)
                 DisplayImage(g_B1_image1616.buffer_image);
             }
         }
-    }
+    } while (!image_mode_exit_condition() && lt.elapsed() < g_Postilightdata.gad);
 }
 
 void FadeIn(image1616 &fromImage, image1616 &toImage, bool animations, bool quad = true)
@@ -618,11 +663,8 @@ int nextImageIndex()
 
 void Image_mode()
 {
-    ImageHeader hCurrent;
-    StopWatch w;
-    Serial.println("Image mode");
 
-    while (1)
+    do
     {
 
         if (g_Postilightdata.mode != CONTROL)
@@ -631,156 +673,164 @@ void Image_mode()
             g_previmage_index = g_image_index;
         }
 
-        //for (int image_index = 0; image_index < max_image_count; image_index++)
+        g_displayed_image_index = g_image_index;
+        displayCurrentImage();
+
+    } while (!image_mode_exit_condition());
+}
+
+void displayCurrentImage()
+{
+
+    ImageHeader hCurrent;
+    StopWatch w;
+    {
+
+        LoadImageHeader(g_image_index, hCurrent);
+
+        if (hCurrent.isUsed() && hCurrent.isFirstFrame)
         {
-            if (image_mode_exit_condition())
+
+            Serial.print("Loading #");
+            Serial.print(g_image_index);
+            Serial.println(hCurrent.isAnimation() ? " (Animation) " : " (Image)");
+        }
+        else
+        {
+            Serial.print("Skipping #");
+            Serial.println(g_image_index);
+            return;
+        }
+
+        LoadBitmap(g_image_index, g_current_image1616.buffer_image);
+
+        // No Funky transition in Control mode
+        int transitionMode = (g_Postilightdata.mode == CONTROL || g_Postilightdata.mode == UPLOAD) ? NONE : g_Postilightdata.trs;
+
+        switch (transitionMode)
+        {
+        case NONE:
+        {
+
+            if (hCurrent.isAnimation())
             {
-                return;
-            }
-
-            LoadImageHeader(g_image_index, hCurrent);
-
-            if (hCurrent.isUsed() && hCurrent.isFirstFrame)
-            {
-
-                Serial.print("Loading #");
-                Serial.print(g_image_index);
-                Serial.println(hCurrent.isAnimation() ? " (Animation) " : " (Image)");
+                PlayAnimation(g_image_index, hCurrent);
             }
             else
             {
-                Serial.print("Skipping #");
-                Serial.println(g_image_index);
-                continue;
-            }
-
-            LoadBitmap(g_image_index, g_current_image1616.buffer_image);
-
-            switch (g_Postilightdata.trs)
-            {
-            case NONE:
-            {
-
-                if (hCurrent.isAnimation())
-                {
-                    PlayAnimation(g_image_index, hCurrent);
-                }
-                else
-                {
-                    uint32_t total_time_ms = g_Postilightdata.imt;
-                    w.reset();
-                    w.start();
-
-                    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition())
-                    {
-                        // Still
-                        DisplayImage(g_current_image1616.buffer_image);
-                    }
-                }
-            }
-            break;
-
-            case FADING:
-            {
-
-                FadeToBlack(g_prev_image1616, g_current_image1616, hCurrent.isAnimation());
-
-                if (hCurrent.isAnimation())
-                {
-                    PlayAnimation(g_image_index, hCurrent);
-                }
-                else
-                {
-                    w.reset();
-                    w.start();
-                    uint32_t total_time_ms = g_Postilightdata.imt;
-                    while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition())
-                    {
-                        // Still
-                        DisplayImage(g_current_image1616.buffer_image);
-                    }
-                }
-                // current image -> prev image
-                memcpy(g_prev_image1616.buffer_image, g_current_image1616.buffer_image, RAW_SIZE);
-            }
-            break;
-
-            case SCROLLING:
-            case SCROLL_AND_FADE:
-            {
-                uint32_t step = 0;
+                uint32_t total_time_ms = g_Postilightdata.imt;
                 w.reset();
                 w.start();
 
-                while ((step <= 17))
+                do
                 {
-                    int elapsed = w.elapsed();
+                    // Still
+                    DisplayImage(g_current_image1616.buffer_image);
+                } while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition());
+            }
+        }
+        break;
 
-                    if (elapsed > (1000 / g_Postilightdata.its))
+        case FADING:
+        {
+
+            FadeToBlack(g_prev_image1616, g_current_image1616, hCurrent.isAnimation());
+
+            if (hCurrent.isAnimation())
+            {
+                PlayAnimation(g_image_index, hCurrent);
+            }
+            else
+            {
+                w.reset();
+                w.start();
+                uint32_t total_time_ms = g_Postilightdata.imt;
+                do
+                {
+                    // Still
+                    DisplayImage(g_current_image1616.buffer_image);
+                } while ((w.elapsed() < total_time_ms) && !image_mode_exit_condition());
+            }
+            // current image -> prev image
+            memcpy(g_prev_image1616.buffer_image, g_current_image1616.buffer_image, RAW_SIZE);
+        }
+        break;
+
+        case SCROLLING:
+        case SCROLL_AND_FADE:
+        {
+            uint32_t step = 0;
+            w.reset();
+            w.start();
+
+            while ((step <= 17))
+            {
+                int elapsed = w.elapsed();
+
+                if (elapsed > (1000 / g_Postilightdata.its))
+                {
+                    //Serial.println(step);
+                    //Advance on col
+
+                    CopyImage(g_B1_image1616, g_B0_image1616);
+                    display_images_horizontally(g_prev_image1616.buffer_image, g_current_image1616.buffer_image, step, g_B1_image1616.buffer_image);
+                    DisplayImage(g_B0_image1616.buffer_image);
+
+                    step += 1;
+                    w.reset();
+                    w.start();
+                }
+
+                else
+                {
+
+                    if (g_Postilightdata.trs & FADING)
                     {
-                        //Serial.println(step);
-                        //Advance on col
-
-                        CopyImage(g_B1_image1616, g_B0_image1616);
-                        display_images_horizontally(g_prev_image1616.buffer_image, g_current_image1616.buffer_image, step, g_B1_image1616.buffer_image);
-                        DisplayImage(g_B0_image1616.buffer_image);
-
-                        step += 1;
-                        w.reset();
-                        w.start();
+                        float a = (float)elapsed / (1000 / (float)g_Postilightdata.its);
+                        // Fade In
+                        fading_images(g_B1_image1616.buffer_image, g_B0_image1616.buffer_image, g_display_image1616.buffer_image, a);
+                        DisplayImage(g_display_image1616.buffer_image);
                     }
-
                     else
                     {
-
-                        if (g_Postilightdata.trs & FADING)
-                        {
-                            float a = (float)elapsed / (1000 / (float)g_Postilightdata.its);
-                            // Fade In
-                            fading_images(g_B1_image1616.buffer_image, g_B0_image1616.buffer_image, g_display_image1616.buffer_image, a);
-                            DisplayImage(g_display_image1616.buffer_image);
-                        }
-                        else
-                        {
-                            DisplayImage(g_B1_image1616.buffer_image);
-                        }
+                        DisplayImage(g_B1_image1616.buffer_image);
                     }
                 }
+            }
 
-                w.reset();
-                w.start();
+            w.reset();
+            w.start();
 
-                if (hCurrent.isAnimation())
+            if (hCurrent.isAnimation())
+            {
+
+                PlayAnimation(g_image_index, hCurrent);
+            }
+            else
+            {
+                do
                 {
-
-                    PlayAnimation(g_image_index, hCurrent);
-                }
-                else
-                {
-                    while ((w.elapsed() < g_Postilightdata.imt) && !image_mode_exit_condition())
+                    if (hCurrent.isAnimation())
                     {
-                        if (hCurrent.isAnimation())
-                        {
-                        }
-                        else
-                        {
-                            // Still
-                            // Serial.println("Display Still Image");
-                            DisplayImage(g_B1_image1616.buffer_image);
-                            delay(5);
-                        }
                     }
-                }
-
-                //Serial.println("Copy current image to prev Image");
-                CopyImage(g_B1_image1616, g_prev_image1616);
-                CopyImage(g_B1_image1616, g_B0_image1616);
+                    else
+                    {
+                        // Still
+                        // Serial.println("Display Still Image");
+                        DisplayImage(g_B1_image1616.buffer_image);
+                        delay(5);
+                    }
+                } while ((w.elapsed() < g_Postilightdata.imt) && !image_mode_exit_condition());
             }
+
+            //Serial.println("Copy current image to prev Image");
+            CopyImage(g_B1_image1616, g_prev_image1616);
+            CopyImage(g_B1_image1616, g_B0_image1616);
+        }
+        break;
+
+        default:
             break;
-
-            default:
-                break;
-            }
         }
     }
 }

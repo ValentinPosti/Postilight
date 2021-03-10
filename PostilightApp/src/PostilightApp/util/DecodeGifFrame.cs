@@ -1,4 +1,5 @@
 using System.IO;
+using nexus.core.logging;
 using SkiaSharp;
 
 
@@ -58,10 +59,18 @@ public class DecodeGifFrames
 
       var opts = new SKCodecOptions();
       opts.FrameIndex = frameIndex;
-      if (codec?.GetPixels(info, bitmap.GetPixels(), opts) == SKCodecResult.Success)
+      
+      var res = codec?.GetPixels(info, bitmap.GetPixels(), opts);
+      if (res == SKCodecResult.Success)
       {
          return bitmap.PeekPixels();
       }
+      else
+      {
+         Log.Trace("Error decoding frame {0} : {1} ",frameIndex, res);
+
+      }
+
 
       return null;
    }

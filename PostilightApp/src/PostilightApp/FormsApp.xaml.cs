@@ -59,15 +59,46 @@ namespace PostilightApp
          }
       }
 
-      
-      public async Task SendImageBuffer(byte[] buffer)
+      public async Task SetMode(PostilightApp.LightMode mode)
       {
          if (!isConnected)
             return;
 
-         await bleGattServerViewModel.SendImageBuffer(buffer);
+         await bleGattServerViewModel.SetMode(mode);
+
       }
-      
+
+      public async Task SendImageBuffers(List<byte[]> buffers, ProgressBar pb = null)
+      {
+         if (!isConnected)
+            return;
+         await bleGattServerViewModel.SetMode(LightMode.CONTROL);
+         foreach (var item in buffers)
+         {
+            await bleGattServerViewModel.SendAnimation(buffers,pb);
+         }
+     
+      }
+
+      public async Task SendImageBuffer(byte[] buffer, ProgressBar pb)
+      {
+         if (!isConnected)
+            return;
+         await bleGattServerViewModel.SetMode(LightMode.UPLOAD);
+         await bleGattServerViewModel.SendImageBuffer(buffer,pb,0,1);
+         
+      }
+
+      public async Task SendAnimation(List<byte[]> buffers, ProgressBar pb)
+      {
+         if (!isConnected)
+            return;
+         await bleGattServerViewModel.SetMode(LightMode.UPLOAD);
+         await bleGattServerViewModel.SendAnimation(buffers, pb);
+
+      }
+
+
 
       public FormsApp( IBluetoothLowEnergyAdapter adapter, IUserDialogs dialogs )
       {

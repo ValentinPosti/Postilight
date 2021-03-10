@@ -12,6 +12,7 @@
             <RowDefinition Height="0.3*" />
             <RowDefinition Height="0.3*" />
             <RowDefinition Height="0.1*" />
+            <RowDefinition Height="0.05*" />
          </Grid.RowDefinitions>
          <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -32,6 +33,7 @@
          </ActivityIndicator>
 
          <Button x:Name="sendToPostiLighButton" Text="Send Image to your Postilight" Grid.Row="3" Grid.Column="0" Clicked="Send_Button_Clicked" />
+         <ProgressBar x:Name="progressBar" HeightRequest="20" Progress="0.0" Grid.Row="4" Grid.Column="0" VerticalOptions="Center" ProgressColor="DarkOrange"/>
       </Grid>
    </ContentPage.Content>
 </util:BasePage>

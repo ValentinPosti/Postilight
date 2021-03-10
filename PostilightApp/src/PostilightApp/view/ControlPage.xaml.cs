@@ -15,21 +15,31 @@ namespace PostilightApp.view
       {
          InitializeComponent();
          _model = model;
+
+         _ = _model.SetMode(LightMode.CONTROL);
+      }
+
+      protected override void OnDisappearing()
+      {
+         base.OnDisappearing();
+         _ = _model?.SetMode(LightMode.IMAGE);
+         
+
       }
 
       async void Plus_Button_Clicked(System.Object sender, System.EventArgs e)
       {
-         await _model.SendCommand("+");
+         await _model?.SendCommand("+");
       }
 
       async void Minus_Button_Clicked(System.Object sender, System.EventArgs e)
       {
-         await _model.SendCommand("-");
+         await _model?.SendCommand("-");
       }
 
       async void Delete_Button_Clicked(System.Object sender, System.EventArgs e)
       {
-         await _model.SendCommand("d");
+         await _model?.SendCommand("d");
       }
 
 

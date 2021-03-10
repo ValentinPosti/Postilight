@@ -17,6 +17,8 @@ using nexus.protocols.ble;
 using nexus.protocols.ble.gatt;
 using Xamarin.Forms;
 using System.Text;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace PostilightApp.viewmodel
 {
@@ -33,6 +35,8 @@ namespace PostilightApp.viewmodel
 
       public bool IsConnected => m_gattServer != null;
 
+
+ 
 
       public BleGattServerViewModel(IUserDialogs dialogsManager, IBluetoothLowEnergyAdapter bleAdapter)
       {
@@ -201,7 +205,7 @@ namespace PostilightApp.viewmodel
          {
             m_peripheral.IsConnected = false;
 
-            Log.Trace("Closing connection to GATT Server. state={0:g}", m_gattServer?.State);
+            Log.Trace("Closing connection to GATT Server. state={0:g}", m_gattServer.State);
             await m_gattServer.Disconnect();
             m_gattServer = null;
             RaisePropertyChanged(nameof(IsConnected));
@@ -219,9 +223,9 @@ namespace PostilightApp.viewmodel
          IsBusy = false;
       }
 
-      public async Task SetMode(int mode)
+      public async Task SetMode(LightMode mode)
       {
-         await WriteValue(BleGuids.Service, BleGuids.Mode, mode);
+         await WriteValue(BleGuids.Service, BleGuids.Mode, (int) mode);
       }
 
       public async Task SendCommand(string command)
@@ -231,12 +235,24 @@ namespace PostilightApp.viewmodel
          await WriteValueByteArray(BleGuids.Service, BleGuids.command, b);
       }
 
-      public async Task SendImageBuffer(byte[] data)
+      public async Task SendAnimation(List<byte[]> data, ProgressBar pb)
       {
-         await SendImageBuffer(data, _MTU);
+         int frame_count = data.Count;
+         int frame_index = 0;
+         foreach (var buffer in data)
+         {
+            await SendImageBuffer(buffer, pb, frame_index, frame_count);
+            frame_index++;           
+         }
       }
 
-      public async Task SendImageBuffer(byte[] data, int mtu)
+      
+      public async Task SendImageBuffer(byte[] data, ProgressBar pb,int frame_index, int frame_count)
+      {
+         await SendImageBuffer(data, _MTU,pb,frame_index,frame_count);
+      }
+
+      public async Task SendImageBuffer(byte[] data, int mtu, ProgressBar pb, int frame_index, int frame_count)
       {
 
          try
@@ -246,26 +262,37 @@ namespace PostilightApp.viewmodel
             int remaining = data.Length - partCount * mtu;
             int totalPartCount = partCount + ((remaining > 0) ? 1 : 0);
 
-            byte[] part = new byte[mtu + 2];
+            byte[] part = new byte[mtu + 4];
+
+            float frame_pb = 1.0f / frame_count; 
 
             for (int i = 0; i < partCount; i++)
             {
-               part[0] = (byte)i;
-               part[1] = (byte)totalPartCount;
+               part[0] = (byte)frame_index;
+               part[1] = (byte)frame_count;
+               part[2] = (byte)i;
+               part[3] = (byte)totalPartCount;
 
-               Array.Copy(data, i * mtu, part, 2, mtu);
+               Array.Copy(data, i * mtu, part, 4, mtu);
                await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
+               if (pb != null)
+               {
+                  pb.Progress = frame_pb * frame_index  + frame_pb * (float)i / (partCount - 1);
+               }
             }
 
             if (remaining > 0)
             {
-               part = new byte[remaining + 2];
+               part = new byte[remaining + 4];
 
-               part[0] = (byte)partCount; // PartIndex
-               part[1] = (byte)totalPartCount; // PartCount
+               part[0] = (byte)frame_index;
+               part[1] = (byte)frame_count;
+               part[2] = (byte)partCount;
+               part[3] = (byte)totalPartCount;
 
-               Array.Copy(data, partCount * mtu, part, 2, remaining);
+               Array.Copy(data, partCount * mtu, part, 4, remaining);
                await WriteValueByteArray(BleGuids.Service, BleGuids.Image, part);
+              
             }
 
          }
@@ -308,8 +335,10 @@ namespace PostilightApp.viewmodel
          try
          {
             IsBusy = true;
-            await m_gattServer.WriteCharacteristicValue(serviceGuid, characteristicGuid, buffer);
-
+            if (m_gattServer != null)
+            {
+               await m_gattServer?.WriteCharacteristicValue(serviceGuid, characteristicGuid, buffer);
+            }
          }
          catch (GattException ex)
          {
@@ -322,10 +351,56 @@ namespace PostilightApp.viewmodel
          }
       }
 
+      public async Task<int> ReadValueInt(Guid serviceGuid, Guid characteristicGuid)
+      {
+         int ret = -1;
+
+         if (IsBusy)
+         {
+
+            // Wait the flag    
+            await Task.Factory.StartNew(() =>
+            {
+               while (IsBusy)
+               {
+                  Thread.Sleep(100);
+               }
+            });
+         }
+
+         byte[] result;
+
+         try
+         {
+            IsBusy = true;
+            result = await m_gattServer?.ReadCharacteristicValue(serviceGuid, characteristicGuid);
+            ret = BitConverter.ToInt32(result, 0);           
+         }
+         catch (GattException ex)
+         {
+            Log.Warn(ex.ToString());
+            m_dialogManager.Toast(ex.Message);
+         }
+         finally
+         {
+            IsBusy = false;
+           
+         }
+
+         return ret;
+
+      }
+
       public async Task WriteValue(Guid serviceGuid, Guid characteristicGuid, int v)
       {
          Byte[] val = v.ToBytes();
          await WriteValueByteArray(serviceGuid, characteristicGuid, val);
+      }
+
+      public async Task<int> ReadValue(Guid serviceGuid, Guid characteristicGuid)
+      {
+         return await ReadValueInt(serviceGuid, characteristicGuid);
+
       }
    }
 }

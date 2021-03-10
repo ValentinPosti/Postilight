@@ -94,7 +94,7 @@ public:
         Serial.print("ControlCallback onWrite : ");
         Serial.print(characteristic->getUUID().toString().c_str());
         Serial.print(" Value =  ");
-        Serial.println(*data);
+        Serial.println((char)*data);
 
         g_Postilightdata.mode = CONTROL;
 
@@ -141,7 +141,7 @@ public:
         DisplayBuffer();
     }
 };
-extern void SaveImageToFreeSlotAndDisplay(uint8_t *data);
+extern void SaveImageToFreeSlotAndDisplay(uint8_t *data, int frame_index, int frame_count);
 
 inline void Convert565_888(const uint8_t *src, uint8_t *dst, uint32_t len)
 {
@@ -165,8 +165,11 @@ class ImageCallbacks : public BLECharacteristicCallbacks
         uint32_t l = characteristic->getValue().length();
 
         //RGB565 Buffer in parts
-        int partNumber = *data;
-        int partCount = *(data + 1);
+        int frame_index = *data;
+        int frame_count = *(data + 1);
+        int partNumber = *(data + 2);
+        int partCount = *(data + 3);
+
         int part_size = 512 / partCount;
 
         if ((512 % part_size) > 0)
@@ -176,7 +179,12 @@ class ImageCallbacks : public BLECharacteristicCallbacks
 
         int dest_offset = partNumber * (3 * part_size) / 2;
 
-        Serial.print("Part# : ");
+        Serial.print("frame# : ");
+        Serial.print(frame_index);
+        Serial.print("/");
+        Serial.print(frame_count);
+
+        Serial.print(" Part# : ");
         Serial.print(partNumber);
 
         Serial.print(" Partcount : ");
@@ -191,11 +199,12 @@ class ImageCallbacks : public BLECharacteristicCallbacks
         Serial.print(" offset : ");
         Serial.println(dest_offset);
 
-        Convert565_888(data + 2, &g_receiveBuffer.buffer_image[dest_offset], l - 2);
+        Convert565_888(data + 4, &g_receiveBuffer.buffer_image[dest_offset], l - 4);
 
         if (partNumber == partCount - 1)
         {
-            SaveImageToFreeSlotAndDisplay(g_receiveBuffer.buffer_image);
+            // We have received a full Image
+            SaveImageToFreeSlotAndDisplay(g_receiveBuffer.buffer_image, frame_index, frame_count);
         }
     }
 };
