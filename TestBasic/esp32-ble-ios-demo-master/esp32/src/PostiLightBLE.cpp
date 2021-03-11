@@ -209,8 +209,9 @@ class ImageCallbacks : public BLECharacteristicCallbacks
             break;
         default:
             //RGB565 Buffer in parts
-            int partNumber = *data;
-            int partCount = *(data + 1);
+
+            int partNumber = *(data + 2);
+            int partCount = *(data + 3);
             int part_size = 512 / partCount;
 
             if ((512 % part_size) > 0)
@@ -235,7 +236,7 @@ class ImageCallbacks : public BLECharacteristicCallbacks
             Serial.print(" offset : ");
             Serial.println(dest_offset);
 
-            Convert565_888(data + 2, &g_raw_out[dest_offset], l - 2);
+            Convert565_888(data + 4, &g_raw_out[dest_offset], l - 4);
             DisplayBuffer(g_raw_out);
             break;
         }

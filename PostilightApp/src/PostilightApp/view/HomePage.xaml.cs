@@ -16,18 +16,18 @@ namespace PostilightApp.view
    public partial class HomePage : ContentPage
    {
 
-      BleGattServerViewModel _model;
+      PostilightViewModel _model;
 
 
       ImageSource imageSource;
       SKBitmap skBitmap;
 
-      public HomePage(BaseViewModel vm)
+      public HomePage(PostilightViewModel vm)
       {
 
          InitializeComponent();
          BindingContext = vm;
-         _model = vm as BleGattServerViewModel;
+         _model = vm;
       }
 
       protected override void OnAppearing()
@@ -41,7 +41,7 @@ namespace PostilightApp.view
 
       async void GetMode()
       {
-         LightMode mode = (LightMode) await _model.ReadValue(BleGuids.Service, BleGuids.Mode);
+         LightMode mode = (LightMode) await _model.ReadValue(_model.characteristic_Mode);
 
          //TODO Select the corresponding button
 
@@ -79,13 +79,20 @@ namespace PostilightApp.view
          async void OnLedsToggled(object sender, ToggledEventArgs e)
       {
          var b = e.Value;
-         await _model.WriteValue(BleGuids.Service, BleGuids.LedsOnOff, b ? 1 : 0);
+         await _model.WriteValue(_model.characteristic_LedsOnOff, b ? 1 : 0);
       }
 
       async void OnBrightnessSliderValueChanged(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.Brightness, v);
+         try
+         {
+            await _model.WriteValue(_model.characteristic_Brightness, v);
+         }
+         catch(Exception )
+         {
+
+         }
       }
 
       async void OnRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)

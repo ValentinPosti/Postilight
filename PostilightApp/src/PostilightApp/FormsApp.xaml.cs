@@ -14,11 +14,12 @@ using Acr.UserDialogs;
 using PostilightApp.util;
 using PostilightApp.viewmodel;
 using nexus.core.logging;
-using nexus.protocols.ble;
 using Xamarin.Forms;
 using Device = Xamarin.Forms.Device;
 using PostilightApp.view;
 using System.Threading.Tasks;
+using Plugin.BLE.Abstractions.Contracts;
+using Plugin.BLE.Abstractions.EventArgs;
 
 #if RELEASE
 using Microsoft.Azure.Mobile;
@@ -33,14 +34,16 @@ namespace PostilightApp
       private readonly IUserDialogs m_dialogs;
       private readonly NavigationPage m_rootPage;
 
-      BleGattServerViewModel bleGattServerViewModel;
+      PostilightViewModel postiLightViewModel;
 
       TabbedPage _tabbedPage;
-         
+
 
       public async Task Disconnect()
       {
-         await bleGattServerViewModel.CloseConnection();
+         if (postiLightViewModel != null) { 
+            await postiLightViewModel.CloseConnection();
+         }
       }
 
       public static FormsApp Instance
@@ -55,7 +58,7 @@ namespace PostilightApp
       {
          get
          {
-            return bleGattServerViewModel == null ? false : bleGattServerViewModel.IsConnectedOrConnecting;
+            return postiLightViewModel == null ? false : postiLightViewModel.IsConnected;
          }
       }
 
@@ -64,7 +67,7 @@ namespace PostilightApp
          if (!isConnected)
             return;
 
-         await bleGattServerViewModel.SetMode(mode);
+         await postiLightViewModel.SetMode(mode);
 
       }
 
@@ -72,10 +75,10 @@ namespace PostilightApp
       {
          if (!isConnected)
             return;
-         await bleGattServerViewModel.SetMode(LightMode.CONTROL);
+         await postiLightViewModel.SetMode(LightMode.CONTROL);
          foreach (var item in buffers)
          {
-            await bleGattServerViewModel.SendAnimation(buffers,pb);
+            await postiLightViewModel.SendAnimation(buffers,pb);
          }
      
       }
@@ -84,8 +87,8 @@ namespace PostilightApp
       {
          if (!isConnected)
             return;
-         await bleGattServerViewModel.SetMode(LightMode.UPLOAD);
-         await bleGattServerViewModel.SendImageBuffer(buffer,pb,0,1);
+         await postiLightViewModel.SetMode(LightMode.UPLOAD);
+         await postiLightViewModel.SendImageBuffer(buffer,pb,0,1);
          
       }
 
@@ -93,45 +96,85 @@ namespace PostilightApp
       {
          if (!isConnected)
             return;
-         await bleGattServerViewModel.SetMode(LightMode.UPLOAD);
-         await bleGattServerViewModel.SendAnimation(buffers, pb);
+         await postiLightViewModel.SetMode(LightMode.UPLOAD);
+         await postiLightViewModel.SendAnimation(buffers, pb);
 
       }
 
 
+      private void OnDeviceDisconnected(object sender, DeviceEventArgs e)
+      {
+         //Devices.FirstOrDefault(d => d.Id == e.Device.Id)?.Update();
+         m_dialogs.HideLoading();
+         m_dialogs.Toast($"Disconnected {e.Device.Name}", TimeSpan.FromMilliseconds(2000));
 
-      public FormsApp( IBluetoothLowEnergyAdapter adapter, IUserDialogs dialogs )
+         Console.WriteLine($"Disconnected {e.Device.Name}");
+
+         Task.Run(async () =>
+         {
+            await postiLightViewModel.CloseConnection();
+
+            Device.BeginInvokeOnMainThread(
+              () =>
+              {
+                 FormsApp.Instance.PopPage();
+                 FormsApp.Instance.SwitchTab(0);
+              });
+         });
+      }
+
+      private void OnDeviceConnectionLost(object sender, DeviceErrorEventArgs e)
+      {
+         //Devices.FirstOrDefault(d => d.Id == e.Device.Id)?.Update();
+
+         m_dialogs.HideLoading();
+         m_dialogs.Toast($"Connection LOST {e.Device.Name}", TimeSpan.FromMilliseconds(2000));
+
+          Task.Run(async () =>
+            {
+               await postiLightViewModel.CloseConnection();
+
+               Device.BeginInvokeOnMainThread(
+                 () =>
+                 {
+                    FormsApp.Instance.PopPage();
+                    FormsApp.Instance.SwitchTab(0);
+                 });
+            });
+        
+      }
+
+
+      public FormsApp( IAdapter adapter, IUserDialogs dialogs )
       {
          InitializeComponent();
 
-        
-         m_dialogs = dialogs;
-         var logsVm = new LogsViewModel();
-         SystemLog.Instance.AddSink( logsVm );
+         adapter.DeviceDisconnected += OnDeviceDisconnected;
+         adapter.DeviceConnectionLost += OnDeviceConnectionLost;
 
+         m_dialogs = dialogs;
+      
          var bleAssembly = adapter.GetType().GetTypeInfo().Assembly.GetName();
          Log.Info( bleAssembly.Name + "@" + bleAssembly.Version );
 
+         postiLightViewModel = new PostilightViewModel(m_dialogs, adapter);
 
-         bleGattServerViewModel = new BleGattServerViewModel( dialogs, adapter );
-
-         
-         var bleScanViewModel = new BleDeviceScannerViewModel(
-            bleAdapter: adapter,
-            dialogs: dialogs,
-            onSelectDevice: async p =>
-            {
-               await bleGattServerViewModel.Update( p );
-               await bleGattServerViewModel.OpenConnection();
-            } );
-         
-         //var homeViewModel = new HomePageViewModel();
-
-         var homePage = new HomePage(bleGattServerViewModel);
+         var homePage = new HomePage(postiLightViewModel);
          homePage.IconImageSource = "home.png";
 
 
-         var devicePage = new DevicesPage(bleScanViewModel);
+         //var devicePage = new DevicesPage(bleScanViewModel);
+         var devicePage = new DevicesPage(new PostilightScannerViewModel(dialogs: dialogs,
+            onSelectDevice: async p =>
+            {
+               var connected = await postiLightViewModel.Connect(p);
+               if (connected)
+               {
+                  p.RaiseIsConnected();
+                  FormsApp.Instance.SwitchTab(1);
+               }
+               
+            }));
 
          _tabbedPage = new TabbedPage
          {
@@ -144,7 +187,7 @@ namespace PostilightApp
             Children = {
                   devicePage,
                   homePage,
-                  new SettingsPage(bleGattServerViewModel)
+                  new SettingsPage(postiLightViewModel)
             //      , new LogsPage( logsVm )
             }
          };

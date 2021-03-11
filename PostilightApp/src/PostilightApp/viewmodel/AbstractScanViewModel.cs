@@ -13,37 +13,49 @@ using Acr.UserDialogs;
 using PostilightApp.util;
 using nexus.core;
 using nexus.core.logging;
-using nexus.protocols.ble;
+
 using Xamarin.Forms;
+
+using Plugin.BLE;
+using Plugin.BLE.Abstractions.Contracts;
 
 namespace PostilightApp.viewmodel
 {
    public abstract class AbstractScanViewModel : BaseViewModel
    {
-      protected readonly IBluetoothLowEnergyAdapter m_bleAdapter;
+
+      protected readonly IBluetoothLE m_ble;
+
+      protected readonly IAdapter m_bleAdapter;
       protected readonly IUserDialogs m_dialogs;
       protected CancellationTokenSource m_scanCancel;
       private Boolean m_isScanning;
 
     
 
-      protected AbstractScanViewModel( IBluetoothLowEnergyAdapter bleAdapter, IUserDialogs dialogs )
+      protected AbstractScanViewModel(IUserDialogs dialogs )
       {
-         m_bleAdapter = bleAdapter;
-         m_dialogs = dialogs;
 
-         EnableAdapterCommand = new Command( async () => await ToggleAdapter( true ) );
-         DisableAdapterCommand = new Command( async () => await ToggleAdapter( false ) );
+         m_ble = CrossBluetoothLE.Current;
+         m_bleAdapter = CrossBluetoothLE.Current.Adapter;
 
-         m_bleAdapter.CurrentState.Subscribe( state => { RaisePropertyChanged( nameof(IsAdapterEnabled) ); } );
+          
+         //EnableAdapterCommand = new Command( async () => await ToggleAdapter( true ) );
+         //DisableAdapterCommand = new Command( async () => await ToggleAdapter( false ) );
+         /*
+         m_bleAdapter.StateChanged += (state) => {
+            RaisePropertyChanged(nameof(IsAdapterEnabled));
+         };
+         */
+
       }
 
       public ICommand DisableAdapterCommand { get; }
 
       public ICommand EnableAdapterCommand { get; }
 
-      public Boolean IsAdapterEnabled => m_bleAdapter.CurrentState.Value == EnabledDisabledState.Enabled ||
-                                         m_bleAdapter.CurrentState.Value == EnabledDisabledState.Unknown;
+      public Boolean IsAdapterEnabled => m_ble.State == BluetoothState.On ||
+                                         m_ble.State == BluetoothState.Unknown;
 
       public Boolean IsScanning
       {
@@ -66,6 +78,7 @@ namespace PostilightApp.viewmodel
          m_scanCancel?.Cancel();
       }
 
+      /*
       private async Task ToggleAdapter( Boolean enable )
       {
          StopScan();
@@ -80,5 +93,6 @@ namespace PostilightApp.viewmodel
          }
          RaisePropertyChanged( nameof(IsAdapterEnabled) );
       }
+      */
    }
 }

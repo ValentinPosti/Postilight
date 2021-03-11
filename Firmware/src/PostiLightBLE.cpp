@@ -201,6 +201,7 @@ class ImageCallbacks : public BLECharacteristicCallbacks
 
         Convert565_888(data + 4, &g_receiveBuffer.buffer_image[dest_offset], l - 4);
 
+        DisplayImage(g_receiveBuffer.buffer_image);
         if (partNumber == partCount - 1)
         {
             // We have received a full Image

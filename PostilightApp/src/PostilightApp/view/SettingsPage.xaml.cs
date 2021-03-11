@@ -9,15 +9,15 @@ namespace PostilightApp.view
    public partial class SettingsPage : ContentPage
    {
 
-      BleGattServerViewModel _model;
+      PostilightViewModel _model;
 
 
-      public SettingsPage(BaseViewModel vm)
+      public SettingsPage(PostilightViewModel vm)
       {
          InitializeComponent();
          BindingContext = vm;
 
-         _model = vm as BleGattServerViewModel;
+         _model = vm;
       }
 
       async void OnChangeTransitionMode(object sender, ToggledEventArgs e)
@@ -27,43 +27,43 @@ namespace PostilightApp.view
 
          var t =( s ? 2 : 0) | ( f ? 1 : 0 );
 
-         await _model.WriteValue(BleGuids.Service, BleGuids.transitionMode, t);
+         await _model.WriteValue(_model.characteristic_transitionMode, t);
       }
 
        async void OnSliderValueChanged_imt(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.imt, v);
+         await _model.WriteValue(_model.characteristic_imt, v);
       }
 
       async void OnSliderValueChanged_trt(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.trt, v);
+         await _model.WriteValue(_model.characteristic_trt, v);
       }
 
       async void OnSliderValueChanged_gad(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.gad, v);
+         await _model.WriteValue(_model.characteristic_gad, v);
       }
 
       async void OnSliderValueChanged_fps(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.fps, v);
+         await _model.WriteValue(_model.characteristic_fps, v);
       }
 
       async void OnSliderValueChanged_its(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.its, v);
+         await _model.WriteValue(_model.characteristic_its, v);
       }
 
       async  void OnSliderValueChanged_tts(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
-         await _model.WriteValue(BleGuids.Service, BleGuids.tts, v);
+         await _model.WriteValue(_model.characteristic_tts, v);
       }
 
       void Mono_Button_Clicked(System.Object sender, System.EventArgs e)

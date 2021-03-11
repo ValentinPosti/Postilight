@@ -65,14 +65,16 @@
                                      Grid.ColumnSpan="2"
                                      Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand">
-                           <Label Text="{Binding DeviceName}" TextColor="Black" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
-                           <Label Text="Connected" TextColor="Blue" HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"  IsVisible="{Binding IsConnected}"/>
+                           <Label Text="{Binding Name}" TextColor="Black" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+                         
+                           <Button Text="Disconnect"  IsVisible="{Binding IsConnected}"
+                                   Command="{Binding DisconnectCommand}"
+                                   HorizontalOptions="EndAndExpand">                             
+                           </Button>
+
                            <Button Text="Connect"  IsVisible="{Binding IsConnected, Converter={StaticResource InvertBoolean}}"
                                    Command="{Binding ConnectToDeviceCommand}"
-                                   HorizontalOptions="EndAndExpand">
-                              <Button.TextColor>
-                                 <OnPlatform x:TypeArguments="Color" WinPhone="DarkOrange" />
-                              </Button.TextColor>
+                                   HorizontalOptions="EndAndExpand">                              
                            </Button>
                         </StackLayout>
                      </ViewCell>

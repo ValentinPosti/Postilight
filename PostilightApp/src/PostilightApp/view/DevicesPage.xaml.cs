@@ -2,15 +2,14 @@ using System;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
-using PostilightApp.viewmodel;
 using Xamarin.Essentials;
-
+using PostilightApp.viewmodel;
 namespace PostilightApp.view
 {
    public partial class DevicesPage : ContentPage
    {
      
-      public DevicesPage(BleDeviceScannerViewModel vm)
+      public DevicesPage(PostilightScannerViewModel vm)
       {
          InitializeComponent();
          BindingContext = vm;
@@ -29,6 +28,7 @@ namespace PostilightApp.view
 
          VersionNumber.Text = version;
 
+
          Task.Run(async delegate
          {
             await Task.Delay(500); // On iOS scanning immediatly is not working
@@ -41,7 +41,7 @@ namespace PostilightApp.view
                }
             });
          });
-
+         
          
          
 
@@ -60,24 +60,6 @@ namespace PostilightApp.view
       {
       }
 
-      private void Switch_OnToggled(Object sender, ToggledEventArgs e)
-      {
-         var vm = BindingContext as BleDeviceScannerViewModel;
-         if (vm == null)
-         {
-            return;
-         }
-         if (e.Value)
-         {
-            if (vm.EnableAdapterCommand.CanExecute(null))
-            {
-               vm.EnableAdapterCommand.Execute(null);
-            }
-         }
-         else if (vm.DisableAdapterCommand.CanExecute(null))
-         {
-            vm.DisableAdapterCommand.Execute(null);
-         }
-      }
+     
    }
 }

@@ -13,36 +13,41 @@ using System.Windows.Input;
 using Acr.UserDialogs;
 using PostilightApp.util;
 using nexus.core.logging;
-using nexus.protocols.ble;
-using nexus.protocols.ble.scan;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+
+using Plugin.BLE;
+using Plugin.BLE.Abstractions.Contracts;
+
 namespace PostilightApp.viewmodel
 {
-   public class BleDeviceScannerViewModel : AbstractScanViewModel
+   public class PostilightScannerViewModel : AbstractScanViewModel
    {
-      private readonly Func<BlePeripheralViewModel, Task> m_onSelectDevice;
+      private readonly Func<PostilightDevice, Task> m_onSelectDevice;
       private DateTime m_scanStopTime;
 
-      public BleDeviceScannerViewModel( IBluetoothLowEnergyAdapter bleAdapter, IUserDialogs dialogs,
-                                        Func<BlePeripheralViewModel, Task> onSelectDevice )
-         : base( bleAdapter, dialogs )
+      public PostilightScannerViewModel(IUserDialogs dialogs,
+                                        Func<PostilightDevice, Task> onSelectDevice )
+         : base(  dialogs )
       {
          m_onSelectDevice = onSelectDevice;
-         FoundDevices = new ObservableCollection<BlePeripheralViewModel>();
+         FoundDevices = new ObservableCollection<PostilightDevice>();
          ScanForDevicesCommand =
             new Command( x => { StartScan( x as Double? ?? BleSampleAppUtils.SCAN_SECONDS_DEFAULT ); } );
       }
 
-      public ObservableCollection<BlePeripheralViewModel> FoundDevices { get; }
+      public ObservableCollection<PostilightDevice> FoundDevices { get; }
 
       public ICommand ScanForDevicesCommand { get; }
 
       public Int32 ScanTimeRemaining =>
          (Int32)BleSampleAppUtils.ClampSeconds( (m_scanStopTime - DateTime.UtcNow).TotalSeconds );
 
-      private async void StartScan( Double seconds )
+      public async void StartScan( Double seconds )
       {
+
+         var ble = CrossBluetoothLE.Current;
+         var adapter = CrossBluetoothLE.Current.Adapter;
 
          var status = await Permissions.RequestAsync<Permissions.LocationAlways>();
          if (status != PermissionStatus.Granted ){
@@ -82,44 +87,26 @@ namespace PostilightApp.viewmodel
                return IsScanning;
             } );
 
-         // var filter = new ScanFilter().AddAdvertisedService("506F7374-694c-6967-6874-000000000001");
-
-         await m_bleAdapter.ScanForBroadcasts(new ScanSettings()
-                {
-                   Mode = ScanMode.HighPower,
-                   Filter = new ScanFilter().AddAdvertisedService("506F7374-694c-6967-6874-000000000001")
-               },            
-            // NOTE:
-            //
-            // You can provide a scan filter to look for particular devices. See Readme.md for more information
-            // e.g.:
-            //    new ScanFilter().SetAdvertisedManufacturerCompanyId( 224 /*Google*/ ),
-            //
-            // You can also specify additional scan settings like the amount of power to direct to the Bluetooth antenna:
-            // e.g.:
-            //    new ScanSettings()
-            //    {
-            //       Mode = ScanMode.LowPower,
-            //       Filter = new ScanFilter().SetAdvertisedManufacturerCompanyId( 224 /*Google*/ )
-            //    },
-            peripheral =>
-            {
-               Device.BeginInvokeOnMainThread(
-                  () =>
+         adapter.DeviceDiscovered += (s, a) =>
+         {
+            Device.BeginInvokeOnMainThread(
+               () =>
+               {
+                  var existing = FoundDevices.FirstOrDefault(d => d.Equals(a.Device));
+                  if (existing != null)
                   {
-                     var existing = FoundDevices.FirstOrDefault( d => d.Equals( peripheral ) );
-                     if(existing != null)
-                     {
-                        existing.Update( peripheral );
-                     }
-                     else
-                     {
-                        FoundDevices.Add( new BlePeripheralViewModel( peripheral, m_onSelectDevice ) );
-                     }
-                  } );
-            },
-            m_scanCancel.Token );
+                     existing.Update(a.Device);
+                  }
+                  else
+                  {
+                     FoundDevices.Add(new PostilightDevice(m_dialogs,adapter,a.Device, m_onSelectDevice));
+                     
+                  }
+               });
+         };
 
+         var filter = new Guid[] { new Guid("506F7374-694c-6967-6874-000000000001") };
+         await adapter.StartScanningForDevicesAsync(filter, null, false, m_scanCancel.Token);
          IsScanning = false;
       }
    }

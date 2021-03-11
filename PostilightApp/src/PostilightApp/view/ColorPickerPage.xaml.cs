@@ -22,9 +22,9 @@ namespace PostilightApp
 
    public class PostilightColorWheel : ColorWheel
    {
-      BleGattServerViewModel _model;
+      PostilightViewModel _model;
 
-      public void SetModel(BleGattServerViewModel model)
+      public void SetModel(PostilightViewModel model)
       {
          _model = model;
       }
@@ -35,9 +35,17 @@ namespace PostilightApp
 
          if (_model != null)
          {
-            _ = _model?.SetRGB(color);
+
+            try
+            {
+               _ = _model?.SetRGB(color);
+            }
+            catch (Exception )
+            {
+
+            }
          }
-         
+
       }
    }
 
@@ -73,25 +81,25 @@ namespace PostilightApp.view
 {
    public partial class ColorPickerPage : BasePage
    {
-      BleGattServerViewModel _model;
+      PostilightViewModel _model;
 
 
 
-      public ColorPickerPage(BaseViewModel vm)
+      public ColorPickerPage(PostilightViewModel vm)
       {
          InitializeComponent();
          BindingContext = vm;
-         _model = vm as BleGattServerViewModel;
+         _model = vm;
 
          ColorWheel1.SetModel(_model);
-                 
+
       }
 
       protected override void OnAppearing()
       {
          base.OnAppearing();
          _ = _model.SetMode(LightMode.MONO);
-                  
+
       }
 
 

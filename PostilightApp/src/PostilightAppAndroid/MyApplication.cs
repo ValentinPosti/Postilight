@@ -13,7 +13,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using nexus.core.logging;
-using nexus.protocols.ble;
+using Plugin.BLE;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Application = Android.App.Application;
@@ -90,7 +90,7 @@ namespace PostilightApp.android
       /// </remarks>
       protected override void OnActivityResult( Int32 requestCode, Result resultCode, Intent data )
       {
-         BluetoothLowEnergyAdapter.OnActivityResult( requestCode, resultCode, data );
+         //BluetoothLowEnergyAdapter.OnActivityResult( requestCode, resultCode, data );
       }
 
       protected override void OnCreate( Bundle bundle )
@@ -106,18 +106,21 @@ namespace PostilightApp.android
 
          // If you want to enable/disable the Bluetooth adapter from code, you must call this.
 
-         if (!adapter_inited)
-         {
-            adapter_inited = true;
-            BluetoothLowEnergyAdapter.Init(this);
-         }
-         
+         //if (!adapter_inited)
+         //{
+         //   adapter_inited = true;
+         //   BluetoothLowEnergyAdapter.Init(this);
+         //}
+
          // Obtain the bluetooth adapter so we can pass it into our (shared-code) Xamarin Forms app. There are
          // additional Obtain() methods on BluetoothLowEnergyAdapter if you have more specific needs (e.g. if you
          // need to support devices with multiple Bluetooth adapters)
-         var bluetooth = BluetoothLowEnergyAdapter.ObtainDefaultAdapter( ApplicationContext );
+         // var bluetooth = BluetoothLowEnergyAdapter.ObtainDefaultAdapter( ApplicationContext );
 
-         LoadApplication( new FormsApp( bluetooth, UserDialogs.Instance ) );
+         var ble = CrossBluetoothLE.Current;
+         var adapter = CrossBluetoothLE.Current.Adapter;
+
+         LoadApplication( new FormsApp(adapter, UserDialogs.Instance ) );
       }
 
 
