@@ -35,6 +35,12 @@ typedef struct image1616
   uint8_t *buffer_image = 0; //Null if nothing, or pointing to 16 by 16 (R,G,B) pixels
 } Image1616;
 
+enum FLIP_MODE
+{
+  NO_FLIP = 0,
+  V_FLIP = 1,
+};
+
 enum MODES
 {
   IMAGE = 0,
@@ -87,7 +93,7 @@ struct PostiLightData
   uint32_t tts;         //vitesse de défilement du texte en défilement horizontal
   unsigned char rgb[3]; //couleur de l'image mono couleur
   unsigned char unused_pad;
-  uint32_t unused0;
+  FLIP_MODE flip;
   uint32_t unused1;
   uint32_t unused2; //vitesse de défilement du texte en défilement horizontal
   uint32_t unused3; //vitesse de défilement du texte en défilement horizontal
@@ -96,7 +102,7 @@ struct PostiLightData
 extern bool interrupt_playback;
 
 extern PostiLightData g_Postilightdata;
-extern char* g_text;
+extern char *g_text;
 
 extern uint8_t *raw;
 extern uint8_t *raw_filt;

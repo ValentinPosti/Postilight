@@ -121,7 +121,7 @@
                                  <Image Source="famous.png"/>                                 
                               </RadioButton.Content>
                            </RadioButton>
-
+                           <!--
                            <RadioButton x:Name="animatonModeButton"  Value="{x:Static local:LightMode.GIF}" Grid.Row="0" Grid.Column="1"  CheckedChanged="OnRadioButtonCheckedChanged"
                                        HorizontalOptions="Center"
                                        HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">                                       
@@ -129,8 +129,8 @@
                                  <Image Source="gamasutra.png"/>
                               </RadioButton.Content>
                            </RadioButton>
-
-                           <RadioButton x:Name="textModeButton" Value="{x:Static local:LightMode.TEXT}" Grid.Row="0" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
+                           -->
+                           <RadioButton x:Name="textModeButton" Value="{x:Static local:LightMode.TEXT}" Grid.Row="0" Grid.Column="1" CheckedChanged="OnRadioButtonCheckedChanged"
                                        HorizontalOptions="Center"
                                        HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
@@ -138,7 +138,7 @@
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton x:Name="monoColorModeButton" Value="{x:Static local:LightMode.MONO}" Grid.Row="1" Grid.Column="0" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="monoColorModeButton" Value="{x:Static local:LightMode.MONO}" Grid.Row="0" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
                                        HorizontalOptions="Center"
                                        HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
@@ -146,7 +146,7 @@
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton x:Name="mathModeButton" Value="{x:Static local:LightMode.MATH}" Grid.Row="1" Grid.Column="1" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="mathModeButton" Value="{x:Static local:LightMode.MATH}" Grid.Row="1" Grid.Column="0" CheckedChanged="OnRadioButtonCheckedChanged"
                                         HorizontalOptions="Center"
                                        HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>
@@ -154,7 +154,7 @@
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton x:Name="barGraphModeButton" Value="{x:Static local:LightMode.BARGRAPH}" Grid.Row="1" Grid.Column="2" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="barGraphModeButton" Value="{x:Static local:LightMode.BARGRAPH}" Grid.Row="1" Grid.Column="1" CheckedChanged="OnRadioButtonCheckedChanged"
                                         HorizontalOptions="Center"
                                        HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>

@@ -17,18 +17,27 @@
                <Frame BackgroundColor="#FFFFFF">
                   <StackLayout>
                      <Label Text="Advanced Settings" FontSize="Title" FontAttributes="Bold"/>
+
                      <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
                         <Label Text="Scrolling" VerticalOptions="Center"/>
                         <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
                         <Switch IsToggled="True" HorizontalOptions="End" x:Name="scrolling_toggle" Toggled="OnChangeTransitionMode"/>
                      </StackLayout>
-                     <BoxView BackgroundColor="Black" HeightRequest="1"/>
                      
                      <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
                         <Label Text="Fading" VerticalOptions="Center"/>
                         <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
                         <Switch IsToggled="False" HorizontalOptions="End"  x:Name="fading_toggle" Toggled="OnChangeTransitionMode"/>
                      </StackLayout>
+
+                     <BoxView BackgroundColor="Black" HeightRequest="1"/>
+                     
+                     <StackLayout Orientation="Horizontal" Margin="10,0,0,0">
+                        <Label Text="V-Flip" VerticalOptions="Center"/>
+                        <Frame BackgroundColor="#FFFFFF" HasShadow="False" HorizontalOptions="CenterAndExpand"/>
+                        <Switch IsToggled="False" HorizontalOptions="End"  x:Name="vflip_toggle" Toggled="OnChangeFlipMode"/>
+                     </StackLayout>
+                     
                      <BoxView BackgroundColor="Black" HeightRequest="1"/>
                                                            
                      <Label Text="Image Display Time" VerticalOptions="Center"/>

@@ -97,9 +97,6 @@ namespace PostilightApp.view
 
       }
 
-
-
-
       Task PixelateImage(SKBitmap srcBitmap)
       {
 

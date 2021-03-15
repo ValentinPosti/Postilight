@@ -50,11 +50,11 @@ namespace PostilightApp.view
             case LightMode.IMAGE:
                imageModeButton.IsChecked = true;
                break;
-
+            /*
             case LightMode.GIF:
                animatonModeButton.IsChecked = true;
                break;
-
+            */
             case LightMode.TEXT:
                textModeButton.IsChecked = true;
                break;
@@ -211,9 +211,9 @@ namespace PostilightApp.view
        
       }
 
-      async void Text_Button_Clicked(object sender, System.EventArgs e)
+      void Text_Button_Clicked(object sender, System.EventArgs e)
       {
-         // TODO
+         FormsApp.Instance.PushPage(new TextPage());
       }
    }
 }

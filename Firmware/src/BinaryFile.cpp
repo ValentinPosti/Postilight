@@ -120,6 +120,31 @@ bool LoadBitmap(int index, uint8_t *dst)
     return true;
 }
 
+bool SaveTextToBinaryFile(int index, const char* data)
+{
+    if (_data_file == 0)
+        return false;
+
+    //  _data_file.close();
+    //  delay(100);
+    //  _data_file = SPIFFS.open("/data.bin", FILE_APPEND);
+
+    Serial.print("Saving Text Data offset : ");
+    int offset = TextIndexOffset(index);
+    Serial.print(" ");
+    Serial.print(offset);
+    bool seek = _data_file.seek(offset, fs::SeekSet);
+    Serial.print(" seek:");
+    Serial.print(seek ? "ok " : "ko ");
+
+    int l = strlen(data);
+    l = min(63,l);
+    _data_file.write((const uint8_t*)data, l);
+    _data_file.flush();
+
+    return true;
+}
+
 bool SaveBitmapToBinaryFile(int index, const uint8_t *data, int frame_index, int frame_count)
 {
     if (_data_file == 0)

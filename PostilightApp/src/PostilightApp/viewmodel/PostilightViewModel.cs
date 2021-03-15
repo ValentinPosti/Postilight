@@ -62,10 +62,13 @@ namespace PostilightApp.viewmodel
 
       //public ICharacteristic characteristic_Message { get; private set; }
 
+      public ICharacteristic characteristic_Text { get; private set; }
       public ICharacteristic characteristic_Image { get; private set; }
       public ICharacteristic characteristic_Brightness { get; private set; }
       public ICharacteristic characteristic_LedsOnOff { get; private set; }
       public ICharacteristic characteristic_Mode { get; private set; }
+
+     
 
       public ICharacteristic characteristic_transitionMode { get; private set; }
 
@@ -80,6 +83,7 @@ namespace PostilightApp.viewmodel
 
       public ICharacteristic characteristic_mono_color { get; private set; }
       public ICharacteristic characteristic_command { get; private set; }
+      public ICharacteristic characteristic_flip { get; private set; }
 
 
       async public Task<bool> Connect(PostilightDevice d)
@@ -131,6 +135,8 @@ namespace PostilightApp.viewmodel
          {
             //characteristic_Message = await service.GetCharacteristicAsync(BleGuids.Message);
 
+
+            characteristic_Text = await service.GetCharacteristicAsync(BleGuids.Text);
             characteristic_Image = await service.GetCharacteristicAsync(BleGuids.Image);
             characteristic_Brightness = await service.GetCharacteristicAsync(BleGuids.Brightness);
             characteristic_LedsOnOff = await service.GetCharacteristicAsync(BleGuids.LedsOnOff);
@@ -149,6 +155,8 @@ namespace PostilightApp.viewmodel
 
             characteristic_mono_color = await service.GetCharacteristicAsync(BleGuids.mono_color);
             characteristic_command = await service.GetCharacteristicAsync(BleGuids.command);
+
+            characteristic_flip = await service.GetCharacteristicAsync(BleGuids.flip);
 
          }
          catch (Exception ex)
@@ -221,21 +229,22 @@ namespace PostilightApp.viewmodel
          { }
       }
 
+      public async Task SendText(string text)
+      {
+         var b = Encoding.ASCII.GetBytes(text);
+         await WriteValueByteArray(characteristic_Text, b);
+      }
+
       public async Task SendCommand(string command)
       {
-
          var b = Encoding.ASCII.GetBytes(command);
-
          await WriteValueByteArray(characteristic_command, b);
-
       }
 
       public async Task SetMode(PostilightApp.LightMode mode)
       {
          await WriteValue(characteristic_Mode, (int)mode);
       }
-
-
 
       public async Task SendAnimation(List<byte[]> data, ProgressBar pb)
       {
@@ -248,7 +257,6 @@ namespace PostilightApp.viewmodel
          }
       }
 
-
       public async Task SendImageBuffer(byte[] data, ProgressBar pb, int frame_index, int frame_count)
       {
          await SendImageBuffer(data, _sendMTU, pb, frame_index, frame_count);
@@ -256,10 +264,8 @@ namespace PostilightApp.viewmodel
 
       public async Task SendImageBuffer(byte[] data, int mtu, ProgressBar pb, int frame_index, int frame_count)
       {
-
          try
          {
-
             int partCount = data.Length / mtu;
             int remaining = data.Length - partCount * mtu;
             int totalPartCount = partCount + ((remaining > 0) ? 1 : 0);

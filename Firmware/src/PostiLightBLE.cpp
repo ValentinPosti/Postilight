@@ -10,9 +10,6 @@
 #include "LedStrip.h"
 #include "globals.h"
 
-BLECharacteristic *characteristicMessage;
-BLECharacteristic *characteristicImage;
-
 extern void DisplayNextImage();
 extern void DisplayPrevImage();
 extern void DeleteCurrentImage();
@@ -75,6 +72,29 @@ public:
         Serial.println(characteristic->getUUID().toString().c_str());
 
         characteristic->setValue((uint8_t *)_target_data, sizeof(uint32_t));
+    }
+};
+
+class FlipCallback : public IntCallback
+{
+
+public:
+    FlipCallback(BLEService *service, const char *CharaterciticGuid, uint32_t *target_data)
+        : IntCallback(service, CharaterciticGuid, target_data)
+    {
+    }
+
+    virtual void onWrite(BLECharacteristic *characteristic)
+    {
+
+        uint32_t *data = (uint32_t *)characteristic->getData();
+        Serial.print("BLECharacteristic onWrite : ");
+        Serial.print(characteristic->getUUID().toString().c_str());
+        Serial.print(" Value =  ");
+        Serial.println(*data);
+
+        SetFlipMode((FLIP_MODE)*data);
+
     }
 };
 
@@ -142,6 +162,7 @@ public:
     }
 };
 extern void SaveImageToFreeSlotAndDisplay(uint8_t *data, int frame_index, int frame_count);
+extern void SaveTextToFreeSlotAndDisplay(uint8_t *data);
 
 inline void Convert565_888(const uint8_t *src, uint8_t *dst, uint32_t len)
 {
@@ -156,6 +177,21 @@ inline void Convert565_888(const uint8_t *src, uint8_t *dst, uint32_t len)
         dst[j++] = b;
     }
 }
+
+class TextCallbacks : public BLECharacteristicCallbacks
+{
+    void onWrite(BLECharacteristic *characteristic)
+    {
+        uint8_t *data = characteristic->getData();
+
+        Serial.print("BLECharacteristic onWrite : ");
+        Serial.print(characteristic->getUUID().toString().c_str());
+        Serial.print(" Value =  ");
+        Serial.println((const char *)data);
+
+        SaveTextToFreeSlotAndDisplay(data);
+    }
+};
 
 class ImageCallbacks : public BLECharacteristicCallbacks
 {
@@ -248,9 +284,11 @@ void SetupBLE()
     BLEServer *server = BLEDevice::createServer();
     server->setCallbacks(new MyServerCallbacks());
 
-    // Register message service that can receive messages and reply with a static message.
     BLEService *service = server->createService(BLEUUID(SERVICE_UUID), 48);
     BLECharacteristic *characteristic;
+
+    characteristic = service->createCharacteristic(CHARACTERISTIC_TEXT_UUID, BLECharacteristic::PROPERTY_WRITE);
+    characteristic->setCallbacks(new TextCallbacks());
 
     characteristic = service->createCharacteristic(CHARACTERISTIC_IMAGE_UUID, BLECharacteristic::PROPERTY_WRITE);
     characteristic->setCallbacks(new ImageCallbacks());
@@ -269,6 +307,7 @@ void SetupBLE()
 
     new IntCallback(service, CHARACTERISTIC_IMAGE_TRANSLATION_SPEED_UUID, &g_Postilightdata.its);
     new IntCallback(service, CHARACTERISTIC_TEXT_TRANSLATION_SPEED_UUID, &g_Postilightdata.tts);
+    new FlipCallback(service, CHARACTERISTIC_FLIP_UUID, (uint32_t*) &g_Postilightdata.flip);
 
     new ControlCallback(service, CHARACTERISTIC_IMAGE_CONTROL_UUID);
 

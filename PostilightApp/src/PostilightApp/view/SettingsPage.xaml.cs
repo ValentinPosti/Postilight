@@ -30,7 +30,13 @@ namespace PostilightApp.view
          await _model.WriteValue(_model.characteristic_transitionMode, t);
       }
 
-       async void OnSliderValueChanged_imt(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
+      async void OnChangeFlipMode(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
+      {
+         var f = vflip_toggle.IsToggled;
+         await _model.WriteValue(_model.characteristic_flip, f ? 1 : 0);
+      }
+
+      async void OnSliderValueChanged_imt(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
          int v = (int)e.NewValue;
          await _model.WriteValue(_model.characteristic_imt, v);
@@ -75,5 +81,7 @@ namespace PostilightApp.view
       {
          FormsApp.Instance.PushPage(new ControlPage(_model));
       }
+
+      
    }
 }

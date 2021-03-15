@@ -71,6 +71,16 @@ namespace PostilightApp
 
       }
 
+      public async Task SendText(string text)
+      {
+         if (!isConnected)
+            return;
+         await postiLightViewModel.SetMode(LightMode.TEXT);
+         await postiLightViewModel.SendText(text);
+
+      }
+
+
       public async Task SendImageBuffers(List<byte[]> buffers, ProgressBar pb = null)
       {
          if (!isConnected)
@@ -233,5 +243,7 @@ namespace PostilightApp
       {
          base.OnStart();       
       }
+
+      
    }
 }

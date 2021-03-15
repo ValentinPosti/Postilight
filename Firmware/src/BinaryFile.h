@@ -58,7 +58,7 @@ void SaveSettings();
 // Text
 int FindFreeTextSlot(int startIndex = 0);
 void LoadText(int index, char *text);
-void SaveText(int index, const char *text);
+bool SaveTextToBinaryFile(int index, const char *text);
 
 // Images
 int FindFreeSlot(int startIndex = 0);

@@ -6,7 +6,10 @@
 
 NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> strip(LED_COUNT + 32, PIN); //NeoGrbwFeature NeoRgbwFeature NeoGrbwFeature NeoGrbFeature
 
-int convert_index_table[LED_COUNT];
+int *convert_index_table = NULL;
+
+int convert_index_table_no_flip[LED_COUNT];
+int convert_index_table_v_flip[LED_COUNT];
 
 uint8_t *g_buffer_image;
 uint8_t *g_raw_out;
@@ -131,10 +134,30 @@ int convert_index(int index)
 
 void make_convert_index_table(void)
 {
-    int i;
-    for (i = 0; i < LED_COUNT; i++)
+    for (int i = 0; i < LED_COUNT; i++)
     {
-        convert_index_table[i] = convert_index(i);
+        convert_index_table_no_flip[i] = convert_index(i);
+    }
+
+    for (int i = 0; i < NB_LINES; i++)
+    {
+        for (int j = 0; j < NB_COLUMNS; j++)
+        {
+            convert_index_table_v_flip[16 * i + 15 - j] = convert_index_table_no_flip[16 * i + j];
+        }
+    }
+    convert_index_table = convert_index_table_v_flip;
+}
+
+void SetFlipMode(FLIP_MODE flip_mode)
+{
+    if (flip_mode == NO_FLIP)
+    {
+        convert_index_table = convert_index_table_no_flip;
+    }
+    else
+    {
+        convert_index_table = convert_index_table_v_flip;
     }
 }
 
@@ -205,18 +228,17 @@ void DisplayImage(uint8_t *src)
     DisplayBuffer();
 }
 
+void draw_vertical_bar_in_buffer(uint8_t column, uint8_t height)
+{
+    draw_vertical_bar_in_buffer(g_raw_out, column, height);
+}
+
 //height : hauteur de la barre verticale (entre 0 et 15)
 //column : abcisse de la barre verticale (entre 0 et 15)
-void draw_vertical_bar_in_buffer(uint8_t column, uint8_t height)
+void draw_vertical_bar_in_buffer(uint8_t *buffer, uint8_t column, uint8_t height)
 {
     int y;
     uint8_t r, v, b;
-
-    /*
-  r = 255;
-  v = 0;
-  b = 0;
-  */
 
     for (y = 0; y <= height; y++)
     {
@@ -245,11 +267,11 @@ void draw_vertical_bar_in_buffer(uint8_t column, uint8_t height)
             b = 0;
         }
 
-        draw_pixel_in_buffer(column, y, r, v, b);
+        draw_pixel_in_buffer(buffer, column, y, r, v, b);
     }
 }
 
-void draw_pixel_in_buffer(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b)
+void draw_pixel_in_buffer(uint8_t *buffer, uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b)
 {
     int index;
 
@@ -257,7 +279,12 @@ void draw_pixel_in_buffer(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b)
 
     index = 3 * ((y * NB_COLUMNS) + x);
 
-    g_raw_out[index] = r;
-    g_raw_out[index + 1] = g;
-    g_raw_out[index + 2] = b;
+    buffer[index] = r;
+    buffer[index + 1] = g;
+    buffer[index + 2] = b;
+}
+
+void draw_pixel_in_buffer(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b)
+{
+    draw_pixel_in_buffer(g_raw_out, x, y, r, g, b);
 }

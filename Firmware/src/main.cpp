@@ -60,10 +60,12 @@ char g_textData[max_text_len + 4] = "   Postilight : Please send text from the s
 
 char *g_text = &g_textData[3];
 
-static const MODES default_mode = TEXT;
+static const MODES default_mode = IMAGE;
 static const TRANSITION_MODE default_trs = NONE;
 
 void displayCurrentImage();
+extern void bar_graph();
+void LoadNextText();
 
 void InitDefaultValues()
 {
@@ -87,6 +89,8 @@ void InitDefaultValues()
     g_Postilightdata.rgb[0] = 255; //couleur de l'image mono couleur
     g_Postilightdata.rgb[1] = 255; //couleur de l'image mono couleur
     g_Postilightdata.rgb[2] = 255; //couleur de l'image mono couleur
+
+    g_Postilightdata.flip = NO_FLIP;
 }
 
 void setup()
@@ -194,6 +198,26 @@ int g_displayed_image_index = -1;
 
 int last_saved_image_index;
 
+void SaveTextToFreeSlotAndDisplay(uint8_t *data)
+{
+    int index = FindFreeTextSlot(0);
+    if (index == INVALID_IMAGE_INDEX)
+    {
+        return;
+    }
+
+    Serial.print("Free Text slot found : ");
+    Serial.println(index);
+
+    if (SaveTextToBinaryFile(index, (const char *)data))
+    {
+
+        g_index_in_current_text = 0;
+        g_current_text = index - 1;
+        LoadNextText();
+    }
+}
+
 void SaveImageToFreeSlotAndDisplay(uint8_t *data, int frame_index, int frame_count)
 {
 
@@ -202,6 +226,7 @@ void SaveImageToFreeSlotAndDisplay(uint8_t *data, int frame_index, int frame_cou
     {
         return;
     }
+
     Serial.print("Free slot found : ");
     Serial.println(index);
 
@@ -315,9 +340,9 @@ void DeleteCurrentImage()
     g_image_index = FindNextImage(g_image_index);
 }
 
-int FindFreeTextIndex()
+int FindFreeTextSlot(int startIndex)
 {
-    for (int i = 0; i < max_text_entries; i++)
+    for (int i = startIndex; i < max_text_entries; i++)
     {
         char tmp[max_text_len];
         LoadText(i, tmp);
@@ -505,7 +530,7 @@ void Math_mode()
 
 void Bargraph_mode()
 {
-    todo_mode();
+    bar_graph();
 }
 
 void Control_mode()

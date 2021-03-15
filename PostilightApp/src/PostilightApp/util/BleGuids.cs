@@ -6,8 +6,7 @@ namespace PostilightApp.util
 
       public static Guid Service = new Guid("506F7374-694c-6967-6874-000000000001");
 
-
-      public static Guid Message = new Guid("506F7374-694c-6967-6875-000000000002");
+      public static Guid Text = new Guid("506F7374-694c-6967-6875-000000000002");
       public static Guid Image = new Guid("506F7374-694c-6967-6875-000000000003");
 
       public static Guid Brightness = new Guid("506F7374-694c-6967-6875-000000000004");
@@ -27,6 +26,7 @@ namespace PostilightApp.util
 
       public static Guid mono_color = new Guid("506F7374-694c-6967-6875-000000000014");
       public static Guid command = new Guid("506F7374-694c-6967-6875-000000000015");
+      public static Guid flip = new Guid("506F7374-694c-6967-6875-000000000016");
 
 
    }
