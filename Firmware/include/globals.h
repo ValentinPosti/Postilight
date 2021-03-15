@@ -74,6 +74,7 @@ struct PostiLightData
 */
 struct PostiLightData
 {
+  int version = 1;
   MODES mode = MATH;
   uint32_t leds_on;     //LEDs allumées ou non
   uint32_t intensity;   //intensité des LEDs
@@ -85,11 +86,17 @@ struct PostiLightData
   uint32_t its;         //image translation speed : vitesse de défilement des images / GIF quand on est en defilement horizontal
   uint32_t tts;         //vitesse de défilement du texte en défilement horizontal
   unsigned char rgb[3]; //couleur de l'image mono couleur
+  unsigned char unused_pad;
+  uint32_t unused0;
+  uint32_t unused1;
+  uint32_t unused2; //vitesse de défilement du texte en défilement horizontal
+  uint32_t unused3; //vitesse de défilement du texte en défilement horizontal
 };
 
 extern bool interrupt_playback;
 
 extern PostiLightData g_Postilightdata;
+extern char* g_text;
 
 extern uint8_t *raw;
 extern uint8_t *raw_filt;

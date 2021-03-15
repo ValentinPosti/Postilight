@@ -1,8 +1,10 @@
+from dataclasses import dataclass
 from typing import ByteString
+from typing import ClassVar
 import numpy as np
 import os
 from struct import *
-from dataclasses import dataclass
+import struct
 
 # check Pillow version number
 import PIL
@@ -14,6 +16,47 @@ class ImageHeader:
     isBlockUsed: bool = 1
     isFirstFrame: bool = 2
     nextImageIndex: int = 3
+
+
+@dataclass
+class Settings:
+    header: ClassVar[struct.Struct] = struct.Struct("iiiiiiiiiiiiiiii")
+    version: int = 1
+    mode: int = 0
+    leds_on: int = 1
+    intensity: int = 255
+    imt: int = 1000
+    fps: int = 5
+    gad: int = 4000
+    trt: int = 1000
+    trs: int = 3
+    its: int = 10
+    tts: int = 10
+    rgbu: int = -1
+    unused0: int = 0
+    unused1: int = 0
+    unused2: int = 0
+    unused3: int = 0
+
+    def pack(self):
+        return self.header.pack(
+            self.version,
+            self.mode,
+            self.leds_on,
+            self.intensity,
+            self.imt,
+            self.fps,
+            self.gad,
+            self.trt,
+            self.trs,
+            self.its,
+            self.tts,
+            self.rgbu,
+            self.unused0,
+            self.unused1,
+            self.unused2,
+            self.unused3,
+        )
 
 
 def packImageHeader():
@@ -29,6 +72,28 @@ def ensure_dir(file_path):
 raw_list = []
 
 
+datafilePath = "../Firmware/data/data.bin"
+
+ensure_dir(datafilePath)
+bf = open(datafilePath, "wb")
+
+settings = Settings()
+
+p = settings.pack()
+
+# Write Default Settings
+bf.write(p)
+
+hello = "Hello from your Postilight !!!"
+l = len(hello)
+encoded = hello.encode("ascii")
+padding = 1024 - l
+bf.write(encoded)
+empty = "\0".encode("ascii")
+x = range(padding)
+for n in x:
+    bf.write(empty)
+
 for root, dirs, files in os.walk("./RAW"):
     for file in files:
         if file.endswith(".raw"):
@@ -38,12 +103,6 @@ raw_list.sort()
 raw_count = len(raw_list)
 
 assert raw_count > 0
-
-datafilePath = "../Firmware/data/data.bin"
-
-ensure_dir(datafilePath)
-bf = open(datafilePath, "wb")
-
 
 for i in range(1024):
 

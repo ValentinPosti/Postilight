@@ -36,6 +36,25 @@ bool OpenDataFile()
     return true;
 }
 
+void LoadSettings()
+{
+    _data_file.seek(0);
+    _data_file.readBytes((char *)&g_Postilightdata.version, sizeof(PostiLightData));
+}
+
+void SaveSettings(int index, char *outTxt)
+{
+    _data_file.seek(0);
+    _data_file.write((uint8_t *)&g_Postilightdata.version, sizeof(PostiLightData));
+}
+
+void LoadText(int index, char *outTxt)
+{
+    int offset = TextIndexOffset(index);
+    _data_file.seek(offset);
+    _data_file.readBytes(outTxt, max_text_len);
+}
+
 int FindFreeSlot(int startindex)
 {
     if (_data_file == 0)

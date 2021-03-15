@@ -18,8 +18,8 @@ void make_convert_index_table(void);
 
 void raz_raw(uint8_t *raw);
 
-void clear_buffer(uint8_t r=0, uint8_t g=0, uint8_t b=0);
-void clear(uint8_t *raw, uint8_t r =0, uint8_t g=0, uint8_t b=0);
+void clear_buffer(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0);
+void clear(uint8_t *raw, uint8_t r = 0, uint8_t g = 0, uint8_t b = 0);
 
 void copy_raw_to_strip(uint8_t *src, bool ApplyLum = false);
 

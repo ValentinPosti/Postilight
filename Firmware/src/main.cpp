@@ -31,7 +31,8 @@ image1616 black_image;
 
 uint8_t dynamicGenerator;
 int g_step = 0;
-int g_index_text = 0;
+int g_index_in_current_text = 0;
+int g_current_text = 0;
 
 float g_spd;
 
@@ -55,9 +56,11 @@ uint8_t *g_buffer_txt;
 
 float g_alpha = (float)100.0;
 
-char g_text[1024] = "Postilight : Please send text from the smartphone app";
+char g_textData[max_text_len + 4] = "   Postilight : Please send text from the smartphone app.";
 
-static const MODES default_mode = IMAGE;
+char *g_text = &g_textData[3];
+
+static const MODES default_mode = TEXT;
 static const TRANSITION_MODE default_trs = NONE;
 
 void displayCurrentImage();
@@ -144,6 +147,8 @@ void setup()
 
     clear(g_display_image1616.buffer_image);
     clear(black_image.buffer_image);
+
+    LoadText(0, g_text);
 
     dynamicGenerator = 1;
     /*
@@ -310,20 +315,55 @@ void DeleteCurrentImage()
     g_image_index = FindNextImage(g_image_index);
 }
 
+int FindFreeTextIndex()
+{
+    for (int i = 0; i < max_text_entries; i++)
+    {
+        char tmp[max_text_len];
+        LoadText(i, tmp);
+        if (tmp[0] == '\0')
+        {
+            return i;
+        }
+    }
+    return 0; // overwrite first text
+}
+
+int FindNexTextIndex(int start)
+{
+    for (int i = start + 1; i < max_text_entries; i++)
+    {
+        char tmp[max_text_len];
+        LoadText(i, tmp);
+        if (tmp[0] != '\0')
+        {
+            return i;
+        }
+    }
+
+    return 0; // Return first text
+}
+
+void LoadNextText()
+{
+    g_current_text = FindNexTextIndex(g_current_text);
+    LoadText(g_current_text, g_text);
+}
+
 void Text_mode()
 {
     if ((g_current_time - g_last_time) > (1000 / g_Postilightdata.tts))
     {
         g_last_time = g_current_time;
 
-        if (strlen(g_text) > 0)
+        if (strlen(g_textData) > 0)
         {
             if (g_step < FONT_WIDTH + INTERCHAR_SPACE)
             {
                 //RAZ memory
                 memcpy(g_buffer_txt, g_buffer_noir, RAW_SIZE);
                 // step though each column of the 1st char for smooth scrolling
-                sendString(&g_text[g_index_text], g_step, g_Postilightdata.rgb[0], g_Postilightdata.rgb[1], g_Postilightdata.rgb[2]);
+                sendString(&g_textData[g_index_in_current_text], g_step, g_Postilightdata.rgb[0], g_Postilightdata.rgb[1], g_Postilightdata.rgb[2]);
                 copy_raw_to_strip(g_buffer_txt, false);
                 strip.Show();
 
@@ -332,11 +372,12 @@ void Text_mode()
             else
             {
                 g_step = 0;
-                g_index_text += 1;
+                g_index_in_current_text += 1;
 
-                if (g_index_text >= strlen(g_text))
+                if (g_index_in_current_text >= strlen(g_textData))
                 {
-                    g_index_text = 0;
+                    g_index_in_current_text = 0;
+                    LoadNextText();
                 }
             }
         }
