@@ -1,3 +1,4 @@
+#pragma once
 #include "globals.h"
 
 // Returns the time in seconds since the Arduino board began running the current program. 1ms resolution. This number will overflow (go back to zero), after approximately 50 days.

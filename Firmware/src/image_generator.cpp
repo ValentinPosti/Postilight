@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "jeu_de_la_vie.h"
 #include "time_speed.h"
+#include "image_generator.h"
 
 float mysin[360];
 float mycos[360];
@@ -44,11 +45,6 @@ float myfcos(float x)
   }
 
   return mycos[i];
-}
-
-inline uint32_t getRawOffset(uint32_t column, uint32_t line)
-{
-  return 3 * (column + line * NB_COLUMNS);
 }
 
 // plasma type values managed : 1,2,3,4,5,12..20

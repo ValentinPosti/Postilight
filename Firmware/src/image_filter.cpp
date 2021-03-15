@@ -10,7 +10,6 @@
 // Prend une image rgb raw, la filtre passe bas  plus haute rsolution
 // filtrage gaussien
 // Probleme de la conservation de la couleur...
-// uint32_t getRawOffset(uint32_t column,uint32_t line)
 
 // version qui accepte aussi les valeurs ngatives, mais pas au del de -
 uint32_t getRawOffsetWRollOver(int32_t column, int32_t line)
@@ -232,9 +231,7 @@ void fondu_raw(uint8_t *raw_in1, uint8_t *raw_in2, uint8_t *raw_out, float alpha
 
   Serial.println(alpha);
 
-  
-
-      for (i = 0; i < NB_PIXELS; i++)
+  for (i = 0; i < NB_PIXELS; i++)
   {
     index = (3 * i);
     raw_out[index] = fondu_pixel(raw_in2[index], raw_in1[index], alpha);

@@ -1,4 +1,4 @@
-
+#pragma once
 #include "globals.h"
 struct ImageHeader
 {

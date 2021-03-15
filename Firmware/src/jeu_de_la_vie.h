@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 // GAME OF LIFE CODE START
 void myseed(float time);

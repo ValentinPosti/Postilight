@@ -1,3 +1,5 @@
+
+#pragma once
 #include <stdint.h>
 
 // version qui accepte aussi les valeurs ngatives, mais pas au del de -

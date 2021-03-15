@@ -1,5 +1,6 @@
 
-#include <stdint.h>
+#pragma once
+#include < stdint.h>
 
 void get8BCD(char *s, uint32_t x);
 

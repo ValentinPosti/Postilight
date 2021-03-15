@@ -1,3 +1,5 @@
+#pragma once
+
 #include "globals.h"
 
 // Sends a full 8 bits down all the pins, represening a single color of 1 pixel
