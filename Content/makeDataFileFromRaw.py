@@ -72,7 +72,7 @@ def ensure_dir(file_path):
 raw_list = []
 
 
-datafilePath = "../Firmware/data/data.bin"
+datafilePath = "../Firmware/src/data/data.bin"
 
 ensure_dir(datafilePath)
 bf = open(datafilePath, "wb")
