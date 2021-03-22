@@ -20,5 +20,6 @@
         "**/.pio": true,
         "**/.vscode": true,
         "**/data": true
-    }
+    },
+    "python.pythonPath": "/usr/local/bin/python3"
 }

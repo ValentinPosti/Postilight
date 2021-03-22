@@ -146,7 +146,7 @@
                               </RadioButton.Content>
                            </RadioButton>
 
-                           <RadioButton x:Name="mathModeButton" Value="{x:Static local:LightMode.MATH}" Grid.Row="1" Grid.Column="0" CheckedChanged="OnRadioButtonCheckedChanged"
+                           <RadioButton x:Name="mathModeButton" Value="{x:Static local:LightMode.MATH}" Grid.Row="1" Grid.Column="0" 
                                         HorizontalOptions="Center"
                                        HeightRequest="{Binding Width, Source={x:Reference imageModeButton}}">
                               <RadioButton.Content>

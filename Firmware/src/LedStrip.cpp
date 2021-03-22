@@ -218,8 +218,11 @@ void copy_raw_to_strip(uint8_t *src, bool applyLum)
 
 void DisplayBuffer()
 {
-    copy_raw_to_strip(g_raw_out, true);
-    strip.Show();
+    if (g_Postilightdata.mode != TEXT)
+    {
+        copy_raw_to_strip(g_raw_out, true);
+        strip.Show();
+    }
 }
 
 void DisplayImage(uint8_t *src)

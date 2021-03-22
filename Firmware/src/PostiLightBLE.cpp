@@ -9,7 +9,7 @@
 #include "PostiLightBLE.h"
 #include "LedStrip.h"
 #include "globals.h"
-
+#include "FirmwareVersion.h"
 extern void DisplayNextImage();
 extern void DisplayPrevImage();
 extern void DeleteCurrentImage();
@@ -75,6 +75,32 @@ public:
     }
 };
 
+class ModeCallback : public IntCallback
+{
+protected:
+public:
+    ModeCallback(BLEService *service, const char *CharaterciticGuid, uint32_t *target_data)
+        : IntCallback(service, CharaterciticGuid, target_data)
+    {
+    }
+
+    virtual void onWrite(BLECharacteristic *characteristic)
+    {
+        IntCallback::onWrite(characteristic);
+
+        if (g_Postilightdata.mode == MATH)
+        {
+            g_imageGenerator_mode = g_imageGenerator_mode + 1;
+            if (g_imageGenerator_mode > 20)
+            {
+                g_imageGenerator_mode = 1;
+            }
+            Serial.print("MathMode : ");
+            Serial.println(g_imageGenerator_mode);
+        }
+    }
+};
+
 class FlipCallback : public IntCallback
 {
 
@@ -94,7 +120,6 @@ public:
         Serial.println(*data);
 
         SetFlipMode((FLIP_MODE)*data);
-
     }
 };
 
@@ -295,7 +320,7 @@ void SetupBLE()
 
     new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
     new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);
-    new IntCallback(service, CHARACTERISTIC_MODE_UUID, (uint32_t *)&g_Postilightdata.mode);
+    new ModeCallback(service, CHARACTERISTIC_MODE_UUID, (uint32_t *)&g_Postilightdata.mode);
 
     new IntCallback(service, CHARACTERISTIC_TMODE_UUID, (uint32_t *)&g_Postilightdata.trs);
 
@@ -307,7 +332,7 @@ void SetupBLE()
 
     new IntCallback(service, CHARACTERISTIC_IMAGE_TRANSLATION_SPEED_UUID, &g_Postilightdata.its);
     new IntCallback(service, CHARACTERISTIC_TEXT_TRANSLATION_SPEED_UUID, &g_Postilightdata.tts);
-    new FlipCallback(service, CHARACTERISTIC_FLIP_UUID, (uint32_t*) &g_Postilightdata.flip);
+    new FlipCallback(service, CHARACTERISTIC_FLIP_UUID, (uint32_t *)&g_Postilightdata.flip);
 
     new ControlCallback(service, CHARACTERISTIC_IMAGE_CONTROL_UUID);
 
@@ -322,9 +347,15 @@ void SetupBLE()
     characteristic->setValue(DEVICE_MANUFACTURER);
     characteristic = service->createCharacteristic(DEVINFO_NAME_UUID, BLECharacteristic::PROPERTY_READ);
     characteristic->setValue(deviceName.c_str());
+
     characteristic = service->createCharacteristic(DEVINFO_SERIAL_UUID, BLECharacteristic::PROPERTY_READ);
     String chipId = String((uint32_t)(ESP.getEfuseMac() >> 24), HEX);
     characteristic->setValue(chipId.c_str());
+
+    String firmwareVersion = FIRMWARE_VERSION;
+    characteristic = service->createCharacteristic(UUID_FIRMWARE_REVISION_STRING_CHAR, BLECharacteristic::PROPERTY_READ);
+    characteristic->setValue(firmwareVersion.c_str());
+
     service->start();
 
     // Advertise services

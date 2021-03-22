@@ -36,14 +36,16 @@ void bar_graph()
 
     for (int i = 0; i < SAMPLES; i++)
     {
-        newTime = micros() - oldTime;
-        oldTime = newTime;
+        //newTime = micros() - oldTime;
+        //oldTime = newTime;
         vReal[i] = analogRead(A0); // A conversion takes about 1uS on an ESP32
         vImag[i] = 0;
-        while (micros() < (newTime + sampling_period_us))
-        {
-            /* do nothing to wait */
-        }
+
+        delayMicroseconds(sampling_period_us);
+        //while (micros() < (newTime + sampling_period_us))
+        //{
+        //    /* do nothing to wait */
+        //}
     }
 
     FFT.Windowing(vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);

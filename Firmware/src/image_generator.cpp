@@ -246,15 +246,15 @@ uint8_t imageGenerator(uint32_t currentMode, uint8_t *raw, float time)
     dynamic = generatePlasma(raw, time, (uint8_t)currentMode);
     break;
   case 6:
-    break; //tbd
+    g_imageGenerator_mode++;
   case 7:
-    break; //tbd
+    g_imageGenerator_mode++;
   case 8:
-    break; // tbd
+    g_imageGenerator_mode++;
   case 9:
-    break; // tbd
+    g_imageGenerator_mode++;
   case 10:
-    break; // tbd
+    g_imageGenerator_mode++;
   case 11:
     dynamic = generateGameOfLife(raw, time);
     break;

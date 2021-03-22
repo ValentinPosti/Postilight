@@ -32,7 +32,7 @@ image1616 black_image;
 uint8_t dynamicGenerator;
 int g_step = 0;
 int g_index_in_current_text = 0;
-int g_current_text = 0;
+int g_current_text = -1;
 
 float g_spd;
 
@@ -66,6 +66,7 @@ static const TRANSITION_MODE default_trs = NONE;
 void displayCurrentImage();
 extern void bar_graph();
 void LoadNextText();
+void Text_mode();
 
 void InitDefaultValues()
 {
@@ -113,10 +114,6 @@ void setup()
 
     InitDefaultValues();
 
-    OpenDataFile();
-
-    FindFreeSlot();
-
     raw = (uint8_t *)malloc(RAW_SIZE);
     raw_filt = (uint8_t *)malloc(RAW_SIZE);
     raw_lum = (uint8_t *)malloc(RAW_SIZE);
@@ -152,9 +149,31 @@ void setup()
     clear(g_display_image1616.buffer_image);
     clear(black_image.buffer_image);
 
+    clear_buffer(0, 0, 0);
+    DisplayBuffer();
+
+    g_current_time = millis();
+    g_last_time = millis();
+
+    if (!OpenDataFile())
+    {
+        sprintf(g_text, "Missing data File !");
+
+        while (1)
+        {
+            g_current_time = millis();
+            Text_mode();
+        }
+    }
+
+    g_current_text = 0;
+
+    FindFreeSlot();
+
     LoadText(0, g_text);
 
     dynamicGenerator = 1;
+
     /*
     Serial.println("Red");
     clear_buffer(255, 0, 0);
@@ -170,13 +189,9 @@ void setup()
     clear_buffer(0, 0, 255);
     DisplayBuffer();
     delay(1000);
-*/
-    clear_buffer(0, 0, 0);
-    DisplayBuffer();
-    delay(1000);
+    */
 
-    g_current_time = millis();
-    g_last_time = millis();
+    delay(1000);
 }
 
 void todo_mode();
@@ -389,7 +404,7 @@ void Text_mode()
                 memcpy(g_buffer_txt, g_buffer_noir, RAW_SIZE);
                 // step though each column of the 1st char for smooth scrolling
                 sendString(&g_textData[g_index_in_current_text], g_step, g_Postilightdata.rgb[0], g_Postilightdata.rgb[1], g_Postilightdata.rgb[2]);
-                copy_raw_to_strip(g_buffer_txt, false);
+                copy_raw_to_strip(g_buffer_txt, true);
                 strip.Show();
 
                 g_step += 1;
@@ -402,7 +417,10 @@ void Text_mode()
                 if (g_index_in_current_text >= strlen(g_textData))
                 {
                     g_index_in_current_text = 0;
-                    LoadNextText();
+                    if (g_current_text != -1)
+                    {
+                        LoadNextText();
+                    }
                 }
             }
         }
@@ -492,7 +510,7 @@ void fading_images(uint8_t *buff_in1, uint8_t *buff_in2, uint8_t *buff_out, floa
 }
 
 int intensity, squared_intensity;
-int imageGenerator_mode = 2;
+int g_imageGenerator_mode = 2;
 
 void Math_mode()
 {
@@ -524,7 +542,7 @@ void Math_mode()
 
     copy_raw_to_strip(raw_out);
 
-    imageGenerator_mode = imageGenerator(imageGenerator_mode, g_buffer_image, getTime());
+    imageGenerator(g_imageGenerator_mode, g_buffer_image, getTime());
     DisplayImage(g_buffer_image);
 }
 

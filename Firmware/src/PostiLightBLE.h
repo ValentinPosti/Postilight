@@ -28,8 +28,9 @@
 #define DEVINFO_MANUFACTURER_UUID (uint16_t)0x2a29
 #define DEVINFO_NAME_UUID (uint16_t)0x2a24
 #define DEVINFO_SERIAL_UUID (uint16_t)0x2a25
+#define UUID_FIRMWARE_REVISION_STRING_CHAR (uint16_t)0x2A26
 
 #define DEVICE_MANUFACTURER "Posti"
 #define DEVICE_PREFIX "PostiLight_"
 
-void SetupBLE();
+    void SetupBLE();

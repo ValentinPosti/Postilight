@@ -65,8 +65,12 @@
                   <Button Text="Manage content"  BackgroundColor="White" HorizontalOptions="FillAndExpand" Clicked="Delete_Button_Clicked"/>
                </StackLayout>
             </StackLayout>
-         </ScrollView>            
+         </ScrollView>
+         <StackLayout BackgroundColor="#59B2FA">
+               <Label Text="{Binding firmwareVersionDesc}" HeightRequest="40" VerticalTextAlignment="Center" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="End" HorizontalOptions="CenterAndExpand" MaxLines="2"/>
+            </StackLayout>
       </StackLayout>
+
    </ContentPage.Content>
 </ContentPage>
 

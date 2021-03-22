@@ -4,6 +4,11 @@ namespace PostilightApp.util
    public static class BleGuids
    {
 
+      public static Guid devInfoService = new Guid("0000180A-0000-1000-8000-00805F9b34FB");
+
+      public static Guid firmwareVersion = new Guid("00002A26-0000-1000-8000-00805F9b34FB");
+
+
       public static Guid Service = new Guid("506F7374-694c-6967-6874-000000000001");
 
       public static Guid Text = new Guid("506F7374-694c-6967-6875-000000000002");

@@ -102,6 +102,8 @@ struct PostiLightData
 extern bool interrupt_playback;
 
 extern PostiLightData g_Postilightdata;
+
+extern int g_imageGenerator_mode; 
 extern char *g_text;
 
 extern uint8_t *raw;

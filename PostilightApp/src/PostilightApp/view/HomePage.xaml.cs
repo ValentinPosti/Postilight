@@ -28,6 +28,14 @@ namespace PostilightApp.view
          InitializeComponent();
          BindingContext = vm;
          _model = vm;
+
+         var tapGestureRecognizer = new TapGestureRecognizer();
+         tapGestureRecognizer.Tapped += async (s, e) => {
+            Log.Trace("mathModeButton tapped");
+            await _model.SetMode(LightMode.MATH);
+         };
+
+         mathModeButton.GestureRecognizers.Add(tapGestureRecognizer);
       }
 
       protected override void OnAppearing()

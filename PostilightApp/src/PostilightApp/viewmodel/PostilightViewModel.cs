@@ -29,6 +29,14 @@ namespace PostilightApp.viewmodel
       private int _requestMTU = 256;
       private int _sendMTU = 128;
       private PostilightDevice _postiDevice;
+
+      private  string firmwareVersion = "-1";
+
+      public string firmwareVersionDesc
+      {
+         get { return "Postilight Firmware version : " + firmwareVersion; }
+      }
+
       public IDevice Device
       {
          get { return device; }
@@ -58,6 +66,10 @@ namespace PostilightApp.viewmodel
       public IAdapter adapter { get; private set; }
 
       public IService service;
+      public IService devInfoService;
+
+
+      public ICharacteristic characteristic_FirmwareVersion { get; private set; }
 
 
       //public ICharacteristic characteristic_Message { get; private set; }
@@ -123,6 +135,7 @@ namespace PostilightApp.viewmodel
          try
          {
             service = await device.GetServiceAsync(BleGuids.Service);
+            devInfoService = await device.GetServiceAsync(BleGuids.devInfoService);
          }
          catch (Exception ex)
          {
@@ -134,7 +147,12 @@ namespace PostilightApp.viewmodel
          try
          {
             //characteristic_Message = await service.GetCharacteristicAsync(BleGuids.Message);
+            characteristic_FirmwareVersion = await devInfoService.GetCharacteristicAsync(BleGuids.firmwareVersion);
 
+            firmwareVersion = await ReadValueString(characteristic_FirmwareVersion);
+            Log.Trace("Firmware version is  " + firmwareVersion);
+
+            RaisePropertyChanged(nameof(firmwareVersionDesc));
 
             characteristic_Text = await service.GetCharacteristicAsync(BleGuids.Text);
             characteristic_Image = await service.GetCharacteristicAsync(BleGuids.Image);
@@ -191,6 +209,30 @@ namespace PostilightApp.viewmodel
       public async Task<int> ReadValue(ICharacteristic c)
       {
          return await ReadValueInt(c);
+
+      }
+
+      public async Task<string> ReadValueString(ICharacteristic c)
+      {
+         string ret = string.Empty;
+
+         byte[] result;
+
+         try
+         {
+            result = await c.ReadAsync();
+            ret = Encoding.UTF8.GetString(result, 0, result.Length);
+         }
+         catch (Exception ex)
+         {
+            Log.Warn(ex.ToString());
+         }
+         finally
+         {
+
+         }
+
+         return ret;
 
       }
 
