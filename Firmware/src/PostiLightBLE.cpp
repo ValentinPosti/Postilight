@@ -112,14 +112,8 @@ public:
 
     virtual void onWrite(BLECharacteristic *characteristic)
     {
-
-        uint32_t *data = (uint32_t *)characteristic->getData();
-        Serial.print("BLECharacteristic onWrite : ");
-        Serial.print(characteristic->getUUID().toString().c_str());
-        Serial.print(" Value =  ");
-        Serial.println(*data);
-
-        SetFlipMode((FLIP_MODE)*data);
+        IntCallback::onWrite(characteristic);
+        SetFlipMode((FLIP_MODE)*_target_data);
     }
 };
 
@@ -309,7 +303,7 @@ void SetupBLE()
     BLEServer *server = BLEDevice::createServer();
     server->setCallbacks(new MyServerCallbacks());
 
-    BLEService *service = server->createService(BLEUUID(SERVICE_UUID), 48);
+    BLEService *service = server->createService(BLEUUID(SERVICE_UUID), 52);
     BLECharacteristic *characteristic;
 
     characteristic = service->createCharacteristic(CHARACTERISTIC_TEXT_UUID, BLECharacteristic::PROPERTY_WRITE);

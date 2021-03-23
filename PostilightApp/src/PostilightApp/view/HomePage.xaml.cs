@@ -21,6 +21,7 @@ namespace PostilightApp.view
 
       ImageSource imageSource;
       SKBitmap skBitmap;
+      bool ignoreUpdates = false;
 
       public HomePage(PostilightViewModel vm)
       {
@@ -30,10 +31,15 @@ namespace PostilightApp.view
          _model = vm;
 
          var tapGestureRecognizer = new TapGestureRecognizer();
-         tapGestureRecognizer.Tapped += async (s, e) => {
+         tapGestureRecognizer.Tapped += async (s, e) =>
+         {
             Log.Trace("mathModeButton tapped");
             await _model.SetMode(LightMode.MATH);
          };
+
+         var f = typeof(Slider).GetFields();
+         var p = typeof(Slider).GetProperties();
+
 
          mathModeButton.GestureRecognizers.Add(tapGestureRecognizer);
       }
@@ -44,60 +50,86 @@ namespace PostilightApp.view
 
          // Get Current Light mode
 
-        GetMode();
+         GetLampValues();
+
       }
 
-      async void GetMode()
+      async void GetLampValues()
       {
-         LightMode mode = (LightMode) await _model.ReadValue(_model.characteristic_Mode);
+         ignoreUpdates = true;
 
-         //TODO Select the corresponding button
-
-         switch (mode)
+         try
          {
-            case LightMode.IMAGE:
-               imageModeButton.IsChecked = true;
-               break;
-            /*
-            case LightMode.GIF:
-               animatonModeButton.IsChecked = true;
-               break;
-            */
-            case LightMode.TEXT:
-               textModeButton.IsChecked = true;
-               break;
+            LightMode mode = (LightMode)await _model.ReadValueInt(_model.characteristic_Mode);
 
-            case LightMode.MONO:
-               monoColorModeButton.IsChecked = true;
-               break;
+            // use SetPropertyValue to avoid triggering callback
 
-            case LightMode.MATH:
-               mathModeButton.IsChecked = true;
-               break;
+            switch (mode)
+            {
+               case LightMode.GIF:
+               case LightMode.IMAGE:
+                  imageModeButton.SetPropertyValue<RadioButton>("IsChecked", true);
+                  break;
+               case LightMode.TEXT:
+                  textModeButton.SetPropertyValue<RadioButton>("IsChecked", true);
+                  break;
 
-            case LightMode.BARGRAPH:
-               barGraphModeButton.IsChecked = true;
-               break;
+               case LightMode.MONO:
+                  monoColorModeButton.SetPropertyValue<RadioButton>("IsChecked", true);
+                  break;
 
+               case LightMode.MATH:
+                  mathModeButton.SetPropertyValue<RadioButton>("IsChecked", true);
+                  break;
+
+               case LightMode.BARGRAPH:
+                  barGraphModeButton.SetPropertyValue<RadioButton>("IsChecked", true);
+                  break;
+
+            }
+
+            int b = await _model.ReadValueInt(_model.characteristic_Brightness);
+            BrightnessSlider.SetPropertyValue<Slider>("Value", b);
+
+            bool leds = await _model.ReadValueBool(_model.characteristic_LedsOnOff);
+            LedsSwitch.SetPropertyValue<Switch>("IsToggled", leds);
+
+
+
+         }
+         catch (Exception) { }
+         finally
+         {
+            ignoreUpdates = false;
          }
 
       }
-     
 
-         async void OnLedsToggled(object sender, ToggledEventArgs e)
+
+      async void OnLedsToggled(object sender, ToggledEventArgs e)
       {
+         if (ignoreUpdates)
+         {
+            return;
+         }
+
          var b = e.Value;
          await _model.WriteValue(_model.characteristic_LedsOnOff, b ? 1 : 0);
       }
 
       async void OnBrightnessSliderValueChanged(System.Object sender, Xamarin.Forms.ValueChangedEventArgs e)
       {
+         if (ignoreUpdates)
+         {
+            return;
+         }
+
          int v = (int)e.NewValue;
          try
          {
             await _model.WriteValue(_model.characteristic_Brightness, v);
          }
-         catch(Exception )
+         catch (Exception)
          {
 
          }
@@ -105,6 +137,11 @@ namespace PostilightApp.view
 
       async void OnRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
       {
+         if (ignoreUpdates)
+         {
+            return;
+         }
+
          var v = e.Value;
 
          if (v == true)
@@ -117,6 +154,7 @@ namespace PostilightApp.view
 
       async void Image_Button_Clicked(object sender, System.EventArgs e)
       {
+         /*
          var status = await Permissions.RequestAsync<Permissions.Camera>();
 
          if (status != PermissionStatus.Granted)
@@ -131,8 +169,9 @@ namespace PostilightApp.view
             }
             return;
          }
+         */
 
-         status = await Permissions.RequestAsync<Permissions.StorageRead>();
+         var status = await Permissions.RequestAsync<Permissions.StorageRead>();
 
          if (status != PermissionStatus.Granted)
          {
@@ -189,7 +228,7 @@ namespace PostilightApp.view
 
                      if (isGif)
                      {
-                        decoder =  new DecodeGifFrames();
+                        decoder = new DecodeGifFrames();
                         decoder.InitFromFile(result.FullPath);
                         Log.Trace("Gif Frames count = " + decoder.FrameCount);
                      }
@@ -216,7 +255,7 @@ namespace PostilightApp.view
             // The user canceled or something went wrong
          }
 
-       
+
       }
 
       void Text_Button_Clicked(object sender, System.EventArgs e)

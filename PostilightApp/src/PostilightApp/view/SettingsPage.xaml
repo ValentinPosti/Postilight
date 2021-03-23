@@ -70,7 +70,6 @@
                <Label Text="{Binding firmwareVersionDesc}" HeightRequest="40" VerticalTextAlignment="Center" LineBreakMode="WordWrap" TextColor="White" VerticalOptions="End" HorizontalOptions="CenterAndExpand" MaxLines="2"/>
             </StackLayout>
       </StackLayout>
-
    </ContentPage.Content>
 </ContentPage>
 

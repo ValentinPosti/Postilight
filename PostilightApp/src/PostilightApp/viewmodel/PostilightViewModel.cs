@@ -206,11 +206,7 @@ namespace PostilightApp.viewmodel
          catch (Exception) { }
       }
 
-      public async Task<int> ReadValue(ICharacteristic c)
-      {
-         return await ReadValueInt(c);
-
-      }
+     
 
       public async Task<string> ReadValueString(ICharacteristic c)
       {
@@ -236,6 +232,13 @@ namespace PostilightApp.viewmodel
 
       }
 
+     
+
+      public async Task<bool> ReadValueBool(ICharacteristic c)
+      {
+         return await ReadValueInt(c) == 0 ? false : true;
+
+      }
 
       public async Task<int> ReadValueInt(ICharacteristic c)
       {
