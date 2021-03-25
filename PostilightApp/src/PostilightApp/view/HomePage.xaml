@@ -83,7 +83,7 @@
                      <StackLayout Orientation="Horizontal" Margin="10,0,10,0">
                         <Label Text="Luminosity" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand"/>
                         <Label Text="-" HorizontalOptions="Start" VerticalOptions="Center" FontSize="Large"/>
-                        <Slider x:Name="BrightnessSlider" Minimum="0" Maximum="255" HorizontalOptions="FillAndExpand" Value="128" HeightRequest="40" ValueChanged="OnBrightnessSliderValueChanged" />
+                        <Slider x:Name="BrightnessSlider" Maximum="255" Minimum="16"  HorizontalOptions="FillAndExpand" Value="128" HeightRequest="40" ValueChanged="OnBrightnessSliderValueChanged" />
                         <Label Text="+" HorizontalOptions="End" VerticalOptions="Center" FontSize="Large"/>
                      </StackLayout>
                      <StackLayout Orientation="Horizontal" Margin="10,0,0,0">

@@ -40,12 +40,9 @@ namespace PostilightApp.view
                   vm.ScanForDevicesCommand.Execute(null);
                }
             });
-         });
-         
-         
-         
-
+         });                      
       }
+
 
       private void ListView_OnItemSelected(Object sender, SelectedItemChangedEventArgs e)
       {

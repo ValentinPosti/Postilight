@@ -19,6 +19,7 @@ using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.Exceptions;
 using nexus.core;
 using Acr.UserDialogs;
+using Plugin.BLE.Abstractions;
 
 namespace PostilightApp.viewmodel
 {
@@ -106,7 +107,8 @@ namespace PostilightApp.viewmodel
 
          try
          {
-            await adapter.ConnectToDeviceAsync(device);
+            var parameters = new ConnectParameters(forceBleTransport: true);
+            await adapter.ConnectToDeviceAsync(device,parameters);
          }
          catch (DeviceConnectionException ex)
          {

@@ -10,6 +10,8 @@
 #include "LedStrip.h"
 #include "globals.h"
 #include "FirmwareVersion.h"
+#include "BinaryFile.h"
+
 extern void DisplayNextImage();
 extern void DisplayPrevImage();
 extern void DeleteCurrentImage();
@@ -152,6 +154,14 @@ public:
         case 'd':
             // Delete current image or animation
             DeleteCurrentImage();
+            break;
+
+        case 's':
+            SaveSettings();
+            break;
+
+        case 'l':
+            LoadSettings();
             break;
 
         default:

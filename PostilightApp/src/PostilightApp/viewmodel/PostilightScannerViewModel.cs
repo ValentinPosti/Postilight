@@ -43,6 +43,31 @@ namespace PostilightApp.viewmodel
       public Int32 ScanTimeRemaining =>
          (Int32)BleSampleAppUtils.ClampSeconds( (m_scanStopTime - DateTime.UtcNow).TotalSeconds );
 
+      private void GetSystemConnectedOrPairedDevices()
+      {
+         try
+         {
+            var adapter = CrossBluetoothLE.Current.Adapter;
+
+
+            //heart rate
+            var guid = Guid.Parse("0000180d-0000-1000-8000-00805f9b34fb");
+
+            var systemDevices = adapter.GetSystemConnectedOrPairedDevices(new[] { guid });
+
+            foreach(var item in systemDevices)
+            {
+               FoundDevices.Add(new PostilightDevice(m_dialogs, adapter, item, m_onSelectDevice));
+            }
+
+            
+         }
+         catch (Exception ex)
+         {
+            Log.Trace("Failed to retreive system connected devices. {0}", ex.Message);
+         }
+      }
+
       public async void StartScan( Double seconds )
       {
 
@@ -66,6 +91,8 @@ namespace PostilightApp.viewmodel
          }
 
          FoundDevices.Clear();
+
+         GetSystemConnectedOrPairedDevices();
 
          await ((FormsApp)FormsApp.Current).Disconnect();
        
