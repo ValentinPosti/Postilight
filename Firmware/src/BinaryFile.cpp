@@ -5,16 +5,6 @@
 
 File _data_file;
 
-void LoadSettingsFromFlash()
-{
-    // Todo
-}
-
-void SaveSettingsToflash()
-{
-    // Todo
-}
-
 bool OpenDataFile()
 {
 
@@ -32,7 +22,7 @@ bool OpenDataFile()
             return false;
         }
     }
-    LoadSettingsFromFlash();
+    LoadSettings();
     return true;
 }
 
@@ -42,7 +32,7 @@ void LoadSettings()
     _data_file.readBytes((char *)&g_Postilightdata.version, sizeof(PostiLightData));
 }
 
-void SaveSettings(int index, char *outTxt)
+void SaveSettings()
 {
     _data_file.seek(0);
     _data_file.write((uint8_t *)&g_Postilightdata.version, sizeof(PostiLightData));
@@ -120,7 +110,7 @@ bool LoadBitmap(int index, uint8_t *dst)
     return true;
 }
 
-bool SaveTextToBinaryFile(int index, const char* data)
+bool SaveTextToBinaryFile(int index, const char *data)
 {
     if (_data_file == 0)
         return false;
@@ -138,8 +128,8 @@ bool SaveTextToBinaryFile(int index, const char* data)
     Serial.print(seek ? "ok " : "ko ");
 
     int l = strlen(data);
-    l = min(63,l);
-    _data_file.write((const uint8_t*)data, l);
+    l = min(63, l);
+    _data_file.write((const uint8_t *)data, l);
     _data_file.flush();
 
     return true;

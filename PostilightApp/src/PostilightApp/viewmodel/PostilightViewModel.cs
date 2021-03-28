@@ -151,8 +151,11 @@ namespace PostilightApp.viewmodel
             //characteristic_Message = await service.GetCharacteristicAsync(BleGuids.Message);
             characteristic_FirmwareVersion = await devInfoService.GetCharacteristicAsync(BleGuids.firmwareVersion);
 
-            firmwareVersion = await ReadValueString(characteristic_FirmwareVersion);
-            Log.Trace("Firmware version is  " + firmwareVersion);
+            if (characteristic_FirmwareVersion != null)
+            {
+               firmwareVersion = await ReadValueString(characteristic_FirmwareVersion);
+               Log.Trace("Firmware version is  " + firmwareVersion);               
+            }
 
             RaisePropertyChanged(nameof(firmwareVersionDesc));
 
