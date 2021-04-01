@@ -142,7 +142,7 @@ public:
         switch (*data)
         {
         case '+':
-            // Next Image or Animation
+            // Next Image or Animation           
             DisplayNextImage();
             break;
 
