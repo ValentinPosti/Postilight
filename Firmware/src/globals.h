@@ -49,8 +49,9 @@ enum MODES
   MONO,
   MATH,
   BARGRAPH,
-  CONTROL,
+  UNUSED,
   UPLOAD,
+
 };
 
 enum TRANSITION_MODE
@@ -99,11 +100,13 @@ struct PostiLightData
   uint32_t unused3; //vitesse de défilement du texte en défilement horizontal
 };
 
+extern bool g_Control;
 extern bool interrupt_playback;
+extern uint32_t g_leds_on;
 
 extern PostiLightData g_Postilightdata;
 
-extern int g_imageGenerator_mode; 
+extern int g_imageGenerator_mode;
 extern char *g_text;
 
 extern uint8_t *raw;

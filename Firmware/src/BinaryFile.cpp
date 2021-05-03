@@ -128,7 +128,7 @@ bool SaveTextToBinaryFile(int index, const char *data)
     Serial.print(seek ? "ok " : "ko ");
 
     int l = strlen(data);
-    l = min(63, l);
+    l = min(63, l + 1);
     _data_file.write((const uint8_t *)data, l);
     _data_file.flush();
 

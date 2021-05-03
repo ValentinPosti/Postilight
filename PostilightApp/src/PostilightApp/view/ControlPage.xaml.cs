@@ -11,19 +11,18 @@ namespace PostilightApp.view
 
       PostilightViewModel _model;
 
+     
       public ControlPage(PostilightViewModel model)
       {
          InitializeComponent();
          _model = model;
-
-         _ = _model.SetMode(LightMode.CONTROL);
+         _ = _model?.SendCommand("C");
       }
 
       protected override void OnDisappearing()
       {
          base.OnDisappearing();
-         _ = _model?.SetMode(LightMode.IMAGE);
-
+         _ = _model?.SendCommand("c");
 
       }
 

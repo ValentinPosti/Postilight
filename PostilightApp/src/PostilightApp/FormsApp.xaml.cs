@@ -79,12 +79,17 @@ namespace PostilightApp
 
       }
 
+      public async Task SendCommand(string command)
+      {
+         await postiLightViewModel.SendCommand(command);
+
+      }
 
       public async Task SendImageBuffers(List<byte[]> buffers, ProgressBar pb = null)
       {
          if (!isConnected)
             return;
-         await postiLightViewModel.SetMode(LightMode.CONTROL);
+         await postiLightViewModel.SendCommand("C");
          foreach (var item in buffers)
          {
             await postiLightViewModel.SendAnimation(buffers,pb);

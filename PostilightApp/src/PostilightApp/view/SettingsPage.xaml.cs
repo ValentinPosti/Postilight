@@ -177,10 +177,7 @@ namespace PostilightApp.view
          FormsApp.Instance.PushPage(new ColorPickerPage(_model));
       }
 
-      void Delete_Button_Clicked(System.Object sender, System.EventArgs e)
-      {
-         FormsApp.Instance.PushPage(new ControlPage(_model));
-      }
+ 
 
 
    }

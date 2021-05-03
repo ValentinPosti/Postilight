@@ -12,9 +12,7 @@
 #include "FirmwareVersion.h"
 #include "BinaryFile.h"
 
-extern void DisplayNextImage();
-extern void DisplayPrevImage();
-extern void DeleteCurrentImage();
+extern void EnqueueCommand(uint32_t c);
 
 Image1616 g_receiveBuffer;
 class MyServerCallbacks : public BLEServerCallbacks
@@ -137,23 +135,28 @@ public:
         Serial.print(" Value =  ");
         Serial.println((char)*data);
 
-        g_Postilightdata.mode = CONTROL;
-
         switch (*data)
         {
+        case 'C':
+            g_Control = true;
+            break;
+        case 'c':
+            g_Control = false;
+            break;
+
         case '+':
-            // Next Image or Animation           
-            DisplayNextImage();
+            // Next Image or Animation
+            EnqueueCommand('cmd+');
             break;
 
         case '-':
             // Previous image or animation
-            DisplayPrevImage();
+            EnqueueCommand('cmd-');
             break;
 
         case 'd':
-            // Delete current image or animation
-            DeleteCurrentImage();
+            // Delete current image , animation or text
+            EnqueueCommand('cmdd');
             break;
 
         case 's':
@@ -323,7 +326,7 @@ void SetupBLE()
     characteristic->setCallbacks(new ImageCallbacks());
 
     new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
-    new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);
+    new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_leds_on);
     new ModeCallback(service, CHARACTERISTIC_MODE_UUID, (uint32_t *)&g_Postilightdata.mode);
 
     new IntCallback(service, CHARACTERISTIC_TMODE_UUID, (uint32_t *)&g_Postilightdata.trs);

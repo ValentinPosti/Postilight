@@ -7,6 +7,8 @@
         <StackLayout Orientation="Vertical">
            <Entry x:Name="textEntry" MaxLength="63" HorizontalOptions="FillAndExpand" Placeholder="Enter text..."/>
            <Button Text="Send" Clicked="sendButton_Clicked"/>
+            <Label Text="Only basic ASCII characters are supported." HorizontalTextAlignment="Center"/>
+         
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

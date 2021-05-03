@@ -1,1 +1,1 @@
-#define FIRMWARE_VERSION "22"
+#define FIRMWARE_VERSION "23"

@@ -15,6 +15,10 @@
 #include <StopWatch.h>
 
 PostiLightData g_Postilightdata;
+
+uint32_t g_leds_on = true;
+
+bool g_Control = false;
 bool interrupt_playback = false;
 
 extern uint8_t *g_buffer_image;
@@ -67,8 +71,14 @@ QueueHandle_t xQueueCommandQueue;
 
 void displayCurrentImage();
 extern void bar_graph();
-void LoadNextText();
+
+void _loadNextText();
+void _loadPrevText();
+void _deleteCurrentText();
+
 void Text_mode();
+
+void EnqueueCommand(uint32_t c);
 
 void _displayNextImage();
 void _displayPrevImage();
@@ -237,7 +247,7 @@ void SaveTextToFreeSlotAndDisplay(uint8_t *data)
 
         g_index_in_current_text = 0;
         g_current_text = index - 1;
-        LoadNextText();
+        _loadNextText();
     }
 }
 
@@ -264,7 +274,8 @@ void SaveImageToFreeSlotAndDisplay(uint8_t *data, int frame_index, int frame_cou
 
     if (frame_index == frame_count - 1)
     {
-        g_Postilightdata.mode = CONTROL;
+        g_Postilightdata.mode = IMAGE;
+        g_Control = true;
         displayCurrentImage();
     }
 }
@@ -275,10 +286,6 @@ void loop()
 
     switch (g_Postilightdata.mode)
     {
-    case CONTROL:
-        Serial.println("Control Mode");
-        Image_mode();
-        break;
     case IMAGE:
         Serial.println("Image Mode");
         Image_mode();
@@ -294,6 +301,7 @@ void loop()
     case TEXT:
         Text_mode();
         break;
+
     case MATH:
         Math_mode();
         break;
@@ -327,10 +335,9 @@ void Mono_mode()
     DisplayBuffer();
 }
 
-void DisplayNextImage()
+void EnqueueCommand(uint32_t c)
 {
     interrupt_playback = true;
-    uint32_t c = 'cmd+';
     xQueueSendToBack(xQueueCommandQueue, (void *)&c, (TickType_t)50);
 }
 
@@ -339,12 +346,6 @@ void _displayNextImage()
     g_image_index = FindNextImage(g_image_index);
 }
 
-void DisplayPrevImage()
-{
-    interrupt_playback = true;
-    uint32_t c = 'cmd-';
-    xQueueSendToBack(xQueueCommandQueue, (void *)&c, (TickType_t)50);
-}
 void _displayPrevImage()
 {
     g_image_index = FindPrevImage(g_image_index);
@@ -396,6 +397,35 @@ int FindFreeTextSlot(int startIndex)
     return 0; // overwrite first text
 }
 
+int FindPrevTextIndex(int start_index)
+{
+
+    int index = (start_index - 1) % max_text_entries;
+
+    char tmp[max_text_len];
+
+    while (true)
+    {
+        if (index < 0)
+        {
+            index += max_text_entries;
+        }
+
+        if (index == start_index)
+        {
+            return start_index; // Only one image
+        }
+
+        LoadText(index, tmp);
+        if (tmp[0] != '\0')
+        {
+
+            return index;
+        }
+        index = (index - 1) % max_image_count;
+    }
+}
+
 int FindNexTextIndex(int start)
 {
     for (int i = start + 1; i < max_text_entries; i++)
@@ -407,18 +437,33 @@ int FindNexTextIndex(int start)
             return i;
         }
     }
-
     return 0; // Return first text
 }
 
-void LoadNextText()
+void _loadNextText()
 {
     g_current_text = FindNexTextIndex(g_current_text);
     LoadText(g_current_text, g_text);
+    g_step = g_index_in_current_text = 0;
 }
 
-void Text_mode()
+void _loadPrevText()
 {
+    g_current_text = FindPrevTextIndex(g_current_text);
+    LoadText(g_current_text, g_text);
+    g_step = g_index_in_current_text = 0;
+}
+
+void _deleteCurrentText()
+{
+    const char *data = "\0";
+    SaveTextToBinaryFile(g_current_text, (const char *)data);
+    _loadNextText();
+}
+
+void _text_mode()
+{
+
     if ((g_current_time - g_last_time) > (1000 / g_Postilightdata.tts))
     {
         g_last_time = g_current_time;
@@ -446,9 +491,41 @@ void Text_mode()
                     g_index_in_current_text = 0;
                     if (g_current_text != -1)
                     {
-                        LoadNextText();
+                        if (!g_Control)
+                        {
+                            _loadNextText();
+                        }
                     }
                 }
+            }
+        }
+    }
+}
+
+void Text_mode()
+{
+
+    _text_mode();
+
+    if (g_Control)
+    {
+        uint32_t command = 0;
+
+        if (xQueueReceive(xQueueCommandQueue, &command, (TickType_t)0) == pdPASS)
+        {
+            switch (command)
+            {
+            case 'cmd+':
+                _loadNextText();
+                break;
+            case 'cmd-':
+                _loadPrevText();
+                break;
+            case 'cmdd':
+                _deleteCurrentText();
+                break;
+            default:
+                break;
             }
         }
     }
@@ -639,12 +716,12 @@ int FindPrevImage(int start_index)
 bool image_mode_exit_condition()
 {
 
-    if (!(g_Postilightdata.mode == IMAGE || (g_Postilightdata.mode == GIF) || g_Postilightdata.mode == CONTROL))
+    if (g_Postilightdata.mode != IMAGE)
     {
         return true;
     }
 
-    if ((g_Postilightdata.mode == CONTROL) && interrupt_playback)
+    if (g_Control && interrupt_playback)
     {
         interrupt_playback = false;
         return true;
@@ -778,9 +855,8 @@ void Image_mode()
     do
     {
 
-        if (g_Postilightdata.mode != CONTROL)
+        if (!g_Control)
         {
-
             g_image_index = nextImageIndex();
             g_previmage_index = g_image_index;
         }
@@ -837,7 +913,7 @@ void displayCurrentImage()
     LoadBitmap(g_image_index, g_current_image1616.buffer_image);
 
     // No Funky transition in Control mode
-    int transitionMode = (g_Postilightdata.mode == CONTROL || g_Postilightdata.mode == UPLOAD) ? NONE : g_Postilightdata.trs;
+    int transitionMode = (g_Control || (g_Postilightdata.mode == UPLOAD)) ? NONE : g_Postilightdata.trs;
 
     switch (transitionMode)
     {

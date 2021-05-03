@@ -173,6 +173,7 @@
                         <Button Text="Image or GIF" HorizontalOptions="FillAndExpand" Clicked="Image_Button_Clicked" />
                         <Button Text="Text" HorizontalOptions="FillAndExpand" Clicked="Text_Button_Clicked" />
                      </StackLayout>
+                     <Button Text="Manage content"  HorizontalOptions="FillAndExpand" Clicked="Manage_Button_Clicked"/>
                   </StackLayout>
                </Frame>
             </StackLayout>

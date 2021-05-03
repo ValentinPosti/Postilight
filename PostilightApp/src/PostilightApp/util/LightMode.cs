@@ -9,7 +9,8 @@ namespace PostilightApp
       MONO,
       MATH,
       BARGRAPH,
-      CONTROL,
-      UPLOAD
+      UNUSED,
+      UPLOAD,
+      DIRECT
    };
 }

@@ -38,7 +38,7 @@ namespace PostilightApp.viewmodel
 
          m_ble = CrossBluetoothLE.Current;
          m_bleAdapter = CrossBluetoothLE.Current.Adapter;
-
+         m_dialogs = dialogs;
           
          //EnableAdapterCommand = new Command( async () => await ToggleAdapter( true ) );
          //DisableAdapterCommand = new Command( async () => await ToggleAdapter( false ) );

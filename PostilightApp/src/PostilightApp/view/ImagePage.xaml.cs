@@ -61,15 +61,30 @@ namespace PostilightApp.view
       protected override void OnDisappearing()
       {
          base.OnDisappearing();
-         _ = FormsApp.Instance.SetMode(LightMode.IMAGE);
+         _ = FormsApp.Instance.SendCommand("c");
+         
 
       }
+
+      async void Delete_Button_Clicked(object sender, EventArgs e)
+      {
+         Log.Trace("Send_Button_Clicked");
+         await FormsApp.Instance.SendCommand("d");
+         FormsApp.Instance.PopPage();
+      }
+
+      void keep_Button_Clicked(object sender, EventArgs e)
+      {
+         FormsApp.Instance.PopPage();
+      }
+            
 
       async void Send_Button_Clicked(object sender, EventArgs e)
       {
          Log.Trace("Send_Button_Clicked");
 
-         sendToPostiLighButton.IsEnabled = false;
+         sendToPostiLightButton.IsVisible = false;
+
          if (gifDecoder == null)
          {
             await FormsApp.Instance.SendImageBuffer(buffer16x16, progressBar);
@@ -94,6 +109,8 @@ namespace PostilightApp.view
 
             await FormsApp.Instance.SendAnimation(frames, progressBar);
          }
+         keepButton.IsVisible = true;
+         deleteButton.IsVisible = true;
 
       }
 
@@ -103,7 +120,7 @@ namespace PostilightApp.view
          ImageSource imageSource = image.Source;
 
          activityIndicator.IsRunning = true;
-         sendToPostiLighButton.IsEnabled = false;
+         sendToPostiLightButton.IsEnabled = false;
 
          return Task.Run(() =>
          {
@@ -239,7 +256,7 @@ namespace PostilightApp.view
                {
                   pixelated.Source = ImageSource.FromStream(() => encodedStream);
                   activityIndicator.IsRunning = false;
-                  sendToPostiLighButton.IsEnabled = true;
+                  sendToPostiLightButton.IsEnabled = true;
                   Log.Trace("Tada !!!");
                });
 

@@ -61,9 +61,9 @@
                   </StackLayout>
                </Frame>
                <StackLayout BackgroundColor="#59B2FA"  Orientation="Horizontal" Margin="5,0,5,0">
-                  <Button Text="Mono Color" BackgroundColor="White" HorizontalOptions="FillAndExpand" Clicked="Mono_Button_Clicked" />
-                  <Button Text="Manage content"  BackgroundColor="White" HorizontalOptions="FillAndExpand" Clicked="Delete_Button_Clicked"/>
+                  <Button Text="Mono Color" BackgroundColor="White" HorizontalOptions="FillAndExpand" Clicked="Mono_Button_Clicked" />                            
                </StackLayout>
+               <Label Text="This sets the text and single color display color." HorizontalTextAlignment="Center"/>
             </StackLayout>
          </ScrollView>
          <StackLayout BackgroundColor="#59B2FA">

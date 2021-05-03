@@ -262,5 +262,10 @@ namespace PostilightApp.view
       {
          FormsApp.Instance.PushPage(new TextPage());
       }
+
+      void Manage_Button_Clicked(System.Object sender, System.EventArgs e)
+      {
+         FormsApp.Instance.PushPage(new ControlPage(_model));
+      }
    }
 }

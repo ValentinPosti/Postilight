@@ -33,7 +33,9 @@ namespace PostilightApp.viewmodel
          m_onSelectDevice = onSelectDevice;
          FoundDevices = new ObservableCollection<PostilightDevice>();
          ScanForDevicesCommand =
-            new Command( x => { StartScan( x as Double? ?? BleSampleAppUtils.SCAN_SECONDS_DEFAULT ); } );
+            new Command( x => {
+               StartScan( x as Double? ?? BleSampleAppUtils.SCAN_SECONDS_DEFAULT );
+            } );
       }
 
       public ObservableCollection<PostilightDevice> FoundDevices { get; }
@@ -84,7 +86,7 @@ namespace PostilightApp.viewmodel
             return;
          }
 
-         if(!IsAdapterEnabled)
+         if(!IsAdapterEnabled && m_dialogs != null)
          {
             m_dialogs.Toast( "Cannot start scan, Bluetooth is turned off" );
             return;

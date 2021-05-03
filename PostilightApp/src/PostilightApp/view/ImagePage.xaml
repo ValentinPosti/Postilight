@@ -12,6 +12,7 @@
             <RowDefinition Height="0.3*" />
             <RowDefinition Height="0.3*" />
             <RowDefinition Height="0.1*" />
+            <RowDefinition Height="0.1*" />
             <RowDefinition Height="0.05*" />
          </Grid.RowDefinitions>
          <Grid.ColumnDefinitions>
@@ -19,9 +20,6 @@
          </Grid.ColumnDefinitions>
 
          <Image x:Name="image"  Grid.Row="0" Grid.Column="0"  VerticalOptions="FillAndExpand" Aspect="AspectFit" />
-
-
-
          <Image x:Name="pixelated" Grid.Row="1" Grid.Column="0" VerticalOptions="FillAndExpand" Aspect="AspectFit" />
          <ActivityIndicator x:Name="activityIndicator" Grid.Row="1" Grid.Column="0" IsRunning="True">
             <ActivityIndicator.WidthRequest>
@@ -30,10 +28,21 @@
                                  iOS="40"
                                  WinPhone="100" />
             </ActivityIndicator.WidthRequest>
+
          </ActivityIndicator>
 
-         <Button x:Name="sendToPostiLighButton" Text="Send Image to your Postilight" Grid.Row="3" Grid.Column="0" Clicked="Send_Button_Clicked" />
-         <ProgressBar x:Name="progressBar" HeightRequest="20" Progress="0.0" Grid.Row="4" Grid.Column="0" VerticalOptions="Center" ProgressColor="DarkOrange"/>
+         <Label Grid.Row="2" Grid.Column="0" HorizontalTextAlignment="Center" >
+            <Label.Text>
+              Best results are achieved with square images
+              and using 16x16 looking images.
+            </Label.Text>
+         </Label>
+
+
+         <Button x:Name="sendToPostiLightButton" Text="Send Image to your Postilight" Grid.Row="3" Grid.Column="0" Clicked="Send_Button_Clicked" IsVisible="True"/>
+         <Button x:Name="keepButton" Text="Keep image" Grid.Row="3" Grid.Column="0" Clicked="keep_Button_Clicked" IsVisible="False"/>
+         <Button x:Name="deleteButton" Text="Delete Image from your Postilight" Grid.Row="4" Grid.Column="0" Clicked="Delete_Button_Clicked" IsVisible="False"/>
+         <ProgressBar x:Name="progressBar" HeightRequest="20" Progress="0.0" Grid.Row="5" Grid.Column="0" VerticalOptions="Center" ProgressColor="DarkOrange"/>
       </Grid>
    </ContentPage.Content>
 </util:BasePage>
