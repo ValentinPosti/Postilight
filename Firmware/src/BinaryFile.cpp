@@ -28,14 +28,41 @@ bool OpenDataFile()
 
 void LoadSettings()
 {
-    _data_file.seek(0);
-    _data_file.readBytes((char *)&g_Postilightdata.version, sizeof(PostiLightData));
+    Serial.print("Loading Settings...");
+    _data_file.seek(0, fs::SeekMode::SeekSet);
+    PostiLightData pd;
+
+    size_t bytes_read = _data_file.readBytes((char *)&pd.version, sizeof(PostiLightData));
+
+    if (bytes_read == sizeof(PostiLightData))
+    {
+        g_Postilightdata = pd;
+        g_Postilightdata.leds_on = true;
+        Serial.println(" Done");
+    }
+    else
+    {
+        Serial.println(" Error");
+    }
 }
 
 void SaveSettings()
 {
+
+    Serial.print("Saving Settings...");
+
     _data_file.seek(0);
-    _data_file.write((uint8_t *)&g_Postilightdata.version, sizeof(PostiLightData));
+    size_t bytes_written = _data_file.write((uint8_t *)&g_Postilightdata.version, sizeof(PostiLightData));
+
+    if (bytes_written == sizeof(PostiLightData))
+    {
+        Serial.println(" Done");
+        _data_file.flush();
+    }
+    else
+    {
+        Serial.println(" Failed");
+    }
 }
 
 void LoadText(int index, char *outTxt)

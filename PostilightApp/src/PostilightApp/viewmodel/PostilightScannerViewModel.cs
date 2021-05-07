@@ -50,12 +50,7 @@ namespace PostilightApp.viewmodel
          try
          {
             var adapter = CrossBluetoothLE.Current.Adapter;
-
-
-            //heart rate
-            var guid = Guid.Parse("0000180d-0000-1000-8000-00805f9b34fb");
-
-            var systemDevices = adapter.GetSystemConnectedOrPairedDevices(new[] { guid });
+            var systemDevices = adapter.GetSystemConnectedOrPairedDevices(new[] { BleGuids.Service });
 
             foreach(var item in systemDevices)
             {

@@ -16,9 +16,9 @@
 
 PostiLightData g_Postilightdata;
 
-uint32_t g_leds_on = true;
-
 bool g_Control = false;
+bool g_DirectDrive = false;
+
 bool interrupt_playback = false;
 
 extern uint8_t *g_buffer_image;
@@ -110,8 +110,34 @@ void InitDefaultValues()
     g_Postilightdata.flip = NO_FLIP;
 }
 
+static void periodic_timer_callback(void *arg);
+extern volatile bool settingsModified;
+volatile bool needSaveSettings;
+static void periodic_timer_callback(void *arg)
+{
+    int64_t time_since_boot = esp_timer_get_time();
+
+    if (settingsModified)
+    {
+        Serial.printf("Settings modified: %lld us\n", time_since_boot);
+        needSaveSettings = true;
+        settingsModified = false;
+    }
+}
+
 void setup()
 {
+
+    esp_timer_create_args_t periodic_timer_args;
+    periodic_timer_args.callback = &periodic_timer_callback;
+    /* name is optional, but may help identify the timer when debugging */
+    periodic_timer_args.name = "checkSettings";
+
+    esp_timer_handle_t periodic_timer;
+    ESP_ERROR_CHECK(esp_timer_create(&periodic_timer_args, &periodic_timer));
+
+    /* Start the timers */
+    ESP_ERROR_CHECK(esp_timer_start_periodic(periodic_timer, 30000000));
 
     xQueueCommandQueue = xQueueCreate(10, sizeof(uint32_t));
 
@@ -214,6 +240,7 @@ void setup()
 
 void todo_mode();
 
+void DirectDrive_mode();
 void Image_mode();
 void Mono_mode();
 void Text_mode();
@@ -230,6 +257,16 @@ int g_image_index = -1, g_previmage_index = -1;
 int g_displayed_image_index = -1;
 
 int last_saved_image_index;
+
+void CheckIfSettingMustBeSaved()
+{
+    if (needSaveSettings)
+    {
+        needSaveSettings = false;
+        SaveSettings();
+        LoadSettings();
+    }
+}
 
 void SaveTextToFreeSlotAndDisplay(uint8_t *data)
 {
@@ -284,8 +321,11 @@ void loop()
 {
     g_current_time = millis();
 
+    CheckIfSettingMustBeSaved();
+
     switch (g_Postilightdata.mode)
     {
+
     case IMAGE:
         Serial.println("Image Mode");
         Image_mode();
@@ -727,6 +767,8 @@ bool image_mode_exit_condition()
         return true;
     }
 
+    CheckIfSettingMustBeSaved();
+
     return false;
 }
 
@@ -847,6 +889,10 @@ int nextImageIndex()
         g_image_index = (g_image_index + 1) % max_image_count;
     }
     return g_image_index;
+}
+
+void DirectDrive_mode()
+{
 }
 
 void Image_mode()

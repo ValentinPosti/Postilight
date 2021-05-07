@@ -14,6 +14,9 @@
 
 extern void EnqueueCommand(uint32_t c);
 
+volatile bool settingsModified = false;
+extern bool g_DirectDrive;
+
 Image1616 g_receiveBuffer;
 class MyServerCallbacks : public BLEServerCallbacks
 {
@@ -64,6 +67,8 @@ public:
         Serial.print(" Value =  ");
         Serial.println(*data);
         *_target_data = *data;
+
+        settingsModified = true;
     }
 
     virtual void onRead(BLECharacteristic *characteristic)
@@ -144,6 +149,13 @@ public:
             g_Control = false;
             break;
 
+        case 'D':
+            g_DirectDrive = true;
+            break;
+        case 'N':
+            g_DirectDrive = false;
+            break;
+
         case '+':
             // Next Image or Animation
             EnqueueCommand('cmd+');
@@ -157,14 +169,6 @@ public:
         case 'd':
             // Delete current image , animation or text
             EnqueueCommand('cmdd');
-            break;
-
-        case 's':
-            SaveSettings();
-            break;
-
-        case 'l':
-            LoadSettings();
             break;
 
         default:
@@ -246,7 +250,7 @@ class ImageCallbacks : public BLECharacteristicCallbacks
         }
 
         int dest_offset = partNumber * (3 * part_size) / 2;
-
+        /*
         Serial.print("frame# : ");
         Serial.print(frame_index);
         Serial.print("/");
@@ -266,14 +270,26 @@ class ImageCallbacks : public BLECharacteristicCallbacks
 
         Serial.print(" offset : ");
         Serial.println(dest_offset);
-
+*/
         Convert565_888(data + 4, &g_receiveBuffer.buffer_image[dest_offset], l - 4);
 
-        DisplayImage(g_receiveBuffer.buffer_image);
-        if (partNumber == partCount - 1)
+        if (g_DirectDrive)
         {
-            // We have received a full Image
-            SaveImageToFreeSlotAndDisplay(g_receiveBuffer.buffer_image, frame_index, frame_count);
+            if (partNumber == partCount - 1)
+            {
+                // We have a full image, display it
+                DisplayImage(g_receiveBuffer.buffer_image);
+            }
+        }
+        else
+        {
+
+            DisplayImage(g_receiveBuffer.buffer_image);
+            if (partNumber == partCount - 1)
+            {
+                // We have received a full Image
+                SaveImageToFreeSlotAndDisplay(g_receiveBuffer.buffer_image, frame_index, frame_count);
+            }
         }
     }
 };
@@ -326,7 +342,7 @@ void SetupBLE()
     characteristic->setCallbacks(new ImageCallbacks());
 
     new IntCallbackAndDisplay(service, CHARACTERISTIC_BRIGHTNESS_UUID, &g_Postilightdata.intensity);
-    new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_leds_on);
+    new IntCallback(service, CHARACTERISTIC_ON_OFF_UUID, &g_Postilightdata.leds_on);
     new ModeCallback(service, CHARACTERISTIC_MODE_UUID, (uint32_t *)&g_Postilightdata.mode);
 
     new IntCallback(service, CHARACTERISTIC_TMODE_UUID, (uint32_t *)&g_Postilightdata.trs);

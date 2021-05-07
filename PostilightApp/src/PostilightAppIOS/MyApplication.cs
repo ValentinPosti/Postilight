@@ -8,11 +8,10 @@ using System;
 using Acr.UserDialogs;
 using Foundation;
 using nexus.core.logging;
-using nexus.protocols.ble;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
-
+using Plugin.BLE;
 using ColorPicker.iOS;
 
 namespace PostilightApp.ios
@@ -60,7 +59,12 @@ namespace PostilightApp.ios
          Forms.Init();
          ColorPickerEffects.Init();
          DependencyService.Register<Xamarin.Forms.ImagePicker.IImagePickerService, Xamarin.Forms.ImagePicker.iOS.ImagePickerService>();
-         LoadApplication(new FormsApp(BluetoothLowEnergyAdapter.ObtainDefaultAdapter(), UserDialogs.Instance));
+
+         var ble = CrossBluetoothLE.Current;
+         var adapter = CrossBluetoothLE.Current.Adapter;
+
+
+         LoadApplication(new FormsApp(adapter, UserDialogs.Instance));
          return base.FinishedLaunching(app, options);
       }
    }

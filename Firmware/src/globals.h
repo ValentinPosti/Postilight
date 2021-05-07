@@ -102,7 +102,7 @@ struct PostiLightData
 
 extern bool g_Control;
 extern bool interrupt_playback;
-extern uint32_t g_leds_on;
+
 
 extern PostiLightData g_Postilightdata;
 

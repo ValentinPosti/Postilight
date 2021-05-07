@@ -23,9 +23,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.posti.postilight</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.18</string>
+	<string>1.0.41</string>
 	<key>CFBundleVersion</key>
-	<string>18</string>
+	<string>41</string>
 	<key>MinimumOSVersion</key>
 	<string>11</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>

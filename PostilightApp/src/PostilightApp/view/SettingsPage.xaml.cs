@@ -13,6 +13,7 @@ namespace PostilightApp.view
 
       PostilightViewModel _model;
       bool ignoreUpdates = false;
+      bool stopTimer = false;
 
       public SettingsPage(PostilightViewModel vm)
       {
@@ -29,8 +30,16 @@ namespace PostilightApp.view
          // Get Current Light mode
 
          GetLampValues();
+         dd_button.IsEnabled = true; ;
 
       }
+
+      protected override void OnDisappearing()
+      {
+         base.OnDisappearing();
+         stopTimer = true;
+      }
+
 
       async void GetLampValues()
       {
@@ -66,7 +75,8 @@ namespace PostilightApp.view
             tts.Value = tts_v;
 
          }
-         catch (Exception e) {
+         catch (Exception e)
+         {
             Log.Trace(e);
          }
          finally
@@ -177,8 +187,48 @@ namespace PostilightApp.view
          FormsApp.Instance.PushPage(new ColorPickerPage(_model));
       }
 
- 
+      async void dd_Button_Clicked(System.Object sender, System.EventArgs e)
+      {
+         await FormsApp.Instance.SetMode(LightMode.UPLOAD);
+         await FormsApp.Instance.SendCommand("D");
 
+         stopTimer = false;
+         Device.StartTimer(TimeSpan.FromSeconds(1), timerCallback);
+
+         dd_button.IsEnabled = false;
+
+      }
+
+      Byte[] dd_buffer = new byte[512];
+
+      bool timerCallback()
+      {
+
+         if (stopTimer == true)
+         {
+            _ = Device.InvokeOnMainThreadAsync(async () =>
+            {
+               await System.Threading.Tasks.Task.Delay(500);
+               await FormsApp.Instance.SendCommand("N");
+               await FormsApp.Instance.SetMode(LightMode.IMAGE);
+
+            }
+            );
+            return false;
+         }
+
+         byte rnd = (byte)new Random().Next(10, 255);
+
+         for (int i = 0; i < dd_buffer.Length; i++)
+         {
+            dd_buffer[i] = rnd;
+         }
+         _ = FormsApp.Instance.SendImageBuffer(dd_buffer, null);
+
+        
+
+         return true;
+      }
 
    }
 }
