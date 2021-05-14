@@ -4,28 +4,14 @@
 	<dict>
 		<key>CFBundleDisplayName</key>
 		<string>Postilight</string>
-		<key>CFBundleIconFiles</key>
-		<array>
-			<string>Icon-72@2x.png</string>
-			<string>Icon-72.png</string>
-			<string>Icon@2x.png</string>
-			<string>Icon.png</string>
-			<string>Icon-60@2x.png</string>
-			<string>Icon-76.png</string>
-			<string>Icon-76@2x.png</string>
-			<string>Icon-Small-50@2x.png</string>
-			<string>Icon-Small-50.png</string>
-			<string>Icon-Small-40.png</string>
-			<string>Icon-Small-40@2x.png</string>
-			<string>Icon-Small.png</string>
-			<string>Icon-Small@2x.png</string>
-		</array>
+		<key>CFBundleIconName</key>
+		<string>AppIcon</string>
 		<key>CFBundleIdentifier</key>
 		<string>com.posti.postilight</string>
 		<key>CFBundleShortVersionString</key>
-		<string>1.0.42</string>
+		<string>1.0.43</string>
 		<key>CFBundleVersion</key>
-		<string>42</string>
+		<string>43</string>
 		<key>MinimumOSVersion</key>
 		<string>11</string>
 		<key>NSBluetoothAlwaysUsageDescription</key>
@@ -53,6 +39,8 @@
 		</array>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
+		<key>UIRequiresFullScreen</key>
+		<true/>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
@@ -61,9 +49,5 @@
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
 		</array>
-		<key>UIRequiresFullScreen</key>
-		<true/>
-		<key>CFBundleIconName</key>
-		<string>AppIcon</string>
 	</dict>
 </plist>
