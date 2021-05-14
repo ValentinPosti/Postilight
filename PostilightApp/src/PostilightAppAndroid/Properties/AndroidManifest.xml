@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.posti.postilight" android:installLocation="auto" android:versionCode="41" android:versionName="1.0.41">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.posti.postilight" android:installLocation="auto" android:versionCode="42" android:versionName="1.0.42">
 	<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="30" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
