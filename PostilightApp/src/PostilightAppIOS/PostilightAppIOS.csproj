@@ -76,6 +76,7 @@
         </Command>
       </CustomCommands>
     </CustomCommands>
+<AssemblyName>com.postilight.app</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -98,6 +99,7 @@
       </CustomCommands>
     </CustomCommands>
     <MtouchSdkVersion>14.4</MtouchSdkVersion>
+<AssemblyName>com.postilight.app</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -111,6 +113,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
+<AssemblyName>com.postilight.app</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -133,6 +136,7 @@
         </Command>
       </CustomCommands>
     </CustomCommands>
+<AssemblyName>com.postilight.app</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="MyApplication.cs" />

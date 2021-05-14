@@ -9,9 +9,9 @@
 		<key>CFBundleIdentifier</key>
 		<string>com.posti.postilight</string>
 		<key>CFBundleShortVersionString</key>
-		<string>1.0.43</string>
+		<string>1.0.44</string>
 		<key>CFBundleVersion</key>
-		<string>43</string>
+		<string>44</string>
 		<key>MinimumOSVersion</key>
 		<string>11</string>
 		<key>NSBluetoothAlwaysUsageDescription</key>
@@ -49,5 +49,7 @@
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
 		</array>
+		<key>XSAppIconAssets</key>
+		<string>Resources/Media.xcassets/AppIcon.appiconset</string>
 	</dict>
 </plist>

@@ -38,9 +38,7 @@
         },
         {
             "size": "29x29",
-            "expected-size": "29",
             "filename": "29.png",
-            "folder": "Assets.xcassets/AppIcon.appiconset/",
             "idiom": "iphone",
             "scale": "1x"
         },
