@@ -58,7 +58,7 @@ namespace PostilightApp.ios
       {
          Forms.Init();
          ColorPickerEffects.Init();
-         DependencyService.Register<Xamarin.Forms.ImagePicker.IImagePickerService, Xamarin.Forms.ImagePicker.iOS.ImagePickerService>();
+         //DependencyService.Register<Xamarin.Forms.ImagePicker.IImagePickerService, Xamarin.Forms.ImagePicker.iOS.ImagePickerService>();
 
          var ble = CrossBluetoothLE.Current;
          var adapter = CrossBluetoothLE.Current.Adapter;
