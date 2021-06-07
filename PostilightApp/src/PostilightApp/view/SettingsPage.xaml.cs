@@ -50,8 +50,8 @@ namespace PostilightApp.view
             int tm = await _model.ReadValueInt(_model.characteristic_transitionMode);
 
 
-            scrolling_toggle.IsToggled = ((tm & 1) == 1);
-            fading_toggle.IsToggled = ((tm & 2) == 2);
+            scrolling_toggle.IsToggled = ((tm & 2) == 2);
+            fading_toggle.IsToggled = ((tm & 1) == 1);
 
             int flip = await _model.ReadValueInt(_model.characteristic_flip);
             vflip_toggle.IsToggled = flip == 1;
