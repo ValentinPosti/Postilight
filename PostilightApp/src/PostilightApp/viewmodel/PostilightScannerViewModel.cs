@@ -71,7 +71,7 @@ namespace PostilightApp.viewmodel
          var ble = CrossBluetoothLE.Current;
          var adapter = CrossBluetoothLE.Current.Adapter;
 
-         var status = await Permissions.RequestAsync<Permissions.LocationAlways>();
+         var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
          if (status != PermissionStatus.Granted ){
             return;
          }

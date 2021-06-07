@@ -14,6 +14,5 @@ using Android.App;
 [assembly: ComVisible( false )]
 [assembly: UsesPermission(Manifest.Permission.Bluetooth)]
 [assembly: UsesPermission(Manifest.Permission.BluetoothAdmin)]
-[assembly: UsesPermission(Manifest.Permission.AccessBackgroundLocation)]
-[assembly: UsesPermission(Manifest.Permission.Camera)]
+[assembly: UsesPermission(Manifest.Permission.AccessFineLocation)]
 [assembly: UsesPermission(Manifest.Permission.ReadExternalStorage)]
