@@ -9,9 +9,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.posti.postilight</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.48</string>
+	<string>1.0.49</string>
 	<key>CFBundleVersion</key>
-	<string>48</string>
+	<string>49</string>
 	<key>MinimumOSVersion</key>
 	<string>11</string>
 	<key>NSAppleMusicUsageDescription</key>
