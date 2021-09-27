@@ -7,9 +7,9 @@
                     HorizontalOptions="Fill"
                     VerticalOptions="Start" >
 
-      <Button Text="-" HorizontalOptions="FillAndExpand" Clicked="Minus_Button_Clicked"/>
-      <Button Text="Delete" HorizontalOptions="FillAndExpand" Clicked="Delete_Button_Clicked"/>
-      <Button Text="+" HorizontalOptions="FillAndExpand" Clicked="Plus_Button_Clicked"/>
+      <Button Text="-" HorizontalOptions="FillAndExpand" Clicked="Minus_Button_Clicked" x:Name="minusButton" />
+      <Button Text="Delete" HorizontalOptions="FillAndExpand" Clicked="Delete_Button_Clicked" x:Name="deleteButton" />
+      <Button Text="+" HorizontalOptions="FillAndExpand" Clicked="Plus_Button_Clicked" x:Name="plusButton" />
      
       </StackLayout>
           <Label Text="Look at your lamp to browse content." HorizontalTextAlignment="Center"/>
