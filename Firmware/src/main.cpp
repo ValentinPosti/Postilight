@@ -252,7 +252,7 @@ void Display_mode();
 int FindNextImage(int current_index);
 int FindPrevImage(int current_index);
 
-bool randomImage = true;
+bool randomImage = false;
 int g_image_index = -1, g_previmage_index = -1;
 int g_displayed_image_index = -1;
 
