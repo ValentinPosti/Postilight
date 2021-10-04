@@ -36,8 +36,9 @@ void LoadSettings()
 
     if (bytes_read == sizeof(PostiLightData))
     {
+        bool ledsOn = g_Postilightdata.leds_on;
         g_Postilightdata = pd;
-        g_Postilightdata.leds_on = true;
+        g_Postilightdata.leds_on = ledsOn;
         Serial.println(" Done");
     }
     else
