@@ -171,17 +171,20 @@ namespace PostilightApp.view
          }
          */
 
-         var status = await Permissions.RequestAsync<Permissions.StorageRead>();
+         //var status = await Permissions.RequestAsync<Permissions.StorageRead>();
 
-         if (status != PermissionStatus.Granted)
+         var permissionResult = await DependencyService.Get<BLE.Client.Helpers.IPlatformHelpers>().CheckAndRequestMediaPermissions();
+        
+
+         if (permissionResult != PermissionStatus.Granted)
          {
-            if (status == PermissionStatus.Denied)
+            if (permissionResult == PermissionStatus.Denied)
             {
                FormsApp.Instance.Toast("Storage Permission Denied, enable it app settings");
             }
             else
             {
-               FormsApp.Instance.Toast(status.ToString());
+               FormsApp.Instance.Toast(permissionResult.ToString());
             }
             return;
          }

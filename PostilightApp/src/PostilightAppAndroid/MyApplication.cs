@@ -12,6 +12,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using AndroidX.Core.App;
 using nexus.core.logging;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions;
@@ -119,8 +120,9 @@ namespace PostilightApp.android
          // need to support devices with multiple Bluetooth adapters)
          // var bluetooth = BluetoothLowEnergyAdapter.ObtainDefaultAdapter( ApplicationContext );
 
-         var ble = CrossBluetoothLE.Current;
+         var _ = CrossBluetoothLE.Current;
          var adapter = CrossBluetoothLE.Current.Adapter;
+
 
          LoadApplication( new FormsApp(adapter, UserDialogs.Instance ) );
       }

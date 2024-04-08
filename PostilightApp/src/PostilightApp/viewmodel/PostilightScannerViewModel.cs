@@ -78,8 +78,8 @@ namespace PostilightApp.viewmodel
 
       public async void StartScan( Double seconds )
       {
-
-         var ble = CrossBluetoothLE.Current;
+         
+         var _ = CrossBluetoothLE.Current;
          var adapter = CrossBluetoothLE.Current.Adapter;
 
          var status = await HasCorrectPermissions();
