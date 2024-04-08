@@ -99,8 +99,8 @@
         </Command>
       </CustomCommands>
     </CustomCommands>
-    <MtouchSdkVersion>14.4</MtouchSdkVersion>
     <AssemblyName>com.posti.postilight</AssemblyName>
+    <PublicSign>false</PublicSign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
