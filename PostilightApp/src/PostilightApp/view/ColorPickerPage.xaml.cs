@@ -16,6 +16,7 @@ using SkiaSharp;
 using SkiaSharp.Views.Forms;
 
 using ColorPicker;
+using ColorPicker.BaseClasses.ColorPickerEventArgs;
 
 namespace PostilightApp
 {
@@ -27,18 +28,20 @@ namespace PostilightApp
       public void SetModel(PostilightViewModel model)
       {
          _model = model;
+         this.SelectedColorChanged += OnSelectedColorChanged;
+
       }
 
-      protected override void SelectedColorChanged(Color color)
+      
+      protected void OnSelectedColorChanged(object sender, ColorChangedEventArgs args)
       {
-         base.SelectedColorChanged(color);
-
+         
          if (_model != null)
          {
 
             try
             {
-               _ = _model?.SetRGB(color);
+               _ = _model?.SetRGB(args.NewColor);
             }
             catch (Exception )
             {

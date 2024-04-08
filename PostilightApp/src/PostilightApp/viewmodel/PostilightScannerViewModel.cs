@@ -65,14 +65,25 @@ namespace PostilightApp.viewmodel
          }
       }
 
+      private async Task<bool> HasCorrectPermissions()
+      {
+         var permissionResult = await DependencyService.Get<BLE.Client.Helpers.IPlatformHelpers>().CheckAndRequestBluetoothPermissions();
+         if (permissionResult != PermissionStatus.Granted)
+         {
+            return false;
+         }
+
+         return true;
+      }
+
       public async void StartScan( Double seconds )
       {
 
          var ble = CrossBluetoothLE.Current;
          var adapter = CrossBluetoothLE.Current.Adapter;
 
-         var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-         if (status != PermissionStatus.Granted ){
+         var status = await HasCorrectPermissions();
+         if (status != true ){
             return;
          }
 

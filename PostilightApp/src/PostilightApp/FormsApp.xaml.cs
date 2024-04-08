@@ -21,9 +21,6 @@ using System.Threading.Tasks;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 
-using Microsoft.AppCenter;
-using Microsoft.AppCenter.Analytics;
-using Microsoft.AppCenter.Crashes;
 
 
 namespace PostilightApp
@@ -163,7 +160,6 @@ namespace PostilightApp
       {
          InitializeComponent();
 
-         AppCenter.Start("6e387852-0c3c-469c-974b-4b36d609f2df",typeof(Analytics), typeof(Crashes));
       
          adapter.DeviceDisconnected += OnDeviceDisconnected;
          adapter.DeviceConnectionLost += OnDeviceConnectionLost;

@@ -221,7 +221,8 @@ namespace PostilightApp.viewmodel
 
          try
          {
-            result = await c.ReadAsync();
+            var tuple = await c.ReadAsync();
+            result = tuple.data;
             ret = Encoding.UTF8.GetString(result, 0, result.Length);
          }
          catch (Exception ex)
@@ -253,7 +254,8 @@ namespace PostilightApp.viewmodel
 
          try
          {
-            result = await c.ReadAsync();
+            var tuple = await c.ReadAsync();
+            result = tuple.data;
             ret = BitConverter.ToInt32(result, 0);
          }
          catch (Exception ex)

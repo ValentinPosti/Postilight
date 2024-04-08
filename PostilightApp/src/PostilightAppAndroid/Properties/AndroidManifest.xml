@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.posti.postilight" android:installLocation="auto" android:versionCode="55" android:versionName="1.0.55">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.posti.postilight" android:installLocation="auto" android:versionCode="56" android:versionName="1.0.56">
 	<uses-sdk android:minSdkVersion="24" android:targetSdkVersion="33" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-	<uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+	<uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+	<uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
 	<application android:label="Postilight" android:icon="@drawable/icon"></application>
 </manifest>

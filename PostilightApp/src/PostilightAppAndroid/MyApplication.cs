@@ -14,10 +14,12 @@ using Android.OS;
 using Android.Runtime;
 using nexus.core.logging;
 using Plugin.BLE;
+using Plugin.BLE.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Application = Android.App.Application;
 using Log = Android.Util.Log;
+using Resource = Xamarin.Forms.Platform.Android.Resource;
 
 namespace PostilightApp.android
 {
